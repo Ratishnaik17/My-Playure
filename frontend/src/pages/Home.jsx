@@ -1,12 +1,12 @@
 import { useState } from "react";
 import SignUpModal from "../components/SignUpModal";
 import SignInModal from "../components/SignInModal";
-import { 
-  Trophy, 
-  Users, 
-  ArrowRight, 
-  Play, 
-  Bot, 
+import {
+  Trophy,
+  Users,
+  ArrowRight,
+  Play,
+  Bot,
   Sparkles,
   ChevronRight,
   User,
@@ -24,10 +24,10 @@ export default function Home({ onSignInSuccess }) {
 
   return (
     <div className="min-h-screen w-full bg-[#0c0e12] text-[#e2e2e8] flex flex-col relative overflow-x-hidden font-['Inter',sans-serif] selection:bg-[#00f0ff] selection:text-[#00363a]">
-      
+
       {/* Floating AI Coach Sidekick (Explicitly Styled Pill Capsule Widget) */}
       <div className="fixed right-8 bottom-8 z-[100] hidden lg:block transition-all hover:scale-105 duration-300">
-        <div 
+        <div
           onClick={() => setShowSignInModal(true)}
           style={{
             display: 'inline-flex',
@@ -84,7 +84,7 @@ export default function Home({ onSignInSuccess }) {
       <nav className="fixed top-0 w-full z-50 bg-[#080a0f]/85 backdrop-blur-2xl border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.6)] flex flex-col items-center">
         {/* Subtle accent light bar along the top edge */}
         <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#00f0ff]/60 to-transparent" />
-        
+
         <div className="w-full py-4 flex items-center justify-between px-8 md:px-14 lg:px-16" style={{ maxWidth: '1360px', marginLeft: 'auto', marginRight: 'auto' }}>
           {/* Left Brand / Logo */}
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setShowSignInModal(true)}>
@@ -104,29 +104,29 @@ export default function Home({ onSignInSuccess }) {
 
           {/* Center Navigation Links */}
           <div className="hidden md:flex items-center gap-8 lg:gap-10">
-            <button 
-              onClick={() => setShowSignInModal(true)} 
+            <button
+              onClick={() => setShowSignInModal(true)}
               className="flex items-center gap-2.5 text-sm font-bold font-hanken text-white hover:text-[#00f0ff] transition-colors cursor-pointer group"
             >
               <Trophy className="w-4 h-4 text-[#00f0ff] group-hover:scale-110 transition-transform" />
               <span>Tournaments</span>
             </button>
-            <button 
-              onClick={() => setShowSignInModal(true)} 
+            <button
+              onClick={() => setShowSignInModal(true)}
               className="flex items-center gap-2.5 text-sm font-bold font-hanken text-white hover:text-[#00f0ff] transition-colors cursor-pointer group"
             >
               <Users className="w-4 h-4 text-[#00f0ff] group-hover:scale-110 transition-transform" />
               <span>Athletes</span>
             </button>
-            <button 
-              onClick={() => setShowSignInModal(true)} 
+            <button
+              onClick={() => setShowSignInModal(true)}
               className="flex items-center gap-2.5 text-sm font-bold font-hanken text-white hover:text-[#00f0ff] transition-colors cursor-pointer group"
             >
               <Sparkles className="w-4 h-4 text-[#00f0ff] group-hover:scale-110 transition-transform" />
               <span>Collab</span>
             </button>
-            <button 
-              onClick={() => setShowSignInModal(true)} 
+            <button
+              onClick={() => setShowSignInModal(true)}
               className="flex items-center gap-2.5 text-sm font-bold font-hanken text-white hover:text-[#00f0ff] transition-colors cursor-pointer group"
             >
               <BarChart2 className="w-4 h-4 text-[#00f0ff] group-hover:scale-110 transition-transform" />
@@ -136,14 +136,14 @@ export default function Home({ onSignInSuccess }) {
 
           {/* Right Action CTA Buttons */}
           <div className="hidden sm:flex items-center gap-5">
-            <button 
+            <button
               onClick={() => setShowSignInModal(true)}
               className="flex items-center gap-2 text-sm font-bold font-hanken text-white hover:text-[#00f0ff] transition-colors cursor-pointer py-1"
             >
               <LogIn className="w-4 h-4 text-[#00f0ff]" />
               <span>Log In</span>
             </button>
-            <button 
+            <button
               onClick={() => setShowSignUpModal(true)}
               style={{
                 borderRadius: '6px',
@@ -174,7 +174,7 @@ export default function Home({ onSignInSuccess }) {
           </div>
 
           {/* Mobile Hamburger Menu Button */}
-          <button 
+          <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2.5 rounded-xl bg-white/5 border border-white/10 text-gray-200 hover:text-white hover:bg-white/10 cursor-pointer transition-colors"
             aria-label="Toggle Menu"
@@ -186,28 +186,28 @@ export default function Home({ onSignInSuccess }) {
         {/* Mobile Dropdown Drawer */}
         {mobileMenuOpen && (
           <div className="md:hidden w-full bg-[#090c12]/95 backdrop-blur-2xl border-t border-white/10 px-6 py-4 flex flex-col gap-3">
-            <button 
+            <button
               onClick={() => { setShowSignInModal(true); setMobileMenuOpen(false); }}
               className="flex items-center gap-3 text-sm font-semibold text-gray-200 hover:text-[#00f0ff] py-2.5 border-b border-white/5"
             >
               <Trophy className="w-4 h-4 text-[#00f0ff]" />
               Tournaments
             </button>
-            <button 
+            <button
               onClick={() => { setShowSignInModal(true); setMobileMenuOpen(false); }}
               className="flex items-center gap-3 text-sm font-semibold text-gray-200 hover:text-[#00f0ff] py-2.5 border-b border-white/5"
             >
               <Users className="w-4 h-4 text-[#00f0ff]" />
               Athletes
             </button>
-            <button 
+            <button
               onClick={() => { setShowSignInModal(true); setMobileMenuOpen(false); }}
               className="flex items-center gap-3 text-sm font-semibold text-gray-200 hover:text-[#00f0ff] py-2.5 border-b border-white/5"
             >
               <Sparkles className="w-4 h-4 text-[#00f0ff]" />
               Collab
             </button>
-            <button 
+            <button
               onClick={() => { setShowSignInModal(true); setMobileMenuOpen(false); }}
               className="flex items-center gap-3 text-sm font-semibold text-gray-200 hover:text-[#00f0ff] py-2.5 border-b border-white/5"
             >
@@ -216,13 +216,13 @@ export default function Home({ onSignInSuccess }) {
             </button>
 
             <div className="flex items-center gap-3 pt-3">
-              <button 
+              <button
                 onClick={() => { setShowSignInModal(true); setMobileMenuOpen(false); }}
                 className="flex-1 py-2.5 rounded-full text-xs font-bold text-center text-white bg-white/10 border border-white/10 hover:bg-white/20"
               >
                 Log In
               </button>
-              <button 
+              <button
                 onClick={() => { setShowSignUpModal(true); setMobileMenuOpen(false); }}
                 className="flex-1 py-2.5 rounded-full text-xs font-extrabold text-center text-[#00262b] bg-[#00f0ff] shadow-[0_0_20px_rgba(0,240,255,0.5)] uppercase tracking-wider"
               >
@@ -235,10 +235,10 @@ export default function Home({ onSignInSuccess }) {
 
       {/* Main Content Canvas */}
       <main className="flex-grow flex flex-col relative w-full overflow-hidden items-center">
-        
+
         {/* HERO SECTION */}
         <section className="relative w-full min-h-screen flex items-center justify-center pt-32 pb-24 md:pt-40 md:pb-32 border-b border-white/5">
-          
+
           {/* Background Image with Overlay */}
           <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
             <img
@@ -252,7 +252,7 @@ export default function Home({ onSignInSuccess }) {
 
           {/* Hero Content */}
           <div className="relative z-10 w-full px-8 md:px-14 lg:px-16 text-center flex flex-col items-center gap-8 mt-12 md:mt-0" style={{ maxWidth: '1360px', marginLeft: 'auto', marginRight: 'auto' }}>
-            
+
             <h1 className="font-['Hanken_Grotesk'] text-[44px] sm:text-[64px] md:text-[80px] text-white font-extrabold leading-[1.0] tracking-tight uppercase drop-shadow-2xl max-w-4xl">
               Building the <span className="text-[#00f0ff] italic pr-2 shadow-[0_0_20px_rgba(0,240,255,0.6)]">Future</span><br />
               for Sports Players
@@ -263,7 +263,7 @@ export default function Home({ onSignInSuccess }) {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-4 w-full">
-              <button 
+              <button
                 onClick={() => setShowSignUpModal(true)}
                 className="bg-[#00f0ff] text-[#00363a] font-['Hanken_Grotesk'] text-base sm:text-lg font-bold px-10 py-4 rounded-full shadow-[0_0_25px_rgba(0,240,255,0.45)] hover:shadow-[0_0_40px_rgba(0,240,255,0.8)] hover:-translate-y-0.5 transition-all w-full sm:w-auto flex items-center justify-center gap-3 uppercase tracking-wider cursor-pointer active:scale-95"
               >
@@ -271,7 +271,7 @@ export default function Home({ onSignInSuccess }) {
                 <ArrowRight className="w-5 h-5" />
               </button>
 
-              <button 
+              <button
                 onClick={() => setShowDemoModal(true)}
                 className="bg-[#111318]/60 backdrop-blur-xl text-white font-['Hanken_Grotesk'] text-base sm:text-lg px-10 py-4 rounded-full hover:bg-white/10 border border-white/10 transition-all w-full sm:w-auto flex items-center justify-center gap-3 cursor-pointer active:scale-95"
               >
@@ -291,7 +291,7 @@ export default function Home({ onSignInSuccess }) {
                   "Volleyball",
                   "Wrestling",
                   "Kabaddi",
-                  "Athletics\n(Running/Sprinting)",
+                  "Athletics",
                   "Cycling",
                   "Badminton",
                   "Boxing",
@@ -326,7 +326,7 @@ export default function Home({ onSignInSuccess }) {
 
           <div className="w-full px-8 sm:px-14 lg:px-16 relative z-10" style={{ maxWidth: '1360px', marginLeft: 'auto', marginRight: 'auto' }}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-              
+
               {/* Left Column (Content Stack) */}
               <div className="w-full flex flex-col items-start gap-6">
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#00f0ff]/40 bg-[#00f0ff]/10">
@@ -345,7 +345,7 @@ export default function Home({ onSignInSuccess }) {
                   Join 500+ players finding the best arenas for every sport and level. From casual matches to championship tournaments.
                 </p>
 
-                <button 
+                <button
                   onClick={() => setShowSignInModal(true)}
                   className="bg-[#161B22] text-white font-['Hanken_Grotesk'] font-semibold px-8 py-3.5 rounded-xl border border-white/10 hover:border-[#00f0ff]/50 hover:bg-[#21262d] transition-all flex items-center gap-3 group mt-2 cursor-pointer shadow-lg active:scale-95"
                 >
@@ -357,7 +357,7 @@ export default function Home({ onSignInSuccess }) {
               {/* Right Column (Active Competitions Reference Match Card) */}
               <div className="w-full flex justify-center lg:justify-end">
                 <div className="w-full max-w-[660px] bg-[#040812] border border-[#00f0ff]/30 rounded-3xl p-8 sm:p-10 flex flex-col gap-5 shadow-[0_0_40px_rgba(0,240,255,0.1)] relative overflow-hidden backdrop-blur-2xl">
-                  
+
                   {/* Header Section */}
                   <div className="flex items-center justify-between border-b border-[#00f0ff]/15 pb-4 mb-1">
                     <div className="flex items-center gap-3.5">
@@ -373,7 +373,7 @@ export default function Home({ onSignInSuccess }) {
                         </p>
                       </div>
                     </div>
-                    <button 
+                    <button
                       onClick={() => setShowSignInModal(true)}
                       className="text-sm font-semibold font-['Hanken_Grotesk'] text-[#00f0ff] hover:text-[#7df4ff] flex items-center gap-1.5 cursor-pointer transition-colors group"
                     >
@@ -384,9 +384,9 @@ export default function Home({ onSignInSuccess }) {
 
                   {/* Mini Competition Cards Stack */}
                   <div className="flex flex-col gap-3.5">
-                    
+
                     {/* Mini Card 1 */}
-                    <div 
+                    <div
                       onClick={() => setShowSignInModal(true)}
                       className="rounded-2xl border border-[#00f0ff]/20 bg-[#080e18] p-4 flex items-center justify-between gap-4 hover:border-[#00f0ff]/50 transition-all duration-200 cursor-pointer group"
                     >
@@ -419,7 +419,7 @@ export default function Home({ onSignInSuccess }) {
                     </div>
 
                     {/* Mini Card 2 */}
-                    <div 
+                    <div
                       onClick={() => setShowSignInModal(true)}
                       className="rounded-2xl border border-[#00f0ff]/20 bg-[#080e18] p-4 flex items-center justify-between gap-4 hover:border-[#00f0ff]/50 transition-all duration-200 cursor-pointer group"
                     >
@@ -452,7 +452,7 @@ export default function Home({ onSignInSuccess }) {
                     </div>
 
                     {/* Mini Card 3 */}
-                    <div 
+                    <div
                       onClick={() => setShowSignInModal(true)}
                       className="rounded-2xl border border-[#00f0ff]/20 bg-[#080e18] p-4 flex items-center justify-between gap-4 hover:border-[#00f0ff]/50 transition-all duration-200 cursor-pointer group"
                     >
@@ -487,7 +487,7 @@ export default function Home({ onSignInSuccess }) {
                   </div>
 
                   {/* FEATURED "UP NEXT" CARD */}
-                  <div 
+                  <div
                     onClick={() => setShowSignInModal(true)}
                     className="rounded-2xl border-2 border-[#00f0ff]/50 bg-gradient-to-r from-[#00f0ff]/10 via-[#0a111e] to-[#0a101b] p-5 flex items-center justify-between gap-4 mt-2 shadow-[0_0_25px_rgba(0,240,255,0.15)] cursor-pointer group"
                   >
@@ -532,6 +532,233 @@ export default function Home({ onSignInSuccess }) {
           </div>
         </section>
 
+        {/* FEATURE: PLAYURE AI COACH & MULTI-AGENT SYSTEM */}
+        <section className="w-full py-16 sm:py-24 relative bg-[#0D1117] border-b border-white/5 overflow-hidden">
+          {/* Background Ambient Radial Glow & Grid Pattern */}
+          <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(#00f0ff_1px,transparent_1px)] [background-size:32px_32px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#00f0ff]/10 rounded-full blur-[180px] pointer-events-none" />
+
+          <div className="w-full max-w-[1360px] mx-auto px-6 sm:px-12 lg:px-16 relative z-10">
+
+            {/* Centered Hero Header Stack */}
+            <div className="text-center mb-12 sm:mb-16 max-w-4xl mx-auto flex flex-col items-center justify-center gap-4">
+
+              <h2 className="font-['Hanken_Grotesk'] text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.15] tracking-tight">
+                Meet Your Elite <span className="text-[#00f0ff]">AI Training Partner</span>
+              </h2>
+
+              <p className="text-base sm:text-lg text-[#b9cacb] font-light leading-relaxed max-w-2xl mx-auto">
+                A multi-agent high-performance suite designed to optimize every facet of your athletic journey. From injury prevention to scouting resume creation.
+              </p>
+
+              <div className="pt-2">
+                <button
+                  onClick={() => setShowSignInModal(true)}
+                  className="bg-[#00f0ff] text-[#002022] font-['Hanken_Grotesk'] font-bold text-base px-8 py-3.5 rounded-xl shadow-[0_0_25px_rgba(0,240,255,0.4)] hover:shadow-[0_0_35px_rgba(0,240,255,0.7)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer flex items-center gap-2"
+                >
+                  <span>Try AI Coach</span>
+                  <ArrowRight className="w-5 h-5 text-[#002022]" />
+                </button>
+              </div>
+            </div>
+
+            {/* Compact Bento Grid & Chat Box Split */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+
+              {/* Left Side: 4 Compact Agent Bento Cards (7 cols) */}
+              <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                {/* 1. Training Agent Card */}
+                <div
+                  onClick={() => setShowSignInModal(true)}
+                  className="bg-[#161B22]/80 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-5 flex flex-col justify-between group cursor-pointer hover:bg-[#1e2024] hover:border-[#00f0ff]/40 transition-all duration-300 shadow-xl min-h-[160px]"
+                >
+                  <div className="flex justify-between items-center mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-[#00f0ff]/10 border border-[#00f0ff]/30 flex items-center justify-center text-[#00f0ff] group-hover:scale-105 transition-transform">
+                      <span className="material-symbols-outlined text-xl">fitness_center</span>
+                    </div>
+                    <span className="font-['JetBrains_Mono',monospace] text-[10px] font-bold text-[#00f0ff] bg-[#00f0ff]/10 px-2 py-0.5 rounded border border-[#00f0ff]/30 shrink-0">
+                      ACTIVE
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-white mb-1">
+                      Training Agent
+                    </h3>
+                    <p className="text-xs text-[#b9cacb] leading-relaxed">
+                      Adaptive micro-cycles, weekly 1RM calculation, and workload management.
+                    </p>
+                  </div>
+                </div>
+
+                {/* 2. Physio Agent Card */}
+                <div
+                  onClick={() => setShowSignInModal(true)}
+                  className="bg-[#161B22]/80 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-5 flex flex-col justify-between group cursor-pointer hover:bg-[#1e2024] hover:border-[#00f0ff]/40 transition-all duration-300 shadow-xl min-h-[160px]"
+                >
+                  <div className="flex justify-between items-center mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-[#00f0ff]/10 border border-[#00f0ff]/30 flex items-center justify-center text-[#00f0ff] group-hover:scale-105 transition-transform">
+                      <span className="material-symbols-outlined text-xl">medical_services</span>
+                    </div>
+                    <span className="font-['JetBrains_Mono',monospace] text-[10px] font-bold text-[#849495] border border-white/10 px-2 py-0.5 rounded shrink-0">
+                      STANDBY
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-white mb-1">
+                      Physio Agent
+                    </h3>
+                    <p className="text-xs text-[#b9cacb] leading-relaxed">
+                      Symptom checker, mobility routines, and injury recovery timelines.
+                    </p>
+                  </div>
+                </div>
+
+                {/* 3. Nutrition Agent Card */}
+                <div
+                  onClick={() => setShowSignInModal(true)}
+                  className="bg-[#161B22]/80 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-5 flex flex-col justify-between group cursor-pointer hover:bg-[#1e2024] hover:border-[#00f0ff]/40 transition-all duration-300 shadow-xl min-h-[160px]"
+                >
+                  <div className="flex justify-between items-center mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-[#00f0ff]/10 border border-[#00f0ff]/30 flex items-center justify-center text-[#00f0ff] group-hover:scale-105 transition-transform">
+                      <span className="material-symbols-outlined text-xl">restaurant</span>
+                    </div>
+                    <span className="font-['JetBrains_Mono',monospace] text-[10px] font-bold text-[#849495] border border-white/10 px-2 py-0.5 rounded shrink-0">
+                      STANDBY
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-white mb-1">
+                      Nutrition Agent
+                    </h3>
+                    <p className="text-xs text-[#b9cacb] leading-relaxed">
+                      BMR & TDEE calculation, macronutrient targets, and meal timing.
+                    </p>
+                  </div>
+                </div>
+
+                {/* 4. Resume Builder Card (HIGHLIGHT) */}
+                <div
+                  onClick={() => setShowSignInModal(true)}
+                  className="bg-[#161B22]/80 backdrop-blur-md border border-[#00f0ff]/40 hover:border-[#00f0ff] rounded-xl p-4 sm:p-5 flex flex-col justify-between group cursor-pointer relative overflow-hidden transition-all duration-300 shadow-xl min-h-[160px]"
+                >
+                  <div className="absolute top-0 right-0 w-28 h-28 bg-[#00f0ff]/10 blur-2xl -mr-14 -mt-14 rounded-full pointer-events-none" />
+
+                  <div className="flex justify-between items-center mb-3 relative z-10">
+                    <div className="w-10 h-10 rounded-lg bg-[#FFD700]/10 border border-[#FFD700]/30 flex items-center justify-center text-[#FFD700] group-hover:scale-105 transition-transform">
+                      <span className="material-symbols-outlined text-xl">edit_document</span>
+                    </div>
+                    <span className="font-['JetBrains_Mono',monospace] text-[9px] font-bold text-[#FFD700] bg-[#FFD700]/10 px-2 py-0.5 rounded flex items-center gap-1 border border-[#FFD700]/30 shrink-0">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#FFD700] animate-pulse" />
+                      HIGHLIGHT
+                    </span>
+                  </div>
+
+                  <div className="relative z-10">
+                    <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-white mb-1">
+                      Resume Builder
+                    </h3>
+                    <p className="text-xs text-[#b9cacb] leading-relaxed">
+                      Scouting-ready CV generation, career stats, and objective layout.
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Right Side: Compact Chat Mockup (5 cols) */}
+              <div className="lg:col-span-5 flex flex-col h-full">
+
+                {/* Interactive Chat Box Mockup */}
+                <div className="bg-[#161B22]/80 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-5 flex-1 h-full min-h-[350px] sm:min-h-[360px] flex flex-col justify-between relative overflow-hidden shadow-2xl">
+                  <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#00f0ff] to-transparent" />
+
+                  {/* Top Bar */}
+                  <div className="flex items-center justify-between mb-3 pb-2.5 border-b border-white/10 shrink-0">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-[#00f0ff]/10 border border-[#00f0ff]/40 flex items-center justify-center text-[#00f0ff] shadow-[0_0_12px_rgba(0,240,255,0.2)]">
+                        <span className="material-symbols-outlined text-base">smart_toy</span>
+                      </div>
+                      <div>
+                        <h4 className="font-['Hanken_Grotesk'] font-bold text-white text-sm leading-none mb-0.5">
+                          Playure Coach
+                        </h4>
+                        <span className="font-['JetBrains_Mono',monospace] text-[9px] font-bold text-[#00FF41] flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#00FF41]" />
+                          ONLINE
+                        </span>
+                      </div>
+                    </div>
+                    <span className="material-symbols-outlined text-[#849495] text-base">more_horiz</span>
+                  </div>
+
+                  {/* Message Stream */}
+                  <div className="space-y-3 mb-3 text-xs flex-1 overflow-y-auto pr-1">
+
+                    {/* User Question */}
+                    <div className="flex flex-col items-end">
+                      <div className="bg-[#282a2e] text-[#e2e2e8] px-3 py-2 rounded-xl rounded-tr-sm max-w-[88%] font-['Inter',sans-serif]">
+                        How is my sprint endurance tracking this week?
+                      </div>
+                      <span className="font-['JetBrains_Mono',monospace] text-[9px] text-[#849495] mt-0.5">10:42 AM</span>
+                    </div>
+
+                    {/* AI Response */}
+                    <div className="flex flex-col items-start">
+                      <div className="bg-[#00f0ff]/10 border border-[#00f0ff]/30 text-white px-3.5 py-2.5 rounded-xl rounded-tl-sm max-w-[92%] leading-relaxed font-['Inter',sans-serif]">
+                        Your VO2 max output has increased by 3.2% compared to last micro-cycle. Recommend shifting today's session to Zone 2 recovery.
+                      </div>
+                      <span className="font-['JetBrains_Mono',monospace] text-[9px] text-[#849495] mt-0.5">10:43 AM</span>
+                    </div>
+
+                    {/* Quick Suggested Prompts */}
+                    <div className="pt-3 border-t border-white/5">
+                      <span className="font-['JetBrains_Mono',monospace] text-[9px] font-bold text-[#849495] uppercase tracking-wider block mb-2">
+                        SUGGESTED AGENT PROMPTS:
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        <span
+                          onClick={() => setShowSignInModal(true)}
+                          className="text-[10px] bg-[#0c0e12] hover:bg-[#1e2024] text-[#00f0ff] px-2.5 py-1 rounded-md border border-[#00f0ff]/30 hover:border-[#00f0ff] transition-all cursor-pointer font-['Inter']"
+                        >
+                          "Generate Scouting Resume"
+                        </span>
+                        <span
+                          onClick={() => setShowSignInModal(true)}
+                          className="text-[10px] bg-[#0c0e12] hover:bg-[#1e2024] text-gray-300 px-2.5 py-1 rounded-md border border-white/10 hover:border-[#00f0ff]/40 transition-all cursor-pointer font-['Inter']"
+                        >
+                          "Calculate 1RM Bench"
+                        </span>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  {/* Input Mockup Box */}
+                  <div
+                    onClick={() => setShowSignInModal(true)}
+                    className="relative cursor-pointer group mt-auto shrink-0"
+                  >
+                    <input
+                      readOnly
+                      type="text"
+                      placeholder="Ask your AI agent..."
+                      className="w-full bg-[#0c0e12]/90 border border-white/10 group-hover:border-[#00f0ff]/50 text-white text-xs rounded-lg py-2.5 pl-3.5 pr-9 focus:outline-none transition-colors cursor-pointer"
+                    />
+                    <button className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#00f0ff] group-hover:scale-110 transition-transform">
+                      <span className="material-symbols-outlined text-lg">send</span>
+                    </button>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
         {/* FEATURE 2: SQUAD BUILDER & COLLABORATION SECTION */}
         <section className="w-full min-h-screen py-32 md:py-44 flex items-center justify-center relative bg-[#0c0e12] border-b border-white/5 overflow-hidden">
           {/* Background Ambient Radial Glow */}
@@ -539,11 +766,11 @@ export default function Home({ onSignInSuccess }) {
 
           <div className="w-full px-8 sm:px-14 lg:px-16 relative z-10" style={{ maxWidth: '1360px', marginLeft: 'auto', marginRight: 'auto' }}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-              
+
               {/* Left Column (Collaboration Hub Redesigned Card) */}
               <div className="w-full flex justify-center lg:justify-start order-2 lg:order-1">
                 <div className="w-full max-w-[660px] bg-[#040812] border border-[#00f0ff]/30 rounded-3xl p-8 sm:p-10 flex flex-col gap-5 shadow-[0_0_40px_rgba(0,240,255,0.1)] relative overflow-hidden backdrop-blur-2xl">
-                  
+
                   {/* Top Neon Ambient Bar */}
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#00f0ff] to-transparent opacity-80" />
 
@@ -562,7 +789,7 @@ export default function Home({ onSignInSuccess }) {
                         </p>
                       </div>
                     </div>
-                    <button 
+                    <button
                       onClick={() => setShowSignInModal(true)}
                       className="text-sm font-semibold font-['Hanken_Grotesk'] text-[#00f0ff] hover:text-[#7df4ff] flex items-center gap-1.5 cursor-pointer transition-colors group"
                     >
@@ -573,9 +800,9 @@ export default function Home({ onSignInSuccess }) {
 
                   {/* Mini Cards Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    
+
                     {/* Mini Card 1: Rahul Dravid */}
-                    <div 
+                    <div
                       onClick={() => setShowSignInModal(true)}
                       className="rounded-2xl border border-[#00f0ff]/20 bg-[#080e18] p-4 flex flex-col justify-between gap-4 hover:border-[#00f0ff]/50 transition-all duration-200 cursor-pointer group"
                     >
@@ -596,7 +823,7 @@ export default function Home({ onSignInSuccess }) {
                         </div>
                       </div>
 
-                      <button 
+                      <button
                         onClick={() => setShowSignInModal(true)}
                         className="w-full bg-[#00f0ff]/10 hover:bg-[#00f0ff] text-[#00f0ff] hover:text-[#00262b] border border-[#00f0ff]/40 font-bold font-['Hanken_Grotesk'] text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                       >
@@ -606,7 +833,7 @@ export default function Home({ onSignInSuccess }) {
                     </div>
 
                     {/* Mini Card 2: Sneha Reddy */}
-                    <div 
+                    <div
                       onClick={() => setShowSignInModal(true)}
                       className="rounded-2xl border border-[#00f0ff]/20 bg-[#080e18] p-4 flex flex-col justify-between gap-4 hover:border-[#00f0ff]/50 transition-all duration-200 cursor-pointer group"
                     >
@@ -627,7 +854,7 @@ export default function Home({ onSignInSuccess }) {
                         </div>
                       </div>
 
-                      <button 
+                      <button
                         onClick={() => setShowSignInModal(true)}
                         className="w-full bg-[#00f0ff]/10 hover:bg-[#00f0ff] text-[#00f0ff] hover:text-[#00262b] border border-[#00f0ff]/40 font-bold font-['Hanken_Grotesk'] text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                       >
@@ -639,7 +866,7 @@ export default function Home({ onSignInSuccess }) {
                   </div>
 
                   {/* FEATURED QUICK SQUAD MATCH CARD */}
-                  <div 
+                  <div
                     onClick={() => setShowSignInModal(true)}
                     className="rounded-2xl border-2 border-[#00f0ff]/50 bg-gradient-to-r from-[#00f0ff]/10 via-[#0a111e] to-[#0a101b] p-5 flex items-center justify-between gap-4 mt-2 shadow-[0_0_25px_rgba(0,240,255,0.15)] cursor-pointer group"
                   >
@@ -692,14 +919,14 @@ export default function Home({ onSignInSuccess }) {
                 </p>
 
                 <div className="flex flex-wrap gap-4 mt-2">
-                  <button 
+                  <button
                     onClick={() => setShowSignInModal(true)}
                     className="bg-white text-[#0c0e12] font-['Hanken_Grotesk'] font-bold text-sm px-8 py-3.5 rounded-xl hover:bg-gray-200 transition-all cursor-pointer shadow-lg active:scale-95"
                   >
                     Find Players
                   </button>
 
-                  <button 
+                  <button
                     onClick={() => setShowSignInModal(true)}
                     className="bg-[#161B22] text-white font-['Hanken_Grotesk'] font-semibold text-sm px-8 py-3.5 rounded-xl border border-white/10 hover:bg-white/10 transition-all cursor-pointer active:scale-95"
                   >
@@ -719,7 +946,7 @@ export default function Home({ onSignInSuccess }) {
 
           <div className="w-full px-8 sm:px-14 lg:px-16 relative z-10" style={{ maxWidth: '1360px', marginLeft: 'auto', marginRight: 'auto' }}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-              
+
               {/* Left Column Content */}
               <div className="w-full flex flex-col items-start gap-6">
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#00f0ff]/40 bg-[#00f0ff]/10">
@@ -823,7 +1050,7 @@ export default function Home({ onSignInSuccess }) {
 
       {/* Demo Video Preview Modal */}
       {showDemoModal && (
-        <div 
+        <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
           onClick={() => setShowDemoModal(false)}
         >

@@ -37,19 +37,19 @@ export async function createPost(postData) {
   }
 }
 
-export async function sendAIChatMessage(message) {
+export async function sendAIChatMessage(message, category = "general") {
   try {
     const res = await fetch(`${API_BASE_URL}/ai/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ message, category }),
     });
     return await res.json();
   } catch (err) {
     console.warn("AI API fallback:", err);
     return {
       status: "fallback",
-      reply: `Playure AI Coach: Training response for '${message}'. FastAPI server connection active!`,
+      reply: `Playure AI Coach [${category}]: Response for '${message}'. FastAPI multi-agent engine active!`,
     };
   }
 }

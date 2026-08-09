@@ -7,6 +7,8 @@ from app.models.follower import Follower
 from app.models.hashtag import Hashtag, PostHashtag
 from app.models.competition import Competition
 from app.models.collaboration import Collaboration, CollaborationMember
+from app.models.message import Conversation, ConversationParticipant, Message
+from app.models.notification import Notification, NotificationPreference
 
 __all__ = [
     "User",
@@ -21,4 +23,9 @@ __all__ = [
     "Competition",
     "Collaboration",
     "CollaborationMember",
+    "Conversation",
+    "ConversationParticipant",
+    "Message",
+    "Notification",
+    "NotificationPreference",
 ]

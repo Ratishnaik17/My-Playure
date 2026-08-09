@@ -54,19 +54,19 @@ export default function RightSidebar({ onOpenChatbot, onNavigateCompetitions }) 
         </div>
       </div>
 
-      {/* 2. Playure AI Assistant Card */}
+      {/* 2. Playure AI Coach Card */}
       <div className="relative overflow-hidden bg-gradient-to-br from-[#006970]/30 to-[#1e2024] border border-[#00f0ff]/30 rounded-xl p-6 shadow-2xl text-center space-y-4">
         <div className="relative z-10 w-full flex flex-col items-center">
           <h3 className="text-sm font-bold text-white uppercase tracking-widest mb-4 flex items-center justify-center gap-2 font-['Hanken_Grotesk']">
             <Bot className="w-5 h-5 text-[#00f0ff]" />
-            <span>PLAYURE AI ASSISTANT</span>
+            <span>PLAYURE AI COACH</span>
           </h3>
 
           <button
             onClick={onOpenChatbot}
             className="w-full bg-transparent border border-[#00f0ff] text-[#00f0ff] font-bold text-xs uppercase tracking-wider py-2.5 rounded-lg hover:bg-[#00f0ff] hover:text-[#002022] transition-colors cursor-pointer font-['Hanken_Grotesk']"
           >
-            OPEN AI ASSISTANT
+            OPEN AI COACH
           </button>
         </div>
       </div>

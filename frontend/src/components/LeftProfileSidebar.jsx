@@ -8,7 +8,9 @@ import {
   Award,
   FileText,
   UserPlus,
-  LogOut
+  LogOut,
+  Bot,
+  Mail
 } from "lucide-react";
 
 export default function LeftProfileSidebar({ activeTab, onNavigateTab, onNavigateCompetitions, onSignOut }) {
@@ -16,6 +18,8 @@ export default function LeftProfileSidebar({ activeTab, onNavigateTab, onNavigat
   const userName = "Ratish Naik";
 
   const menuItems = [
+    { id: "ai_assistant", label: "AI Coach & Resume", icon: Bot, isHighlight: true },
+    { id: "messages", label: "Direct Messages", icon: Mail },
     { id: "competitions", label: "Competitions", icon: Trophy },
     { id: "tournaments", label: "My Tournaments", icon: Award },
     { id: "registrations", label: "My Registrations", icon: FileText },

@@ -27,7 +27,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
     { name: "Volleyball", icon: "🏐" },
     { name: "Wrestling", icon: "🤼‍♂️" },
     { name: "Kabaddi", icon: "🤼" },
-    { name: "Athletics (Running/Sprinting)", icon: "🏃" },
+    { name: "Athletics", icon: "🏃" },
     { name: "Cycling", icon: "🚴" },
     { name: "Badminton", icon: "🏸" },
     { name: "Boxing", icon: "🥊" },

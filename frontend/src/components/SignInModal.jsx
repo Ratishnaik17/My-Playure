@@ -87,7 +87,7 @@ export default function SignInModal({ isOpen, onClose, onSuccess, onSwitchToSign
             </div>
 
             <h2 className="font-hanken text-xl font-bold text-white mb-1 tracking-tight">
-              Sign In to Playure
+              Sign In to Play<span className="text-[#00f0ff]">ure</span>
             </h2>
             <p className="font-inter text-xs text-[#b9cacb]">
               Elevate your sports career across India

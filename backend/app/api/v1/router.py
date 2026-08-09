@@ -12,6 +12,8 @@ from app.api.v1.endpoints import (
     sidebar,
     home,
     ai_coach,
+    messaging,
+    notifications,
 )
 
 api_router = APIRouter()
@@ -28,3 +30,5 @@ api_router.include_router(users.router, tags=["Users & Suggestions"])
 api_router.include_router(sidebar.router, tags=["Left Sidebar"])
 api_router.include_router(home.router, tags=["Home Dashboard"])
 api_router.include_router(ai_coach.router, tags=["AI Coach"])
+api_router.include_router(messaging.router, tags=["Real-Time Messaging"])
+api_router.include_router(notifications.router, tags=["Real-Time Notifications"])

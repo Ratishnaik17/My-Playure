@@ -7,12 +7,19 @@ import CompetitionsView from "../components/CompetitionsView";
 import CollaborationView from "../components/CollaborationView";
 import RightSidebar from "../components/RightSidebar";
 import AIChatbotModal from "../components/AIChatbotModal";
+import MessagingModal from "../components/MessagingModal";
+import NotificationSettingsModal from "../components/NotificationSettingsModal";
 import { Trophy, Flame } from "lucide-react";
 
 export default function Dashboard({ onSignOut }) {
   const [activeTab, setActiveTab] = useState("home");
   const [selectedCategory, setSelectedCategory] = useState("All Sports");
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+  const [isMessagingOpen, setIsMessagingOpen] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isNotificationSettingsOpen, setIsNotificationSettingsOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(2);
+  const [notificationCount, setNotificationCount] = useState(3);
   const createPostRef = useRef(null);
 
   // High quality sports updates feed
@@ -100,7 +107,23 @@ export default function Dashboard({ onSignOut }) {
       {/* 1. Header Navigation Bar */}
       <Navbar
         onOpenChatbot={() => setIsChatbotOpen(true)}
-        onNavigateTab={(tab) => setActiveTab(tab)}
+        onOpenMessaging={() => setIsMessagingOpen(true)}
+        unreadCount={unreadCount}
+        isNotificationsOpen={isNotificationsOpen}
+        onOpenNotifications={() => setIsNotificationsOpen(!isNotificationsOpen)}
+        onCloseNotifications={() => setIsNotificationsOpen(false)}
+        notificationCount={notificationCount}
+        onOpenNotificationSettings={() => setIsNotificationSettingsOpen(true)}
+        onNotificationUnreadCountChange={(cnt) => setNotificationCount(cnt)}
+        onNavigateTab={(tab) => {
+          if (tab === "messages") {
+            setIsMessagingOpen(true);
+          } else if (tab === "ai_coach") {
+            setIsChatbotOpen(true);
+          } else {
+            setActiveTab(tab);
+          }
+        }}
         activeTab={activeTab}
         onSignOut={onSignOut}
       />
@@ -112,7 +135,15 @@ export default function Dashboard({ onSignOut }) {
           <div className="w-[300px] xl:w-[320px] shrink-0 hidden lg:block sticky top-[80px]">
             <LeftProfileSidebar 
               activeTab={activeTab}
-              onNavigateTab={(tab) => setActiveTab(tab)}
+              onNavigateTab={(tab) => {
+                if (tab === "ai_assistant") {
+                  setIsChatbotOpen(true);
+                } else if (tab === "messages") {
+                  setIsMessagingOpen(true);
+                } else {
+                  setActiveTab(tab);
+                }
+              }}
               onNavigateCompetitions={() => setActiveTab("competitions")} 
               onSignOut={onSignOut}
             />
@@ -204,6 +235,19 @@ export default function Dashboard({ onSignOut }) {
       <AIChatbotModal
         isOpen={isChatbotOpen}
         onClose={() => setIsChatbotOpen(false)}
+      />
+
+      {/* Real-Time Direct Messaging Suite Modal */}
+      <MessagingModal
+        isOpen={isMessagingOpen}
+        onClose={() => setIsMessagingOpen(false)}
+        onUnreadCountChange={(cnt) => setUnreadCount(cnt)}
+      />
+
+      {/* Notification Preferences Settings Modal */}
+      <NotificationSettingsModal
+        isOpen={isNotificationSettingsOpen}
+        onClose={() => setIsNotificationSettingsOpen(false)}
       />
 
     </div>

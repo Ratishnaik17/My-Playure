@@ -1,7 +1,21 @@
 import { useState } from "react";
 import { Search, Home, Trophy, Users, Bot, Mail, Bell, ChevronDown, LogOut, User } from "lucide-react";
+import NotificationDropdown from "./NotificationDropdown";
 
-export default function Navbar({ onOpenChatbot, onNavigateTab, activeTab = "home", onSignOut }) {
+export default function Navbar({ 
+  onOpenChatbot, 
+  onNavigateTab, 
+  activeTab = "home", 
+  onSignOut, 
+  onOpenMessaging, 
+  unreadCount = 2,
+  isNotificationsOpen = false,
+  onOpenNotifications,
+  onCloseNotifications,
+  notificationCount = 3,
+  onOpenNotificationSettings,
+  onNotificationUnreadCountChange
+}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [showUserDropdown, setShowUserDropdown] = useState(false);
 
@@ -82,22 +96,45 @@ export default function Navbar({ onOpenChatbot, onNavigateTab, activeTab = "home
           })}
 
           {/* Utility Icons & Profile Dropdown */}
-          <div className="flex items-center gap-3 pl-3 border-l border-white/10">
+          <div className="flex items-center gap-3.5 pl-4 border-l border-white/10 shrink-0">
             {/* Mail Icon */}
-            <button className="relative text-[#b9cacb] hover:text-[#00f0ff] p-1 transition-colors">
+            <button 
+              onClick={() => onOpenMessaging && onOpenMessaging()}
+              title="Open Playure Messages"
+              className="relative text-[#b9cacb] hover:text-[#00f0ff] p-1.5 rounded-xl hover:bg-white/5 transition-all cursor-pointer flex items-center justify-center"
+            >
               <Mail className="w-5 h-5" />
-              <span className="absolute -top-1 -right-1 bg-[#ffb4ab] text-[#690005] text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center border border-[#111318]">
-                2
-              </span>
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-[#ffb4ab] text-[#690005] text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center border border-[#111318] animate-pulse">
+                  {unreadCount}
+                </span>
+              )}
             </button>
 
             {/* Notification Bell Icon */}
-            <button className="relative text-[#b9cacb] hover:text-[#00f0ff] p-1 transition-colors">
-              <Bell className="w-5 h-5" />
-              <span className="absolute -top-1 -right-1 bg-[#ffb4ab] text-[#690005] text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center border border-[#111318]">
-                3
-              </span>
-            </button>
+            <div className="relative flex items-center justify-center">
+              <button 
+                onClick={() => onOpenNotifications && onOpenNotifications()}
+                title="Notifications"
+                className="relative text-[#b9cacb] hover:text-[#00f0ff] p-1.5 rounded-xl hover:bg-white/5 transition-all cursor-pointer flex items-center justify-center"
+              >
+                <Bell className="w-5 h-5" />
+                {notificationCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-[#ffb4ab] text-[#690005] text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center border border-[#111318] animate-pulse">
+                    {notificationCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Notification Dropdown Container */}
+              <NotificationDropdown 
+                isOpen={isNotificationsOpen}
+                onClose={() => onCloseNotifications && onCloseNotifications()}
+                onNavigateAction={onNavigateTab}
+                onOpenSettings={onOpenNotificationSettings}
+                onUnreadCountChange={onNotificationUnreadCountChange}
+              />
+            </div>
 
             {/* Profile Avatar & Interactive Dropdown */}
             <div className="relative pl-1">
