@@ -58,6 +58,7 @@ export default function Navbar({
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search tournaments, players, teams, or arenas..."
               className="w-full pl-11 pr-4 py-2 bg-[#222733] border border-white/15 rounded-full text-sm text-gray-100 placeholder-[#8ab4f8]/70 focus:outline-none focus:border-[#00f0ff] focus:ring-2 focus:ring-[#00f0ff]/20 transition-all shadow-inner font-['Inter']"
+              style={{ paddingLeft: "2.75rem" }}
             />
           </div>
         </div>

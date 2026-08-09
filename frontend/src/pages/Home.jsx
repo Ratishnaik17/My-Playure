@@ -13,7 +13,9 @@ import {
   Menu,
   X,
   BarChart2,
-  LogIn
+  LogIn,
+  Globe,
+  Zap
 } from "lucide-react";
 
 export default function Home({ onSignInSuccess }) {
@@ -354,9 +356,11 @@ export default function Home({ onSignInSuccess }) {
                 </button>
               </div>
 
-              {/* Right Column (Active Competitions Reference Match Card) */}
               <div className="w-full flex justify-center lg:justify-end">
-                <div className="w-full max-w-[660px] bg-[#040812] border border-[#00f0ff]/30 rounded-3xl p-8 sm:p-10 flex flex-col gap-5 shadow-[0_0_40px_rgba(0,240,255,0.1)] relative overflow-hidden backdrop-blur-2xl">
+                <div 
+                  className="w-full max-w-[660px] bg-[#040812] border border-[#00f0ff]/30 rounded-3xl p-8 sm:p-10 flex flex-col gap-5 shadow-[0_0_40px_rgba(0,240,255,0.1)] relative overflow-hidden backdrop-blur-2xl"
+                  style={{ padding: "2.5rem 2rem" }}
+                >
 
                   {/* Header Section */}
                   <div className="flex items-center justify-between border-b border-[#00f0ff]/15 pb-4 mb-1">
@@ -538,27 +542,94 @@ export default function Home({ onSignInSuccess }) {
           <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(#00f0ff_1px,transparent_1px)] [background-size:32px_32px]" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#00f0ff]/10 rounded-full blur-[180px] pointer-events-none" />
 
-          <div className="w-full max-w-[1360px] mx-auto px-6 sm:px-12 lg:px-16 relative z-10">
+          <div className="w-full max-w-[1360px] mx-auto px-6 sm:px-12 lg:px-16 relative z-10" style={{ paddingLeft: 'max(1.5rem, 5%)', paddingRight: 'max(1.5rem, 5%)' }}>
 
-            {/* Centered Hero Header Stack */}
-            <div className="text-center mb-12 sm:mb-16 max-w-4xl mx-auto flex flex-col items-center justify-center gap-4">
+            {/* Split Hero Header Layout matching professional redesign */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center mb-16">
+              {/* Left Side (Content) */}
+              <div className="lg:col-span-7 text-left flex flex-col items-start gap-5">
+                {/* Badge */}
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-[#00f0ff]/30 bg-[#00f0ff]/5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] animate-pulse" />
+                  <span className="font-['JetBrains_Mono',monospace] text-[10px] font-bold text-[#00f0ff] uppercase tracking-wider">
+                    AI POWERED • ATHLETE FOCUSED
+                  </span>
+                </div>
 
-              <h2 className="font-['Hanken_Grotesk'] text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.15] tracking-tight">
-                Meet Your Elite <span className="text-[#00f0ff]">AI Training Partner</span>
-              </h2>
+                {/* Heading */}
+                <h2 className="font-['Hanken_Grotesk'] text-4xl sm:text-5xl lg:text-[54px] font-black text-white leading-[1.1] tracking-tight">
+                  Meet Your Elite <br />
+                  <span className="text-[#00f0ff]">AI Training</span> Partner
+                </h2>
 
-              <p className="text-base sm:text-lg text-[#b9cacb] font-light leading-relaxed max-w-2xl mx-auto">
-                A multi-agent high-performance suite designed to optimize every facet of your athletic journey. From injury prevention to scouting resume creation.
-              </p>
+                {/* Subtitle */}
+                <p className="text-[#b9cacb] font-light leading-relaxed max-w-xl text-sm sm:text-base">
+                  A multi-agent high-performance suite designed to optimize every facet of your athletic journey. From injury prevention to scouting resume creation.
+                </p>
 
-              <div className="pt-2">
-                <button
-                  onClick={() => setShowSignInModal(true)}
-                  className="bg-[#00f0ff] text-[#002022] font-['Hanken_Grotesk'] font-bold text-base px-8 py-3.5 rounded-xl shadow-[0_0_25px_rgba(0,240,255,0.4)] hover:shadow-[0_0_35px_rgba(0,240,255,0.7)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer flex items-center gap-2"
-                >
-                  <span>Try AI Coach</span>
-                  <ArrowRight className="w-5 h-5 text-[#002022]" />
-                </button>
+                {/* CTA Button */}
+                <div className="pt-2">
+                  <button
+                    onClick={() => setShowSignInModal(true)}
+                    className="bg-[#00f0ff] text-[#002022] font-['Hanken_Grotesk'] font-bold text-sm sm:text-base px-8 py-3.5 rounded-xl shadow-[0_0_25px_rgba(0,240,255,0.4)] hover:shadow-[0_0_35px_rgba(0,240,255,0.7)] hover:-translate-y-0.5 transition-all duration-300 cursor-pointer flex items-center gap-2"
+                  >
+                    <span>Try AI Coach</span>
+                    <ArrowRight className="w-4 h-4 text-[#002022]" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Side (Visual Mockup with Overlay Stats) */}
+              <div className="lg:col-span-5 relative w-full h-[320px] sm:h-[380px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl flex items-center justify-center bg-black/40">
+                <img 
+                  src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800&auto=format&fit=crop&q=80" 
+                  alt="Athlete running on stadium track" 
+                  className="w-full h-full object-cover opacity-60"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0D1117]/80 via-transparent to-transparent z-10" />
+
+                {/* Overlay 1: Performance 92% (Top Left) */}
+                <div className="absolute top-4 left-4 bg-[#161B22]/90 border border-white/15 backdrop-blur-md rounded-xl p-3 shadow-2xl z-20 flex flex-col gap-1 w-32">
+                  <span className="text-[9px] font-['JetBrains_Mono',monospace] text-[#b9cacb] uppercase tracking-wider">Performance</span>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xl font-bold text-white leading-none">92%</span>
+                    <span className="text-[10px] text-[#00FF41] font-bold">▲ 4%</span>
+                  </div>
+                  <svg className="w-full h-6 mt-1 text-[#00f0ff]" viewBox="0 0 100 30" fill="none">
+                    <path d="M0,25 Q15,10 30,20 T60,5 T90,15 T100,10" stroke="currentColor" strokeWidth="2" fill="none" />
+                  </svg>
+                </div>
+
+                {/* Overlay 2: Top Speed (Top Right) */}
+                <div className="absolute top-4 right-4 bg-[#161B22]/90 border border-white/15 backdrop-blur-md rounded-xl p-3 shadow-2xl z-20 flex flex-col gap-1 w-32">
+                  <span className="text-[9px] font-['JetBrains_Mono',monospace] text-[#b9cacb] uppercase tracking-wider">Top Speed</span>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-xl font-bold text-white leading-none">32.4</span>
+                    <span className="text-[10px] text-[#b9cacb] font-medium">KM/H</span>
+                  </div>
+                  <div className="flex items-end gap-1 h-6 mt-1 pt-1">
+                    <div className="bg-[#b9cacb]/20 w-2 h-3 rounded-sm" />
+                    <div className="bg-[#b9cacb]/20 w-2 h-4 rounded-sm" />
+                    <div className="bg-[#00f0ff] w-2 h-5 rounded-sm shadow-[0_0_8px_#00f0ff]" />
+                    <div className="bg-[#b9cacb]/20 w-2 h-4 rounded-sm" />
+                    <div className="bg-[#b9cacb]/20 w-2 h-3 rounded-sm" />
+                  </div>
+                </div>
+
+                {/* Overlay 3: Recovery 87% (Bottom Right) */}
+                <div className="absolute bottom-4 right-4 bg-[#161B22]/90 border border-white/15 backdrop-blur-md rounded-xl p-3 shadow-2xl z-20 flex items-center gap-2 w-36">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-[9px] font-['JetBrains_Mono',monospace] text-[#b9cacb] uppercase tracking-wider">Recovery</span>
+                    <span className="text-lg font-bold text-white leading-none">87%</span>
+                  </div>
+                  <div className="relative w-8 h-8 flex items-center justify-center ml-auto">
+                    <svg className="w-full h-full transform -rotate-90">
+                      <circle cx="16" cy="16" r="13" stroke="rgba(255,255,255,0.05)" strokeWidth="3" fill="none" />
+                      <circle cx="16" cy="16" r="13" stroke="#00FF41" strokeWidth="3" strokeDasharray="81" strokeDashoffset="11" strokeLinecap="round" fill="none" />
+                    </svg>
+                    <span className="absolute text-[8px] font-bold text-[#00FF41] font-['JetBrains_Mono',monospace]">87%</span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -571,77 +642,115 @@ export default function Home({ onSignInSuccess }) {
                 {/* 1. Training Agent Card */}
                 <div
                   onClick={() => setShowSignInModal(true)}
-                  className="bg-[#161B22]/80 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-5 flex flex-col justify-between group cursor-pointer hover:bg-[#1e2024] hover:border-[#00f0ff]/40 transition-all duration-300 shadow-xl min-h-[160px]"
+                  className="bg-[#161B22]/80 backdrop-blur-md border border-white/10 rounded-xl p-5 flex flex-col justify-between group cursor-pointer hover:bg-[#1e2024] hover:border-[#00f0ff]/40 transition-all duration-300 shadow-xl min-h-[175px] relative overflow-hidden"
                 >
-                  <div className="flex justify-between items-center mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-[#00f0ff]/10 border border-[#00f0ff]/30 flex items-center justify-center text-[#00f0ff] group-hover:scale-105 transition-transform">
-                      <span className="material-symbols-outlined text-xl">fitness_center</span>
+                  <img 
+                    src="https://images.unsplash.com/photo-1502224562085-639556652f33?w=400&auto=format&fit=crop&q=80" 
+                    alt="Track background" 
+                    className="absolute inset-0 w-full h-full object-cover opacity-[0.08] pointer-events-none mix-blend-luminosity group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="flex justify-between items-center mb-3 relative z-10">
+                    <div className="w-10 h-10 rounded-lg bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 group-hover:scale-105 transition-transform">
+                      <span className="material-symbols-outlined text-xl">directions_run</span>
                     </div>
-                    <span className="font-['JetBrains_Mono',monospace] text-[10px] font-bold text-[#00f0ff] bg-[#00f0ff]/10 px-2 py-0.5 rounded border border-[#00f0ff]/30 shrink-0">
+                    <span className="font-['JetBrains_Mono',monospace] text-[9px] font-bold text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded border border-teal-500/20 shrink-0">
                       ACTIVE
                     </span>
                   </div>
-                  <div>
-                    <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-white mb-1">
-                      Training Agent
-                    </h3>
-                    <p className="text-xs text-[#b9cacb] leading-relaxed">
-                      Adaptive micro-cycles, weekly 1RM calculation, and workload management.
-                    </p>
+                  <div className="relative z-10 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-white mb-1">
+                        Training Agent
+                      </h3>
+                      <p className="text-xs text-[#b9cacb] leading-relaxed">
+                        Adaptive micro-cycles, weekly 1RM calculation, and workload management.
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1 text-[11px] text-[#00f0ff] font-semibold mt-4 transition-colors group-hover:text-[#7df4ff]">
+                      <span>Open Agent</span>
+                      <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                    </div>
                   </div>
                 </div>
 
                 {/* 2. Physio Agent Card */}
                 <div
                   onClick={() => setShowSignInModal(true)}
-                  className="bg-[#161B22]/80 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-5 flex flex-col justify-between group cursor-pointer hover:bg-[#1e2024] hover:border-[#00f0ff]/40 transition-all duration-300 shadow-xl min-h-[160px]"
+                  className="bg-[#161B22]/80 backdrop-blur-md border border-white/10 rounded-xl p-5 flex flex-col justify-between group cursor-pointer hover:bg-[#1e2024] hover:border-[#00f0ff]/40 transition-all duration-300 shadow-xl min-h-[175px] relative overflow-hidden"
                 >
-                  <div className="flex justify-between items-center mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-[#00f0ff]/10 border border-[#00f0ff]/30 flex items-center justify-center text-[#00f0ff] group-hover:scale-105 transition-transform">
-                      <span className="material-symbols-outlined text-xl">medical_services</span>
+                  <img 
+                    src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=400&auto=format&fit=crop&q=80" 
+                    alt="Skeleton background" 
+                    className="absolute inset-0 w-full h-full object-cover opacity-[0.08] pointer-events-none mix-blend-luminosity group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="flex justify-between items-center mb-3 relative z-10">
+                    <div className="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 group-hover:scale-105 transition-transform">
+                      <span className="material-symbols-outlined text-xl">health_and_safety</span>
                     </div>
-                    <span className="font-['JetBrains_Mono',monospace] text-[10px] font-bold text-[#849495] border border-white/10 px-2 py-0.5 rounded shrink-0">
+                    <span className="font-['JetBrains_Mono',monospace] text-[9px] font-bold text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20 shrink-0">
                       STANDBY
                     </span>
                   </div>
-                  <div>
-                    <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-white mb-1">
-                      Physio Agent
-                    </h3>
-                    <p className="text-xs text-[#b9cacb] leading-relaxed">
-                      Symptom checker, mobility routines, and injury recovery timelines.
-                    </p>
+                  <div className="relative z-10 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-white mb-1">
+                        Physio Agent
+                      </h3>
+                      <p className="text-xs text-[#b9cacb] leading-relaxed">
+                        Symptom checker, mobility routines, and injury recovery timelines.
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1 text-[11px] text-[#00f0ff] font-semibold mt-4 transition-colors group-hover:text-[#7df4ff]">
+                      <span>Open Agent</span>
+                      <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                    </div>
                   </div>
                 </div>
 
                 {/* 3. Nutrition Agent Card */}
                 <div
                   onClick={() => setShowSignInModal(true)}
-                  className="bg-[#161B22]/80 backdrop-blur-md border border-white/10 rounded-xl p-4 sm:p-5 flex flex-col justify-between group cursor-pointer hover:bg-[#1e2024] hover:border-[#00f0ff]/40 transition-all duration-300 shadow-xl min-h-[160px]"
+                  className="bg-[#161B22]/80 backdrop-blur-md border border-white/10 rounded-xl p-5 flex flex-col justify-between group cursor-pointer hover:bg-[#1e2024] hover:border-[#00f0ff]/40 transition-all duration-300 shadow-xl min-h-[175px] relative overflow-hidden"
                 >
-                  <div className="flex justify-between items-center mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-[#00f0ff]/10 border border-[#00f0ff]/30 flex items-center justify-center text-[#00f0ff] group-hover:scale-105 transition-transform">
+                  <img 
+                    src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&auto=format&fit=crop&q=80" 
+                    alt="Salad background" 
+                    className="absolute inset-0 w-full h-full object-cover opacity-[0.08] pointer-events-none mix-blend-luminosity group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="flex justify-between items-center mb-3 relative z-10">
+                    <div className="w-10 h-10 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 group-hover:scale-105 transition-transform">
                       <span className="material-symbols-outlined text-xl">restaurant</span>
                     </div>
-                    <span className="font-['JetBrains_Mono',monospace] text-[10px] font-bold text-[#849495] border border-white/10 px-2 py-0.5 rounded shrink-0">
+                    <span className="font-['JetBrains_Mono',monospace] text-[9px] font-bold text-green-400 bg-green-500/10 px-2 py-0.5 rounded border border-green-500/20 shrink-0">
                       STANDBY
                     </span>
                   </div>
-                  <div>
-                    <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-white mb-1">
-                      Nutrition Agent
-                    </h3>
-                    <p className="text-xs text-[#b9cacb] leading-relaxed">
-                      BMR & TDEE calculation, macronutrient targets, and meal timing.
-                    </p>
+                  <div className="relative z-10 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-white mb-1">
+                        Nutrition Agent
+                      </h3>
+                      <p className="text-xs text-[#b9cacb] leading-relaxed">
+                        BMR & TDEE calculation, macronutrient targets, and meal timing.
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1 text-[11px] text-[#00f0ff] font-semibold mt-4 transition-colors group-hover:text-[#7df4ff]">
+                      <span>Open Agent</span>
+                      <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                    </div>
                   </div>
                 </div>
 
-                {/* 4. Resume Builder Card (HIGHLIGHT) */}
+                {/* 4. Resume Builder Card */}
                 <div
                   onClick={() => setShowSignInModal(true)}
-                  className="bg-[#161B22]/80 backdrop-blur-md border border-[#00f0ff]/40 hover:border-[#00f0ff] rounded-xl p-4 sm:p-5 flex flex-col justify-between group cursor-pointer relative overflow-hidden transition-all duration-300 shadow-xl min-h-[160px]"
+                  className="bg-[#161B22]/80 backdrop-blur-md border border-[#00f0ff]/40 hover:border-[#00f0ff] rounded-xl p-5 flex flex-col justify-between group cursor-pointer relative overflow-hidden transition-all duration-300 shadow-xl min-h-[175px]"
                 >
+                  <img 
+                    src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&auto=format&fit=crop&q=80" 
+                    alt="Resume background" 
+                    className="absolute inset-0 w-full h-full object-cover opacity-[0.08] pointer-events-none mix-blend-luminosity group-hover:scale-105 transition-transform duration-500"
+                  />
                   <div className="absolute top-0 right-0 w-28 h-28 bg-[#00f0ff]/10 blur-2xl -mr-14 -mt-14 rounded-full pointer-events-none" />
 
                   <div className="flex justify-between items-center mb-3 relative z-10">
@@ -654,13 +763,19 @@ export default function Home({ onSignInSuccess }) {
                     </span>
                   </div>
 
-                  <div className="relative z-10">
-                    <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-white mb-1">
-                      Resume Builder
-                    </h3>
-                    <p className="text-xs text-[#b9cacb] leading-relaxed">
-                      Scouting-ready CV generation, career stats, and objective layout.
-                    </p>
+                  <div className="relative z-10 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-['Hanken_Grotesk'] text-lg font-bold text-white mb-1">
+                        Resume Builder
+                      </h3>
+                      <p className="text-xs text-[#b9cacb] leading-relaxed">
+                        Scouting-ready CV generation, career stats, and objective layout.
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1 text-[11px] text-[#FFD700] font-semibold mt-4 transition-colors group-hover:text-yellow-300">
+                      <span>Open Agent</span>
+                      <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                    </div>
                   </div>
                 </div>
 
@@ -764,12 +879,15 @@ export default function Home({ onSignInSuccess }) {
           {/* Background Ambient Radial Glow */}
           <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-red-500/10 rounded-full blur-[160px] pointer-events-none" />
 
-          <div className="w-full px-8 sm:px-14 lg:px-16 relative z-10" style={{ maxWidth: '1360px', marginLeft: 'auto', marginRight: 'auto' }}>
+          <div className="w-full px-8 sm:px-14 lg:px-16 relative z-10" style={{ maxWidth: '1360px', marginLeft: 'auto', marginRight: 'auto', paddingLeft: 'max(1.5rem, 5%)', paddingRight: 'max(1.5rem, 5%)' }}>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
               {/* Left Column (Collaboration Hub Redesigned Card) */}
               <div className="w-full flex justify-center lg:justify-start order-2 lg:order-1">
-                <div className="w-full max-w-[660px] bg-[#040812] border border-[#00f0ff]/30 rounded-3xl p-8 sm:p-10 flex flex-col gap-5 shadow-[0_0_40px_rgba(0,240,255,0.1)] relative overflow-hidden backdrop-blur-2xl">
+                <div 
+                  className="w-full max-w-[660px] bg-[#040812] border border-[#00f0ff]/30 rounded-3xl p-8 sm:p-10 flex flex-col gap-5 shadow-[0_0_40px_rgba(0,240,255,0.1)] relative overflow-hidden backdrop-blur-2xl"
+                  style={{ padding: "2.5rem 2rem" }}
+                >
 
                   {/* Top Neon Ambient Bar */}
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#00f0ff] to-transparent opacity-80" />
@@ -814,8 +932,9 @@ export default function Home({ onSignInSuccess }) {
                           <h4 className="font-bold text-white text-base font-['Hanken_Grotesk'] group-hover:text-[#00f0ff] transition-colors truncate">
                             Rahul Dravid
                           </h4>
-                          <p className="text-xs font-semibold text-[#00f0ff] mt-0.5 truncate">
-                            ⚽ Football Squad
+                          <p className="text-xs font-semibold text-[#00f0ff] mt-0.5 truncate flex items-center gap-1">
+                            <Globe className="w-3.5 h-3.5 text-[#00f0ff]" />
+                            <span>Football Squad</span>
                           </p>
                           <p className="text-xs font-medium text-[#9aa0a6] mt-0.5 truncate">
                             Turf Park, Koramangala
@@ -832,21 +951,22 @@ export default function Home({ onSignInSuccess }) {
                       </button>
                     </div>
 
-                    {/* Mini Card 2: Sneha Reddy */}
+                    {/* Mini Card 2: Sneha Reddy (Purple Themed) */}
                     <div
                       onClick={() => setShowSignInModal(true)}
-                      className="rounded-2xl border border-[#00f0ff]/20 bg-[#080e18] p-4 flex flex-col justify-between gap-4 hover:border-[#00f0ff]/50 transition-all duration-200 cursor-pointer group"
+                      className="rounded-2xl border border-purple-500/20 bg-[#080e18] p-4 flex flex-col justify-between gap-4 hover:border-purple-500/50 transition-all duration-200 cursor-pointer group"
                     >
                       <div className="flex items-start gap-3">
-                        <div className="w-11 h-11 rounded-xl border border-[#00f0ff]/30 bg-[#00f0ff]/10 flex items-center justify-center shrink-0 font-bold text-white text-base font-['Hanken_Grotesk']">
+                        <div className="w-11 h-11 rounded-xl border border-purple-500/30 bg-purple-500/10 flex items-center justify-center shrink-0 font-bold text-white text-base font-['Hanken_Grotesk']">
                           SR
                         </div>
                         <div className="flex flex-col min-w-0">
-                          <h4 className="font-bold text-white text-base font-['Hanken_Grotesk'] group-hover:text-[#00f0ff] transition-colors truncate">
+                          <h4 className="font-bold text-white text-base font-['Hanken_Grotesk'] group-hover:text-purple-400 transition-colors truncate">
                             Sneha Reddy
                           </h4>
-                          <p className="text-xs font-semibold text-[#00f0ff] mt-0.5 truncate">
-                            🏸 Badminton Partner
+                          <p className="text-xs font-semibold text-purple-400 mt-0.5 truncate flex items-center gap-1">
+                            <Zap className="w-3.5 h-3.5 text-purple-400" />
+                            <span>Badminton Partner</span>
                           </p>
                           <p className="text-xs font-medium text-[#9aa0a6] mt-0.5 truncate">
                             Indiranagar Club
@@ -856,7 +976,7 @@ export default function Home({ onSignInSuccess }) {
 
                       <button
                         onClick={() => setShowSignInModal(true)}
-                        className="w-full bg-[#00f0ff]/10 hover:bg-[#00f0ff] text-[#00f0ff] hover:text-[#00262b] border border-[#00f0ff]/40 font-bold font-['Hanken_Grotesk'] text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                        className="w-full bg-purple-500/10 hover:bg-purple-500 text-purple-400 hover:text-[#0c0e12] border border-purple-500/40 hover:border-purple-500 font-bold font-['Hanken_Grotesk'] text-xs py-2.5 rounded-xl uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                       >
                         <span>COLLABORATE</span>
                         <ChevronRight className="w-4 h-4" />
@@ -891,7 +1011,7 @@ export default function Home({ onSignInSuccess }) {
                     </div>
 
                     <div className="flex items-center gap-2 shrink-0">
-                      <span className="px-3 py-1.5 rounded-lg border border-[#00f0ff]/40 bg-[#00f0ff] font-['JetBrains_Mono',monospace] font-bold text-xs text-[#00262b] uppercase tracking-wider">
+                      <span className="px-3.5 py-2 rounded-xl bg-[#00f0ff] font-['JetBrains_Mono',monospace] font-bold text-xs text-[#00262b] uppercase tracking-wider whitespace-nowrap shadow-[0_0_15px_rgba(0,240,255,0.2)]">
                         POST NOW
                       </span>
                     </div>

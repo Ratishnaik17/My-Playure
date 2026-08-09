@@ -265,18 +265,15 @@ export default function CompetitionsView() {
         {/* Right Athlete Image */}
         <div className="absolute right-0 top-0 bottom-0 w-full md:w-2/3 h-full overflow-hidden flex items-center justify-end pointer-events-none z-0">
           <img
-            src="https://images.unsplash.com/photo-1517649763962-0c623266010b?w=1000&auto=format&fit=crop&q=80"
-            alt="Sports Athlete"
+            src="/competition-hero-bg.jpg"
+            alt="Sports Trophy"
             className="w-full h-full object-cover object-right opacity-80"
-            onError={(e) => {
-              e.target.src = "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&auto=format&fit=crop&q=80";
-            }}
           />
         </div>
       </div>
 
       {/* 2. Filter Bar (Glass Panel with Custom Selects) */}
-      <div className="bg-[#161B22]/60 backdrop-blur-xl border border-white/10 p-4 rounded-xl space-y-3">
+      <div className="bg-[#161B22]/60 backdrop-blur-xl border border-white/10 p-4 rounded-xl space-y-5">
         {/* Search Bar */}
         <div className="relative w-full">
           <Search className="w-4 h-4 text-[#b9cacb] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -285,12 +282,13 @@ export default function CompetitionsView() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search tournaments, players, clubs..."
-            className="w-full pl-10 pr-4 py-2.5 bg-[#333539] border border-white/10 rounded-full text-xs text-white placeholder-[#b9cacb] focus:outline-none focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff] transition-all font-['Inter']"
+            className="w-full pl-11 pr-4 py-2.5 bg-[#333539] border border-white/10 rounded-full text-xs text-white placeholder-[#b9cacb] focus:outline-none focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff] transition-all font-['Inter']"
+            style={{ paddingLeft: "2.75rem" }}
           />
         </div>
 
         {/* Filter Dropdowns Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-1">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-2">
           {/* Sport Filter */}
           <div className="flex items-center bg-[#1e2024] border border-white/10 rounded-lg px-3 py-2 hover:border-[#00f0ff]/50 transition-colors">
             <select
