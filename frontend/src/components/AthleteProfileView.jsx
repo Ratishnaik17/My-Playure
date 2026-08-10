@@ -35,13 +35,7 @@ const INITIAL_ATHLETE_DATA = {
     { id: "languages", label: "Languages", value: "English, Hindi, Gujarati", icon: "translate" },
     { id: "education", label: "Education", value: "BBA, Mumbai University", icon: "school" }
   ],
-  skills: [
-    { name: "Batting", percentage: 95 },
-    { name: "Bowling", percentage: 80 },
-    { name: "Fielding", percentage: 90 },
-    { name: "Fitness", percentage: 88 },
-    { name: "Leadership", percentage: 85 }
-  ],
+  skills: [],
   highlights: [
     { icon: "🏆", text: "Man of the Series – State Championship 2023" },
     { icon: "🏏", text: "Highest Score: 152*" },
@@ -148,6 +142,11 @@ export default function AthleteProfileView() {
   const [editLanguages, setEditLanguages] = useState("");
   const [editEducation, setEditEducation] = useState("");
 
+  // Skills add states
+  const [isAddingSkill, setIsAddingSkill] = useState(false);
+  const [newSkillName, setNewSkillName] = useState("");
+  const [newSkillPercent, setNewSkillPercent] = useState(80);
+
   const handleStartEditingAbout = () => {
     setEditedAbout(athlete.about);
     
@@ -222,7 +221,8 @@ export default function AthleteProfileView() {
           about: parsedBio.about,
           profileUrl: parsedBio.website || prev.profileUrl,
           attributes: parsedBio.attributes || prev.attributes,
-          bioDetails: loadedBioDetails
+          bioDetails: loadedBioDetails,
+          skills: parsedBio.skills || []
         }));
         setEditedAbout(parsedBio.about);
       }
@@ -264,7 +264,8 @@ export default function AthleteProfileView() {
         playingSince: editPlayingSince,
         languages: editLanguages,
         education: editEducation
-      }
+      },
+      skills: athlete.skills
     };
 
     const updatePayload = {
@@ -291,10 +292,26 @@ export default function AthleteProfileView() {
       .map(t => t.trim())
       .filter(t => t.length > 0);
 
+    const ageVal = athlete.bioDetails.find(d => d.label === "Age")?.value || "24";
+    const heightVal = athlete.bioDetails.find(d => d.label === "Height")?.value || "5'10\"";
+    const weightVal = athlete.bioDetails.find(d => d.label === "Weight")?.value || "72 kg";
+    const sinceVal = athlete.bioDetails.find(d => d.label === "Playing Since")?.value || "2012";
+    const langVal = athlete.bioDetails.find(d => d.label === "Languages")?.value || "English, Hindi, Gujarati";
+    const eduVal = athlete.bioDetails.find(d => d.label === "Education")?.value || "BBA, Mumbai University";
+
     const bioObj = {
       about: athlete.about,
       website: editWebsite.trim(),
-      attributes: attributesArr
+      attributes: attributesArr,
+      bioDetails: {
+        age: ageVal,
+        height: heightVal,
+        weight: weightVal,
+        playingSince: sinceVal,
+        languages: langVal,
+        education: eduVal
+      },
+      skills: athlete.skills
     };
 
     const updatePayload = {
@@ -321,6 +338,79 @@ export default function AthleteProfileView() {
     } else {
       alert("Failed to save profile details in database.");
     }
+  };
+
+  const syncSkillsToDB = async (skillsList) => {
+    let city = "Bengaluru";
+    let state = "India";
+    const locParts = athlete.location.split(",");
+    if (locParts.length > 0) city = locParts[0].trim();
+    if (locParts.length > 1) state = locParts.slice(1).join(",").trim();
+
+    const ageVal = athlete.bioDetails.find(d => d.label === "Age")?.value || "24";
+    const heightVal = athlete.bioDetails.find(d => d.label === "Height")?.value || "5'10\"";
+    const weightVal = athlete.bioDetails.find(d => d.label === "Weight")?.value || "72 kg";
+    const sinceVal = athlete.bioDetails.find(d => d.label === "Playing Since")?.value || "2012";
+    const langVal = athlete.bioDetails.find(d => d.label === "Languages")?.value || "English, Hindi, Gujarati";
+    const eduVal = athlete.bioDetails.find(d => d.label === "Education")?.value || "BBA, Mumbai University";
+
+    const bioObj = {
+      about: athlete.about,
+      website: athlete.profileUrl,
+      attributes: athlete.attributes,
+      bioDetails: {
+        age: ageVal,
+        height: heightVal,
+        weight: weightVal,
+        playingSince: sinceVal,
+        languages: langVal,
+        education: eduVal
+      },
+      skills: skillsList
+    };
+
+    const updatePayload = {
+      role: athlete.role,
+      city: city,
+      state: state,
+      bio: JSON.stringify(bioObj)
+    };
+    const activeUserId = user?.id || localStorage.getItem("playure_demo_user_id") || "00000000-0000-0000-0000-000000000001";
+    await updateUserProfile(updatePayload, activeUserId);
+  };
+
+  const handleSaveNewSkill = async (e) => {
+    e.preventDefault();
+    if (!newSkillName.trim()) return;
+
+    if (athlete.skills.some(s => s.name.toLowerCase() === newSkillName.trim().toLowerCase())) {
+      alert("This skill is already listed.");
+      return;
+    }
+
+    const updatedSkills = [
+      ...athlete.skills,
+      { name: newSkillName.trim(), percentage: newSkillPercent }
+    ];
+
+    setAthlete(prev => ({
+      ...prev,
+      skills: updatedSkills
+    }));
+    setIsAddingSkill(false);
+    setNewSkillName("");
+    setNewSkillPercent(80);
+
+    await syncSkillsToDB(updatedSkills);
+  };
+
+  const handleDeleteSkill = async (skillName) => {
+    const updatedSkills = athlete.skills.filter(s => s.name !== skillName);
+    setAthlete(prev => ({
+      ...prev,
+      skills: updatedSkills
+    }));
+    await syncSkillsToDB(updatedSkills);
   };
 
   const handleAvatarChange = (e) => {
@@ -755,13 +845,78 @@ export default function AthleteProfileView() {
 
               {/* Skills card */}
               <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all">
-                <h3 className="text-sm font-extrabold uppercase tracking-wider text-white mb-5 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#00f0ff] text-lg">bolt</span>
-                  <span>Skills</span>
-                </h3>
+                <div className="flex justify-between items-center mb-5">
+                  <h3 className="text-sm font-extrabold uppercase tracking-wider text-white flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[#00f0ff] text-lg">bolt</span>
+                    <span>Skills</span>
+                  </h3>
+                  {isOwner && !isAddingSkill && (
+                    <button 
+                      onClick={() => {
+                        setNewSkillName("");
+                        setNewSkillPercent(80);
+                        setIsAddingSkill(true);
+                      }}
+                      className="p-1 rounded-md text-[#00f0ff] hover:text-white hover:bg-white/5 cursor-pointer flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-sm">add</span>
+                      <span>Add</span>
+                    </button>
+                  )}
+                </div>
+
+                {isAddingSkill && (
+                  <form onSubmit={handleSaveNewSkill} className="p-3.5 bg-[#111318]/50 border border-white/5 rounded-xl space-y-3.5 mb-4">
+                    <div>
+                      <label className="text-[9px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Skill Name</label>
+                      <input
+                        type="text"
+                        required
+                        value={newSkillName}
+                        onChange={(e) => setNewSkillName(e.target.value)}
+                        placeholder="e.g. Batting, Wicketkeeping"
+                        className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                        style={{ padding: '8px 12px' }}
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[9px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Proficiency ({newSkillPercent}%)</label>
+                      <input
+                        type="range"
+                        min="10"
+                        max="100"
+                        step="5"
+                        value={newSkillPercent}
+                        onChange={(e) => setNewSkillPercent(Number(e.target.value))}
+                        className="w-full accent-[#00f0ff] cursor-pointer"
+                      />
+                    </div>
+                    <div className="flex justify-end gap-2 pt-2 border-t border-white/5">
+                      <button 
+                        type="button" 
+                        onClick={() => setIsAddingSkill(false)} 
+                        className="bg-white/5 hover:bg-white/10 rounded-md text-[9px] font-bold cursor-pointer transition-colors"
+                        style={{ padding: '6px 12px' }}
+                      >
+                        Cancel
+                      </button>
+                      <button 
+                        type="submit" 
+                        className="bg-[#00f0ff] hover:bg-[#00dbe9] text-black rounded-md text-[9px] font-bold cursor-pointer transition-colors shadow-[0_0_6px_rgba(0,240,255,0.2)]"
+                        style={{ padding: '6px 12px' }}
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </form>
+                )}
+
                 <div className="space-y-4">
+                  {athlete.skills.length === 0 && !isAddingSkill && (
+                    <p className="text-xs text-gray-500 italic py-2 text-center">No skills added yet.</p>
+                  )}
                   {athlete.skills.map((skill) => (
-                    <div key={skill.name}>
+                    <div key={skill.name} className="group/item relative pr-6">
                       <div className="flex justify-between items-center text-xs mb-1.5">
                         <span className="font-semibold text-gray-300">{skill.name}</span>
                         <span className="font-bold text-[#00f0ff] font-['JetBrains_Mono']">{skill.percentage}%</span>
@@ -772,6 +927,15 @@ export default function AthleteProfileView() {
                           style={{ width: `${skill.percentage}%` }}
                         />
                       </div>
+                      {isOwner && (
+                        <button 
+                          onClick={() => handleDeleteSkill(skill.name)}
+                          className="absolute right-0 top-0.5 opacity-0 group-hover/item:opacity-100 p-0.5 rounded text-red-400 hover:text-red-500 hover:bg-white/5 cursor-pointer transition-all"
+                          title="Delete Skill"
+                        >
+                          <span className="material-symbols-outlined text-[15px]">delete</span>
+                        </button>
+                      )}
                     </div>
                   ))}
                 </div>
