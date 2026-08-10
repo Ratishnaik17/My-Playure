@@ -14,6 +14,9 @@ function App() {
 
   const handleSignOut = async () => {
     setDemoAuthenticated(false);
+    localStorage.removeItem("playure_demo_user_name");
+    localStorage.removeItem("playure_demo_user_email");
+    localStorage.removeItem("playure_demo_user_id");
     if (isSignedIn && signOut) {
       try {
         await signOut();

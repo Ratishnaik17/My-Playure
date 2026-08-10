@@ -151,8 +151,9 @@ export default function AthleteProfileView() {
   // Fetch details on mount or session change
   useEffect(() => {
     async function loadProfile() {
+      const activeUserId = user?.id || localStorage.getItem("playure_demo_user_id") || "00000000-0000-0000-0000-000000000001";
       const fallbackName = user?.fullName || localStorage.getItem("playure_demo_user_name") || "Arjun Mehta";
-      const data = await fetchUserProfile(user?.id, fallbackName);
+      const data = await fetchUserProfile(activeUserId, fallbackName);
       if (data) {
         let parsedBio = { 
           about: INITIAL_ATHLETE_DATA.about, 
@@ -212,7 +213,8 @@ export default function AthleteProfileView() {
       state: state,
       bio: JSON.stringify(bioObj)
     };
-    await updateUserProfile(updatePayload, user?.id);
+    const activeUserId = user?.id || localStorage.getItem("playure_demo_user_id") || "00000000-0000-0000-0000-000000000001";
+    await updateUserProfile(updatePayload, activeUserId);
   };
 
   const handleSaveProfileDetails = async (e) => {
@@ -243,7 +245,8 @@ export default function AthleteProfileView() {
       bio: JSON.stringify(bioObj)
     };
 
-    const result = await updateUserProfile(updatePayload, user?.id);
+    const activeUserId = user?.id || localStorage.getItem("playure_demo_user_id") || "00000000-0000-0000-0000-000000000001";
+    const result = await updateUserProfile(updatePayload, activeUserId);
     if (result && result.status === "success") {
       localStorage.setItem("playure_demo_user_name", updatePayload.full_name);
       setAthlete(prev => ({

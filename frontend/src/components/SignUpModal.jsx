@@ -19,6 +19,13 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
   const [pendingVerification, setPendingVerification] = useState(false);
   const [code, setCode] = useState("");
 
+  const saveRegistrationSession = () => {
+    const generatedId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : '00000000-0000-0000-0000-' + Math.random().toString(16).slice(2, 14).padEnd(12, '0');
+    localStorage.setItem("playure_demo_user_id", generatedId);
+    localStorage.setItem("playure_demo_user_name", name);
+    localStorage.setItem("playure_demo_user_email", email);
+  };
+
   const indianSportsList = [
     { name: "Cricket", icon: "🏏" },
     { name: "Field Hockey", icon: "🏑" },
@@ -100,8 +107,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
         }
 
         if (result?.status === "complete") {
-          localStorage.setItem("playure_demo_user_name", name);
-          localStorage.setItem("playure_demo_user_email", email);
+          saveRegistrationSession();
           await setActive({ session: result.createdSessionId });
           if (onSuccess) onSuccess();
           onClose();
@@ -111,8 +117,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
             setPendingVerification(true);
           } catch (verErr) {
             if (result?.createdSessionId) {
-              localStorage.setItem("playure_demo_user_name", name);
-              localStorage.setItem("playure_demo_user_email", email);
+              saveRegistrationSession();
               await setActive({ session: result.createdSessionId });
               if (onSuccess) onSuccess();
               onClose();
@@ -123,8 +128,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
         }
       } else {
         setTimeout(() => {
-          localStorage.setItem("playure_demo_user_name", name);
-          localStorage.setItem("playure_demo_user_email", email);
+          saveRegistrationSession();
           setLoading(false);
           if (onSuccess) onSuccess();
           onClose();
@@ -147,8 +151,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
       if (isLoaded && signUp) {
         const completeSignUp = await signUp.attemptEmailAddressVerification({ code });
         if (completeSignUp.status === "complete") {
-          localStorage.setItem("playure_demo_user_name", name);
-          localStorage.setItem("playure_demo_user_email", email);
+          saveRegistrationSession();
           await setActive({ session: completeSignUp.createdSessionId });
           if (onSuccess) onSuccess();
           onClose();
@@ -156,8 +159,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
           setError("Verification incomplete. Please check your code.");
         }
       } else {
-        localStorage.setItem("playure_demo_user_name", name);
-        localStorage.setItem("playure_demo_user_email", email);
+        saveRegistrationSession();
         if (onSuccess) onSuccess();
         onClose();
       }
