@@ -608,15 +608,15 @@ export default function AthleteProfileView() {
                 )}
 
                 {/* BIO FIELDS GRID */}
-                <div className="border-t border-white/5 mt-5 pt-4 space-y-3.5">
+                <div className="border-t border-white/5 mt-5 pt-5 flex flex-col !gap-4.5">
                   {athlete.bioDetails.map((detail) => (
-                    <div key={detail.id} className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#111318]/80 border border-white/10 flex items-center justify-center text-[#b9cacb]">
-                        <span className="material-symbols-outlined text-base">{detail.icon}</span>
+                    <div key={detail.id} className="flex items-center !gap-4.5 !py-1">
+                      <div className="w-9 h-9 rounded-xl bg-[#111318]/80 border border-white/10 flex items-center justify-center text-[#00f0ff] shadow-md shrink-0">
+                        <span className="material-symbols-outlined text-lg">{detail.icon}</span>
                       </div>
-                      <div>
+                      <div className="space-y-1">
                         <span className="text-[10px] text-[#b9cacb]/80 uppercase tracking-wider block font-bold leading-none">{detail.label}</span>
-                        <span className="text-xs text-white font-semibold block mt-1">{detail.value}</span>
+                        <span className="text-xs text-white font-semibold block leading-normal">{detail.value}</span>
                       </div>
                     </div>
                   ))}
