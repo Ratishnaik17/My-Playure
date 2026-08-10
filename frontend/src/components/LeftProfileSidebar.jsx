@@ -18,7 +18,7 @@ import { useUser } from "@clerk/clerk-react";
 export default function LeftProfileSidebar({ activeTab, onNavigateTab, onNavigateCompetitions, onSignOut }) {
   const { user } = useUser();
   const userAvatar = "/default_avatar.jpg";
-  const userName = user?.fullName || "Ratish Naik";
+  const userName = user?.fullName || localStorage.getItem("playure_demo_user_name") || "Ratish Naik";
 
   const menuItems = [
     { id: "ai_assistant", label: "AI Coach & Resume", icon: Bot, isHighlight: true },

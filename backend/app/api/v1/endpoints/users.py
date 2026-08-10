@@ -34,17 +34,19 @@ async def get_suggested_users(
 
 @router.get("/users/me", summary="Get current user details")
 async def get_my_profile(
+    full_name: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
     current_user_id: uuid.UUID = Depends(get_current_user_id),
 ):
     service = UserService(db)
     user = await service.user_repo.get_by_id(current_user_id)
     if not user:
+        display_name = full_name or "Arjun Mehta"
         # Auto-create default user matching profile info
         from app.models.user import User
         user = User(
             id=current_user_id,
-            full_name="Arjun Mehta",
+            full_name=display_name,
             username="arjunmehta",
             email="arjun@playure.com",
             role="Professional Cricketer",
@@ -54,6 +56,9 @@ async def get_my_profile(
             bio='{"about": "Passionate cricketer with 8+ years of experience in competitive cricket. Represented Mumbai in Ranji Trophy and currently playing in the Premier League. Focused on continuous improvement and team success.", "website": "playure.com/arjunmehta", "attributes": ["Right Hand Batsman", "Right Arm Off Break", "All Rounder"]}'
         )
         await service.user_repo.create(user)
+    elif full_name and user.full_name != full_name and user.full_name == "Arjun Mehta":
+        # If user exists but name is placeholder, sync their actual name
+        await service.user_repo.update(user, {"full_name": full_name})
     return {
         "id": user.id,
         "full_name": user.full_name,

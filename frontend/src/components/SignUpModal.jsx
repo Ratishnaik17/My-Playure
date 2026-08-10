@@ -100,6 +100,8 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
         }
 
         if (result?.status === "complete") {
+          localStorage.setItem("playure_demo_user_name", name);
+          localStorage.setItem("playure_demo_user_email", email);
           await setActive({ session: result.createdSessionId });
           if (onSuccess) onSuccess();
           onClose();
@@ -109,6 +111,8 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
             setPendingVerification(true);
           } catch (verErr) {
             if (result?.createdSessionId) {
+              localStorage.setItem("playure_demo_user_name", name);
+              localStorage.setItem("playure_demo_user_email", email);
               await setActive({ session: result.createdSessionId });
               if (onSuccess) onSuccess();
               onClose();
@@ -119,6 +123,8 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
         }
       } else {
         setTimeout(() => {
+          localStorage.setItem("playure_demo_user_name", name);
+          localStorage.setItem("playure_demo_user_email", email);
           setLoading(false);
           if (onSuccess) onSuccess();
           onClose();
@@ -141,6 +147,8 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
       if (isLoaded && signUp) {
         const completeSignUp = await signUp.attemptEmailAddressVerification({ code });
         if (completeSignUp.status === "complete") {
+          localStorage.setItem("playure_demo_user_name", name);
+          localStorage.setItem("playure_demo_user_email", email);
           await setActive({ session: completeSignUp.createdSessionId });
           if (onSuccess) onSuccess();
           onClose();
@@ -148,6 +156,8 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
           setError("Verification incomplete. Please check your code.");
         }
       } else {
+        localStorage.setItem("playure_demo_user_name", name);
+        localStorage.setItem("playure_demo_user_email", email);
         if (onSuccess) onSuccess();
         onClose();
       }

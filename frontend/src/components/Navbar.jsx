@@ -18,8 +18,8 @@ export default function Navbar({
   onNotificationUnreadCountChange
 }) {
   const { user } = useUser();
-  const userName = user?.fullName || "Ratish Naik";
-  const userEmail = user?.primaryEmailAddress?.emailAddress || "ratish@playure.com";
+  const userName = user?.fullName || localStorage.getItem("playure_demo_user_name") || "Ratish Naik";
+  const userEmail = user?.primaryEmailAddress?.emailAddress || localStorage.getItem("playure_demo_user_email") || "ratish@playure.com";
   const [searchQuery, setSearchQuery] = useState("");
   const [showUserDropdown, setShowUserDropdown] = useState(false);
 

@@ -29,7 +29,7 @@ export default function CreatePostCard({ onAddPost }) {
   const fileInputRef = useRef(null);
 
   const userAvatar = "/default_avatar.jpg";
-  const userName = user?.fullName || "Ratish Naik";
+  const userName = user?.fullName || localStorage.getItem("playure_demo_user_name") || "Ratish Naik";
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];

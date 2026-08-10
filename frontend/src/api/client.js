@@ -208,13 +208,17 @@ export async function createRePlayListing(listingData) {
   return newListing;
 }
 
-export async function fetchUserProfile(userId) {
+export async function fetchUserProfile(userId, fullName) {
   try {
     const headers = {};
     if (userId) {
       headers["X-User-Id"] = userId;
     }
-    const res = await fetch(`${API_BASE_URL}/v1/users/me`, { headers });
+    let url = `${API_BASE_URL}/v1/users/me`;
+    if (fullName) {
+      url += `?full_name=${encodeURIComponent(fullName)}`;
+    }
+    const res = await fetch(url, { headers });
     if (!res.ok) throw new Error("Failed to fetch user profile");
     return await res.json();
   } catch (err) {

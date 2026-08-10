@@ -11,7 +11,7 @@ import { fetchUserProfile, updateUserProfile } from "../api/client";
 
 // Mock data model
 const INITIAL_ATHLETE_DATA = {
-  name: "Arjun Mehta",
+  name: localStorage.getItem("playure_demo_user_name") || "Arjun Mehta",
   sport: "Cricket",
   role: "Professional Cricketer",
   location: "Bengaluru, India",
@@ -142,6 +142,7 @@ export default function AthleteProfileView() {
 
   // Edit Profile Details states
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [editName, setEditName] = useState(athlete.name);
   const [editRole, setEditRole] = useState(athlete.role);
   const [editLocation, setEditLocation] = useState(athlete.location);
   const [editWebsite, setEditWebsite] = useState(athlete.profileUrl);
@@ -150,7 +151,8 @@ export default function AthleteProfileView() {
   // Fetch details on mount or session change
   useEffect(() => {
     async function loadProfile() {
-      const data = await fetchUserProfile(user?.id);
+      const fallbackName = user?.fullName || localStorage.getItem("playure_demo_user_name") || "Arjun Mehta";
+      const data = await fetchUserProfile(user?.id, fallbackName);
       if (data) {
         let parsedBio = { 
           about: INITIAL_ATHLETE_DATA.about, 
@@ -172,6 +174,7 @@ export default function AthleteProfileView() {
 
         setAthlete(prev => ({
           ...prev,
+          name: data.full_name || prev.name,
           role: data.role || prev.role,
           location: (data.city && data.state) ? `${data.city}, ${data.state}` : prev.location,
           about: parsedBio.about,
@@ -233,6 +236,7 @@ export default function AthleteProfileView() {
     };
 
     const updatePayload = {
+      full_name: editName.trim(),
       role: editRole.trim(),
       city: city,
       state: state,
@@ -241,8 +245,10 @@ export default function AthleteProfileView() {
 
     const result = await updateUserProfile(updatePayload, user?.id);
     if (result && result.status === "success") {
+      localStorage.setItem("playure_demo_user_name", updatePayload.full_name);
       setAthlete(prev => ({
         ...prev,
+        name: updatePayload.full_name,
         role: updatePayload.role,
         location: `${updatePayload.city}, ${updatePayload.state}`,
         profileUrl: bioObj.website,
@@ -450,6 +456,7 @@ export default function AthleteProfileView() {
                   {isOwner ? (
                     <button 
                       onClick={() => {
+                        setEditName(athlete.name);
                         setEditRole(athlete.role);
                         setEditLocation(athlete.location);
                         setEditWebsite(athlete.profileUrl);
@@ -1306,6 +1313,19 @@ export default function AthleteProfileView() {
               </h2>
 
               <form onSubmit={handleSaveProfileDetails} className="!space-y-5">
+                <div>
+                  <label className="text-xs font-bold text-[#b9cacb] uppercase tracking-wider block mb-2 font-['Hanken_Grotesk']">Name</label>
+                  <input
+                    type="text"
+                    required
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    placeholder="e.g. Arjun Mehta"
+                    className="w-full bg-[#333539] border border-white/10 rounded-lg text-sm text-white placeholder-[#b9cacb]/60 font-medium focus:outline-none focus:border-[#00f0ff]"
+                    style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '12px', paddingBottom: '12px' }}
+                  />
+                </div>
+
                 <div>
                   <label className="text-xs font-bold text-[#b9cacb] uppercase tracking-wider block mb-2 font-['Hanken_Grotesk']">Title / Playing Role</label>
                   <input
