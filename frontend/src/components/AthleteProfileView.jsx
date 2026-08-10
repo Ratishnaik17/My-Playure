@@ -879,7 +879,7 @@ export default function AthleteProfileView() {
                         style={{ padding: '10px 14px' }}
                       />
                     </div>
-                    <div>
+                    <div className="!mt-4.5">
                       <label className="text-[9px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Proficiency ({newSkillPercent}%)</label>
                       <input
                         type="range"
@@ -891,7 +891,7 @@ export default function AthleteProfileView() {
                         className="w-full accent-[#00f0ff] cursor-pointer"
                       />
                     </div>
-                    <div className="flex justify-end gap-2 pt-2 border-t border-white/5">
+                    <div className="flex justify-end gap-3 !mt-5 pt-3.5 border-t border-white/5">
                       <button 
                         type="button" 
                         onClick={() => setIsAddingSkill(false)} 
