@@ -895,7 +895,7 @@ export default function AthleteProfileView() {
               <div className="flex flex-row items-center gap-8 md:gap-12 text-center sm:text-left">
                 <div>
                   <span className="text-[11px] text-[#b9cacb] uppercase tracking-wider block font-bold">Athlete Network</span>
-                  <span className="text-xl font-extrabold text-white font-['JetBrains_Mono'] block mt-0.5">{athlete.stats.connections} athletes</span>
+                  <span className="text-xl font-extrabold text-[#00f0ff] font-['JetBrains_Mono'] block mt-0.5">{athlete.stats.connections} athletes</span>
                 </div>
                 <div className="h-8 w-px bg-white/10 hidden sm:block" />
                 <div>
