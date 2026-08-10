@@ -876,7 +876,7 @@ export default function AthleteProfileView() {
                         onChange={(e) => setNewSkillName(e.target.value)}
                         placeholder="e.g. Batting, Wicketkeeping"
                         className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
-                        style={{ padding: '8px 12px' }}
+                        style={{ padding: '10px 14px' }}
                       />
                     </div>
                     <div>
@@ -896,14 +896,14 @@ export default function AthleteProfileView() {
                         type="button" 
                         onClick={() => setIsAddingSkill(false)} 
                         className="bg-white/5 hover:bg-white/10 rounded-md text-[9px] font-bold cursor-pointer transition-colors"
-                        style={{ padding: '6px 12px' }}
+                        style={{ padding: '8px 16px' }}
                       >
                         Cancel
                       </button>
                       <button 
                         type="submit" 
                         className="bg-[#00f0ff] hover:bg-[#00dbe9] text-black rounded-md text-[9px] font-bold cursor-pointer transition-colors shadow-[0_0_6px_rgba(0,240,255,0.2)]"
-                        style={{ padding: '6px 12px' }}
+                        style={{ padding: '8px 16px' }}
                       >
                         Add
                       </button>
