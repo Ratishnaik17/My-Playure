@@ -140,6 +140,38 @@ export default function AthleteProfileView() {
   const [isEditingAbout, setIsEditingAbout] = useState(false);
   const [editedAbout, setEditedAbout] = useState(athlete.about);
 
+  // Bio details individual edit states
+  const [editAge, setEditAge] = useState("");
+  const [editHeight, setEditHeight] = useState("");
+  const [editWeight, setEditWeight] = useState("");
+  const [editPlayingSince, setEditPlayingSince] = useState("");
+  const [editLanguages, setEditLanguages] = useState("");
+  const [editEducation, setEditEducation] = useState("");
+
+  const handleStartEditingAbout = () => {
+    setEditedAbout(athlete.about);
+    
+    const ageObj = athlete.bioDetails.find(d => d.label === "Age");
+    setEditAge(ageObj ? ageObj.value : "24");
+
+    const heightObj = athlete.bioDetails.find(d => d.label === "Height");
+    setEditHeight(heightObj ? heightObj.value : "5'10\"");
+
+    const weightObj = athlete.bioDetails.find(d => d.label === "Weight");
+    setEditWeight(weightObj ? weightObj.value : "72 kg");
+
+    const sinceObj = athlete.bioDetails.find(d => d.label === "Playing Since");
+    setEditPlayingSince(sinceObj ? sinceObj.value : "2012");
+
+    const langObj = athlete.bioDetails.find(d => d.label === "Languages");
+    setEditLanguages(langObj ? langObj.value : "English, Hindi, Gujarati");
+
+    const eduObj = athlete.bioDetails.find(d => d.label === "Education");
+    setEditEducation(eduObj ? eduObj.value : "BBA, Mumbai University");
+
+    setIsEditingAbout(true);
+  };
+
   // Edit Profile Details states
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [editName, setEditName] = useState(athlete.name);
@@ -173,6 +205,15 @@ export default function AthleteProfileView() {
           }
         }
 
+        const loadedBioDetails = [
+          { id: 1, label: "Age", value: parsedBio.bioDetails?.age || "24", icon: "cake" },
+          { id: 2, label: "Height", value: parsedBio.bioDetails?.height || "5'10\"", icon: "straighten" },
+          { id: 3, label: "Weight", value: parsedBio.bioDetails?.weight || "72 kg", icon: "fitness_center" },
+          { id: 4, label: "Playing Since", value: parsedBio.bioDetails?.playingSince || "2012", icon: "calendar_today" },
+          { id: 5, label: "Languages", value: parsedBio.bioDetails?.languages || "English, Hindi, Gujarati", icon: "translate" },
+          { id: 6, label: "Education", value: parsedBio.bioDetails?.education || "BBA, Mumbai University", icon: "school" }
+        ];
+
         setAthlete(prev => ({
           ...prev,
           name: data.full_name || prev.name,
@@ -180,7 +221,8 @@ export default function AthleteProfileView() {
           location: (data.city && data.state) ? `${data.city}, ${data.state}` : prev.location,
           about: parsedBio.about,
           profileUrl: parsedBio.website || prev.profileUrl,
-          attributes: parsedBio.attributes || prev.attributes
+          attributes: parsedBio.attributes || prev.attributes,
+          bioDetails: loadedBioDetails
         }));
         setEditedAbout(parsedBio.about);
       }
@@ -189,9 +231,19 @@ export default function AthleteProfileView() {
   }, [user]);
 
   const handleSaveAbout = async () => {
+    const updatedBioDetails = [
+      { id: 1, label: "Age", value: editAge, icon: "cake" },
+      { id: 2, label: "Height", value: editHeight, icon: "straighten" },
+      { id: 3, label: "Weight", value: editWeight, icon: "fitness_center" },
+      { id: 4, label: "Playing Since", value: editPlayingSince, icon: "calendar_today" },
+      { id: 5, label: "Languages", value: editLanguages, icon: "translate" },
+      { id: 6, label: "Education", value: editEducation, icon: "school" }
+    ];
+
     setAthlete(prev => ({
       ...prev,
-      about: editedAbout
+      about: editedAbout,
+      bioDetails: updatedBioDetails
     }));
     setIsEditingAbout(false);
 
@@ -204,7 +256,15 @@ export default function AthleteProfileView() {
     const bioObj = {
       about: editedAbout,
       website: athlete.profileUrl,
-      attributes: athlete.attributes
+      attributes: athlete.attributes,
+      bioDetails: {
+        age: editAge,
+        height: editHeight,
+        weight: editWeight,
+        playingSince: editPlayingSince,
+        languages: editLanguages,
+        education: editEducation
+      }
     };
 
     const updatePayload = {
@@ -580,7 +640,7 @@ export default function AthleteProfileView() {
                   </h3>
                   {isOwner && (
                     <button 
-                      onClick={() => setIsEditingAbout(!isEditingAbout)}
+                      onClick={handleStartEditingAbout}
                       className="p-1 rounded-md text-[#b9cacb] hover:text-white hover:bg-white/5 cursor-pointer"
                     >
                       <span className="material-symbols-outlined text-[16px]">edit</span>
@@ -589,38 +649,101 @@ export default function AthleteProfileView() {
                 </div>
 
                 {isEditingAbout ? (
-                  <div className="space-y-3">
-                    <textarea 
-                      value={editedAbout}
-                      onChange={(e) => setEditedAbout(e.target.value)}
-                      rows={4}
-                      className="w-full bg-[#1e2024] border border-white/10 rounded-lg p-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff] leading-relaxed resize-none"
-                    />
-                    <div className="flex justify-end gap-2">
-                      <button onClick={() => setIsEditingAbout(false)} className="px-3 py-1 bg-white/5 rounded-md text-[10px] font-bold cursor-pointer">Cancel</button>
-                      <button onClick={handleSaveAbout} className="px-3 py-1 bg-[#00f0ff] text-black rounded-md text-[10px] font-bold cursor-pointer">Save</button>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Bio / About Description</label>
+                      <textarea 
+                        value={editedAbout}
+                        onChange={(e) => setEditedAbout(e.target.value)}
+                        rows={4}
+                        className="w-full bg-[#1e2024] border border-white/10 rounded-lg p-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff] leading-relaxed resize-none font-['Inter']"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Age</label>
+                        <input
+                          type="text"
+                          value={editAge}
+                          onChange={(e) => setEditAge(e.target.value)}
+                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg p-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Height</label>
+                        <input
+                          type="text"
+                          value={editHeight}
+                          onChange={(e) => setEditHeight(e.target.value)}
+                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg p-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Weight</label>
+                        <input
+                          type="text"
+                          value={editWeight}
+                          onChange={(e) => setEditWeight(e.target.value)}
+                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg p-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Playing Since</label>
+                        <input
+                          type="text"
+                          value={editPlayingSince}
+                          onChange={(e) => setEditPlayingSince(e.target.value)}
+                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg p-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Languages</label>
+                        <input
+                          type="text"
+                          value={editLanguages}
+                          onChange={(e) => setEditLanguages(e.target.value)}
+                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg p-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Education</label>
+                        <input
+                          type="text"
+                          value={editEducation}
+                          onChange={(e) => setEditEducation(e.target.value)}
+                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg p-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end gap-2 pt-2 border-t border-white/5">
+                      <button onClick={() => setIsEditingAbout(false)} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded-md text-[10px] font-bold cursor-pointer transition-colors">Cancel</button>
+                      <button onClick={handleSaveAbout} className="px-3 py-1.5 bg-[#00f0ff] hover:bg-[#00dbe9] text-black rounded-md text-[10px] font-bold cursor-pointer transition-colors shadow-[0_0_8px_rgba(0,240,255,0.2)]">Save</button>
                     </div>
                   </div>
                 ) : (
-                  <p className="text-xs text-gray-300 leading-relaxed font-['Inter']">
-                    {athlete.about}
-                  </p>
-                )}
+                  <>
+                    <p className="text-xs text-gray-300 leading-relaxed font-['Inter']">
+                      {athlete.about}
+                    </p>
 
-                {/* BIO FIELDS GRID */}
-                <div className="border-t border-white/5 mt-5 pt-5 flex flex-col !gap-4.5">
-                  {athlete.bioDetails.map((detail) => (
-                    <div key={detail.id} className="flex items-center !gap-4.5 !py-1">
-                      <div className="w-9 h-9 rounded-xl bg-[#111318]/80 border border-white/10 flex items-center justify-center text-[#00f0ff] shadow-md shrink-0">
-                        <span className="material-symbols-outlined text-lg">{detail.icon}</span>
-                      </div>
-                      <div className="space-y-1">
-                        <span className="text-[10px] text-[#b9cacb]/80 uppercase tracking-wider block font-bold leading-none">{detail.label}</span>
-                        <span className="text-xs text-white font-semibold block leading-normal">{detail.value}</span>
-                      </div>
+                    {/* BIO FIELDS GRID */}
+                    <div className="border-t border-white/5 mt-5 pt-5 flex flex-col !gap-4.5">
+                      {athlete.bioDetails.map((detail) => (
+                        <div key={detail.id} className="flex items-center !gap-4.5 !py-1">
+                          <div className="w-9 h-9 rounded-xl bg-[#111318]/80 border border-white/10 flex items-center justify-center text-[#00f0ff] shadow-md shrink-0">
+                            <span className="material-symbols-outlined text-lg">{detail.icon}</span>
+                          </div>
+                          <div className="space-y-1">
+                            <span className="text-[10px] text-[#b9cacb]/80 uppercase tracking-wider block font-bold leading-none">{detail.label}</span>
+                            <span className="text-xs text-white font-semibold block leading-normal">{detail.value}</span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </>
+                )}
               </div>
 
               {/* Skills card */}
