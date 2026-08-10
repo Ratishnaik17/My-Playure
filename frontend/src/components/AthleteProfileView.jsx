@@ -656,7 +656,8 @@ export default function AthleteProfileView() {
                         value={editedAbout}
                         onChange={(e) => setEditedAbout(e.target.value)}
                         rows={4}
-                        className="w-full bg-[#1e2024] border border-white/10 rounded-lg p-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff] leading-relaxed resize-none font-['Inter']"
+                        className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff] leading-relaxed resize-none font-['Inter']"
+                        style={{ padding: '12px 14px' }}
                       />
                     </div>
 
@@ -667,7 +668,8 @@ export default function AthleteProfileView() {
                           type="text"
                           value={editAge}
                           onChange={(e) => setEditAge(e.target.value)}
-                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg p-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                          style={{ padding: '10px 14px' }}
                         />
                       </div>
                       <div>
@@ -676,7 +678,8 @@ export default function AthleteProfileView() {
                           type="text"
                           value={editHeight}
                           onChange={(e) => setEditHeight(e.target.value)}
-                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg p-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                          style={{ padding: '10px 14px' }}
                         />
                       </div>
                       <div>
@@ -685,7 +688,8 @@ export default function AthleteProfileView() {
                           type="text"
                           value={editWeight}
                           onChange={(e) => setEditWeight(e.target.value)}
-                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg p-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                          style={{ padding: '10px 14px' }}
                         />
                       </div>
                       <div>
@@ -694,7 +698,8 @@ export default function AthleteProfileView() {
                           type="text"
                           value={editPlayingSince}
                           onChange={(e) => setEditPlayingSince(e.target.value)}
-                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg p-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                          style={{ padding: '10px 14px' }}
                         />
                       </div>
                       <div>
@@ -703,7 +708,8 @@ export default function AthleteProfileView() {
                           type="text"
                           value={editLanguages}
                           onChange={(e) => setEditLanguages(e.target.value)}
-                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg p-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                          style={{ padding: '10px 14px' }}
                         />
                       </div>
                       <div>
@@ -712,14 +718,15 @@ export default function AthleteProfileView() {
                           type="text"
                           value={editEducation}
                           onChange={(e) => setEditEducation(e.target.value)}
-                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg p-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                          className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                          style={{ padding: '10px 14px' }}
                         />
                       </div>
                     </div>
 
                     <div className="flex justify-end gap-2 pt-2 border-t border-white/5">
-                      <button onClick={() => setIsEditingAbout(false)} className="px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded-md text-[10px] font-bold cursor-pointer transition-colors">Cancel</button>
-                      <button onClick={handleSaveAbout} className="px-3 py-1.5 bg-[#00f0ff] hover:bg-[#00dbe9] text-black rounded-md text-[10px] font-bold cursor-pointer transition-colors shadow-[0_0_8px_rgba(0,240,255,0.2)]">Save</button>
+                      <button onClick={() => setIsEditingAbout(false)} className="bg-white/5 hover:bg-white/10 rounded-md text-[10px] font-bold cursor-pointer transition-colors" style={{ padding: '8px 16px' }}>Cancel</button>
+                      <button onClick={handleSaveAbout} className="bg-[#00f0ff] hover:bg-[#00dbe9] text-black rounded-md text-[10px] font-bold cursor-pointer transition-colors shadow-[0_0_8px_rgba(0,240,255,0.2)]" style={{ padding: '8px 16px' }}>Save</button>
                     </div>
                   </div>
                 ) : (
