@@ -661,7 +661,7 @@ export default function AthleteProfileView() {
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 !gap-x-4 !gap-y-4 !mt-4.5">
                       <div>
                         <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Age</label>
                         <input
@@ -724,7 +724,7 @@ export default function AthleteProfileView() {
                       </div>
                     </div>
 
-                    <div className="flex justify-end gap-2 pt-2 border-t border-white/5">
+                    <div className="flex justify-end gap-3.5 !mt-5 pt-4 border-t border-white/5">
                       <button onClick={() => setIsEditingAbout(false)} className="bg-white/5 hover:bg-white/10 rounded-md text-[10px] font-bold cursor-pointer transition-colors" style={{ padding: '8px 16px' }}>Cancel</button>
                       <button onClick={handleSaveAbout} className="bg-[#00f0ff] hover:bg-[#00dbe9] text-black rounded-md text-[10px] font-bold cursor-pointer transition-colors shadow-[0_0_8px_rgba(0,240,255,0.2)]" style={{ padding: '8px 16px' }}>Save</button>
                     </div>
