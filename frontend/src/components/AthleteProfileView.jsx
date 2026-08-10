@@ -1716,9 +1716,7 @@ export default function AthleteProfileView() {
                     <h4 className="text-sm sm:text-base font-extrabold text-white font-['Hanken_Grotesk'] leading-tight">
                       {h.text}
                     </h4>
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-[#00ff41]/10 text-[#00ff41] border border-[#00ff41]/20 mt-2 uppercase tracking-wider font-['JetBrains_Mono']">
-                      Verified Trophy
-                    </span>
+
                   </div>
                 </div>
               ))}
