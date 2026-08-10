@@ -24,7 +24,7 @@ const INITIAL_ATHLETE_DATA = {
     connections: 325,
     teams: 28,
     tournaments: 42,
-    followers: "1.2K"
+    followers: 1205
   },
   about: "Passionate cricketer with 8+ years of experience in competitive cricket. Represented Mumbai in Ranji Trophy and currently playing in the Premier League. Focused on continuous improvement and team success.",
   bioDetails: [
@@ -124,6 +124,7 @@ export default function AthleteProfileView() {
   const [activeTab, setActiveTab] = useState("overview");
   const [isOwner, setIsOwner] = useState(true); // Toggle to simulate Owner vs. Visitor view
   const [isConnected, setIsConnected] = useState(false);
+  const [isSupporting, setIsSupporting] = useState(false);
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
   
   // Ref for Avatar Upload
@@ -146,6 +147,37 @@ export default function AthleteProfileView() {
   const [isAddingSkill, setIsAddingSkill] = useState(false);
   const [newSkillName, setNewSkillName] = useState("");
   const [newSkillPercent, setNewSkillPercent] = useState(80);
+
+  const handleToggleConnect = () => {
+    const nextConnected = !isConnected;
+    setIsConnected(nextConnected);
+    setAthlete(prev => ({
+      ...prev,
+      stats: {
+        ...prev.stats,
+        connections: nextConnected ? prev.stats.connections + 1 : prev.stats.connections - 1
+      }
+    }));
+  };
+
+  const handleToggleSupport = () => {
+    const nextSupporting = !isSupporting;
+    setIsSupporting(nextSupporting);
+    setAthlete(prev => {
+      let currentFollowers = typeof prev.stats.followers === 'number' ? prev.stats.followers : 1205;
+      return {
+        ...prev,
+        stats: {
+          ...prev.stats,
+          followers: nextSupporting ? currentFollowers + 1 : currentFollowers - 1
+        }
+      };
+    });
+  };
+
+  // Achievements edit states
+  const [isEditingAchievements, setIsEditingAchievements] = useState(false);
+  const [editedAchievements, setEditedAchievements] = useState([]);
 
   const handleStartEditingAbout = () => {
     setEditedAbout(athlete.about);
@@ -222,7 +254,9 @@ export default function AthleteProfileView() {
           profileUrl: parsedBio.website || prev.profileUrl,
           attributes: parsedBio.attributes || prev.attributes,
           bioDetails: loadedBioDetails,
-          skills: parsedBio.skills || []
+          skills: parsedBio.skills || [],
+          highlights: parsedBio.highlights || prev.highlights,
+          experience: parsedBio.experience || prev.experience
         }));
         setEditedAbout(parsedBio.about);
       }
@@ -265,7 +299,9 @@ export default function AthleteProfileView() {
         languages: editLanguages,
         education: editEducation
       },
-      skills: athlete.skills
+      skills: athlete.skills,
+      highlights: athlete.highlights,
+      experience: athlete.experience
     };
 
     const updatePayload = {
@@ -311,7 +347,9 @@ export default function AthleteProfileView() {
         languages: langVal,
         education: eduVal
       },
-      skills: athlete.skills
+      skills: athlete.skills,
+      highlights: athlete.highlights,
+      experience: athlete.experience
     };
 
     const updatePayload = {
@@ -366,7 +404,9 @@ export default function AthleteProfileView() {
         languages: langVal,
         education: eduVal
       },
-      skills: skillsList
+      skills: skillsList,
+      highlights: athlete.highlights,
+      experience: athlete.experience
     };
 
     const updatePayload = {
@@ -413,6 +453,75 @@ export default function AthleteProfileView() {
     await syncSkillsToDB(updatedSkills);
   };
 
+  const handleStartEditingAchievements = () => {
+    setEditedAchievements(athlete.highlights.map(h => ({ ...h })));
+    setIsEditingAchievements(true);
+  };
+
+  const handleAddAchievementField = () => {
+    setEditedAchievements(prev => [...prev, { icon: "🏆", text: "" }]);
+  };
+
+  const handleRemoveAchievementField = (index) => {
+    setEditedAchievements(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleAchievementChange = (index, field, value) => {
+    setEditedAchievements(prev => {
+      const copy = [...prev];
+      copy[index] = { ...copy[index], [field]: value };
+      return copy;
+    });
+  };
+
+  const handleSaveAchievements = async () => {
+    const validAchievements = editedAchievements.filter(h => h.text.trim().length > 0);
+    setAthlete(prev => ({
+      ...prev,
+      highlights: validAchievements
+    }));
+    setIsEditingAchievements(false);
+
+    let city = "Bengaluru";
+    let state = "India";
+    const locParts = athlete.location.split(",");
+    if (locParts.length > 0) city = locParts[0].trim();
+    if (locParts.length > 1) state = locParts.slice(1).join(",").trim();
+
+    const ageVal = athlete.bioDetails.find(d => d.label === "Age")?.value || "24";
+    const heightVal = athlete.bioDetails.find(d => d.label === "Height")?.value || "5'10\"";
+    const weightVal = athlete.bioDetails.find(d => d.label === "Weight")?.value || "72 kg";
+    const sinceVal = athlete.bioDetails.find(d => d.label === "Playing Since")?.value || "2012";
+    const langVal = athlete.bioDetails.find(d => d.label === "Languages")?.value || "English, Hindi, Gujarati";
+    const eduVal = athlete.bioDetails.find(d => d.label === "Education")?.value || "BBA, Mumbai University";
+
+    const bioObj = {
+      about: athlete.about,
+      website: athlete.profileUrl,
+      attributes: athlete.attributes,
+      bioDetails: {
+        age: ageVal,
+        height: heightVal,
+        weight: weightVal,
+        playingSince: sinceVal,
+        languages: langVal,
+        education: eduVal
+      },
+      skills: athlete.skills,
+      highlights: validAchievements,
+      experience: athlete.experience
+    };
+
+    const updatePayload = {
+      role: athlete.role,
+      city: city,
+      state: state,
+      bio: JSON.stringify(bioObj)
+    };
+    const activeUserId = user?.id || localStorage.getItem("playure_demo_user_id") || "00000000-0000-0000-0000-000000000001";
+    await updateUserProfile(updatePayload, activeUserId);
+  };
+
   const handleAvatarChange = (e) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -429,48 +538,151 @@ export default function AthleteProfileView() {
   const [newExpRole, setNewExpRole] = useState("");
   const [newExpPeriod, setNewExpPeriod] = useState("");
   const [newExpDesc, setNewExpDesc] = useState("");
+  const [editingExpId, setEditingExpId] = useState(null);
 
-  const handleAddExperience = (e) => {
-    e.preventDefault();
-    if (!newExpTeam.trim() || !newExpRole.trim()) return;
-
-    const newEntry = {
-      id: Date.now(),
-      team: newExpTeam.trim(),
-      role: newExpRole.trim(),
-      period: newExpPeriod.trim() || "Present",
-      description: newExpDesc.trim()
-    };
-
-    setAthlete({
-      ...athlete,
-      experience: [newEntry, ...athlete.experience]
-    });
-
-    // Reset Form
+  const handleStartAddExperience = () => {
     setNewExpTeam("");
     setNewExpRole("");
     setNewExpPeriod("");
     setNewExpDesc("");
+    setEditingExpId(null);
+    setIsExperienceModalOpen(true);
+  };
+
+  const handleStartEditExperience = (exp) => {
+    setNewExpTeam(exp.team);
+    setNewExpRole(exp.role);
+    setNewExpPeriod(exp.period);
+    setNewExpDesc(exp.description);
+    setEditingExpId(exp.id);
+    setIsExperienceModalOpen(true);
+  };
+
+  const handleDeleteExperience = async (expId) => {
+    const updatedExp = athlete.experience.filter(e => e.id !== expId);
+    setAthlete(prev => ({
+      ...prev,
+      experience: updatedExp
+    }));
+    await syncExperienceToDB(updatedExp);
+  };
+
+  const syncExperienceToDB = async (expList) => {
+    let city = "Bengaluru";
+    let state = "India";
+    const locParts = athlete.location.split(",");
+    if (locParts.length > 0) city = locParts[0].trim();
+    if (locParts.length > 1) state = locParts.slice(1).join(",").trim();
+
+    const ageVal = athlete.bioDetails.find(d => d.label === "Age")?.value || "24";
+    const heightVal = athlete.bioDetails.find(d => d.label === "Height")?.value || "5'10\"";
+    const weightVal = athlete.bioDetails.find(d => d.label === "Weight")?.value || "72 kg";
+    const sinceVal = athlete.bioDetails.find(d => d.label === "Playing Since")?.value || "2012";
+    const langVal = athlete.bioDetails.find(d => d.label === "Languages")?.value || "English, Hindi, Gujarati";
+    const eduVal = athlete.bioDetails.find(d => d.label === "Education")?.value || "BBA, Mumbai University";
+
+    const bioObj = {
+      about: athlete.about,
+      website: athlete.profileUrl,
+      attributes: athlete.attributes,
+      bioDetails: {
+        age: ageVal,
+        height: heightVal,
+        weight: weightVal,
+        playingSince: sinceVal,
+        languages: langVal,
+        education: eduVal
+      },
+      skills: athlete.skills,
+      highlights: athlete.highlights,
+      experience: expList
+    };
+
+    const updatePayload = {
+      role: athlete.role,
+      city: city,
+      state: state,
+      bio: JSON.stringify(bioObj)
+    };
+    const activeUserId = user?.id || localStorage.getItem("playure_demo_user_id") || "00000000-0000-0000-0000-000000000001";
+    await updateUserProfile(updatePayload, activeUserId);
+  };
+
+  const handleSaveExperienceForm = async (e) => {
+    e.preventDefault();
+    if (!newExpTeam.trim() || !newExpRole.trim()) return;
+
+    let updatedExp = [];
+    if (editingExpId) {
+      updatedExp = athlete.experience.map(exp => {
+        if (exp.id === editingExpId) {
+          return {
+            ...exp,
+            team: newExpTeam.trim(),
+            role: newExpRole.trim(),
+            period: newExpPeriod.trim() || "Present",
+            description: newExpDesc.trim()
+          };
+        }
+        return exp;
+      });
+    } else {
+      const newEntry = {
+        id: Date.now(),
+        team: newExpTeam.trim(),
+        role: newExpRole.trim(),
+        period: newExpPeriod.trim() || "Present",
+        description: newExpDesc.trim()
+      };
+      updatedExp = [newEntry, ...athlete.experience];
+    }
+
+    setAthlete(prev => ({
+      ...prev,
+      experience: updatedExp
+    }));
+
+    setNewExpTeam("");
+    setNewExpRole("");
+    setNewExpPeriod("");
+    setNewExpDesc("");
+    setEditingExpId(null);
     setIsExperienceModalOpen(false);
+
+    await syncExperienceToDB(updatedExp);
   };
 
 
-  const handleEndorseSkill = (skillName) => {
-    const updatedEndorsements = athlete.endorsements.map(item => {
-      if (item.skill.toLowerCase() === skillName.toLowerCase()) {
+  const getSkillEndorsementsList = () => {
+    return athlete.skills.map(s => {
+      const count = s.count !== undefined ? s.count : 0;
+      return {
+        skill: s.name,
+        count: count,
+        avatars: s.avatars || []
+      };
+    });
+  };
+
+  const handleEndorseSkill = async (skillName) => {
+    const updatedSkills = athlete.skills.map(s => {
+      if (s.name.toLowerCase() === skillName.toLowerCase()) {
+        const currentCount = s.count !== undefined ? s.count : 0;
         return {
-          ...item,
-          count: item.count + 1
+          ...s,
+          count: currentCount + 1,
+          avatars: s.avatars || []
         };
       }
-      return item;
+      return s;
     });
 
-    setAthlete({
-      ...athlete,
-      endorsements: updatedEndorsements
-    });
+    setAthlete(prev => ({
+      ...prev,
+      skills: updatedSkills
+    }));
+
+    await syncSkillsToDB(updatedSkills);
   };
 
   const tabs = [
@@ -478,7 +690,6 @@ export default function AthleteProfileView() {
     { id: "about", label: "About" },
     { id: "stats", label: "Stats" },
     { id: "experience", label: "Experience" },
-    { id: "media", label: "Media" },
     { id: "achievements", label: "Achievements" },
     { id: "endorsements", label: "Endorsements" },
     { id: "reviews", label: "Reviews" }
@@ -622,17 +833,31 @@ export default function AthleteProfileView() {
                       <span>Edit Details</span>
                     </button>
                   ) : (
-                    <button 
-                      onClick={() => setIsConnected(!isConnected)}
-                      className={`!px-6 !py-3 rounded-full font-bold text-xs uppercase tracking-wider transition-all cursor-pointer font-['Hanken_Grotesk'] flex items-center gap-2 ${
-                        isConnected 
-                          ? "bg-[#00f0ff]/10 border border-[#00f0ff] text-[#00f0ff]" 
-                          : "bg-[#00f0ff] hover:bg-[#00dbe9] text-[#002022] shadow-[0_0_15px_rgba(0,240,255,0.3)]"
-                      }`}
-                    >
-                      <UserPlus className="w-3.5 h-3.5" />
-                      <span>{isConnected ? "Connected" : "Connect"}</span>
-                    </button>
+                    <>
+                      <button 
+                        onClick={handleToggleConnect}
+                        className={`!px-6 !py-3 rounded-full font-bold text-xs uppercase tracking-wider transition-all cursor-pointer font-['Hanken_Grotesk'] flex items-center gap-2 ${
+                          isConnected 
+                            ? "bg-[#00f0ff]/10 border border-[#00f0ff] text-[#00f0ff]" 
+                            : "bg-[#00f0ff] hover:bg-[#00dbe9] text-[#002022] shadow-[0_0_15px_rgba(0,240,255,0.3)]"
+                        }`}
+                      >
+                        <UserPlus className="w-3.5 h-3.5" />
+                        <span>{isConnected ? "Teamed Up" : "Team Up"}</span>
+                      </button>
+
+                      <button 
+                        onClick={handleToggleSupport}
+                        className={`!px-6 !py-3 rounded-full font-bold text-xs uppercase tracking-wider transition-all cursor-pointer font-['Hanken_Grotesk'] flex items-center gap-2 ${
+                          isSupporting 
+                            ? "bg-[#00f0ff]/10 border border-[#00f0ff] text-[#00f0ff]" 
+                            : "bg-[#1e2024] hover:bg-[#333539] border border-white/10 text-white"
+                        }`}
+                      >
+                        <span className={`material-symbols-outlined text-[15px] ${isSupporting ? "text-[#00f0ff]" : "text-gray-400"}`}>favorite</span>
+                        <span>{isSupporting ? "Supporting" : "Support"}</span>
+                      </button>
+                    </>
                   )}
 
                   {!isOwner && (
@@ -675,7 +900,9 @@ export default function AthleteProfileView() {
                 <div className="h-8 w-px bg-white/10 hidden sm:block" />
                 <div>
                   <span className="text-[11px] text-[#b9cacb] uppercase tracking-wider block font-bold">Supporters</span>
-                  <span className="text-xl font-extrabold text-[#00f0ff] font-['JetBrains_Mono'] block mt-0.5">{athlete.stats.followers}</span>
+                  <span className="text-xl font-extrabold text-[#00f0ff] font-['JetBrains_Mono'] block mt-0.5">
+                    {typeof athlete.stats.followers === 'number' ? athlete.stats.followers.toLocaleString() : athlete.stats.followers}
+                  </span>
                 </div>
               </div>
 
@@ -722,7 +949,7 @@ export default function AthleteProfileView() {
             <div className="lg:col-span-3 space-y-6">
               
               {/* About card */}
-              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all">
+              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all !mb-6">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-sm font-extrabold uppercase tracking-wider text-white flex items-center gap-2">
                     <span className="material-symbols-outlined text-[#00f0ff] text-lg">info</span>
@@ -844,7 +1071,7 @@ export default function AthleteProfileView() {
               </div>
 
               {/* Skills card */}
-              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all">
+              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all !mt-6">
                 <div className="flex justify-between items-center mb-5">
                   <h3 className="text-sm font-extrabold uppercase tracking-wider text-white flex items-center gap-2">
                     <span className="material-symbols-outlined text-[#00f0ff] text-lg">bolt</span>
@@ -946,39 +1173,102 @@ export default function AthleteProfileView() {
             {/* CENTER COLUMN: Highlights, Experience (6 Columns) */}
             <div className="lg:col-span-6 space-y-6">
               
-              {/* Career Highlights Card */}
-              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all flex flex-col md:flex-row justify-between gap-6">
+              {/* Career Achievements Card */}
+              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all flex flex-col md:flex-row justify-between gap-6 !mb-6">
                 
-                {/* List Items */}
-                <div className="flex-1 space-y-4">
-                  <h3 className="text-sm font-extrabold uppercase tracking-wider text-white flex items-center gap-2 mb-2">
-                    <span className="material-symbols-outlined text-[#00f0ff] text-lg">military_tech</span>
-                    <span>Career Highlights</span>
-                  </h3>
-                  <div className="space-y-3.5">
-                    {athlete.highlights.map((h, i) => (
-                      <div key={i} className="flex items-start gap-3">
-                        <span className="text-base shrink-0 mt-0.5">{h.icon}</span>
-                        <span className="text-xs sm:text-sm font-semibold text-gray-200">{h.text}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                {isEditingAchievements ? (
+                  <div className="space-y-4 w-full">
+                    <div className="flex justify-between items-center pb-2 border-b border-white/5">
+                      <h3 className="text-sm font-extrabold uppercase tracking-wider text-white flex items-center gap-2">
+                        <span className="material-symbols-outlined text-[#00f0ff] text-lg">military_tech</span>
+                        <span>Edit Career Achievements</span>
+                      </h3>
+                    </div>
 
-                {/* Trophy Graphic */}
-                <div className="w-36 h-36 border border-white/5 bg-[#111318]/50 rounded-xl p-2 flex items-center justify-center self-center shrink-0 shadow-inner relative overflow-hidden group-hover:border-[#00f0ff]/20 transition-all">
-                  <img 
-                    src="/trophy.png" 
-                    alt="Golden Trophy Award" 
-                    className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(0,240,255,0.25)] transition-transform duration-500 group-hover:scale-105" 
-                  />
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#00f0ff]/10 to-transparent h-1/3 pointer-events-none" />
-                </div>
+                    <div className="flex flex-col !gap-3.5 max-h-[300px] overflow-y-auto pr-1">
+                      {editedAchievements.map((ach, index) => (
+                        <div key={index} className="flex items-center gap-2.5 p-3.5 bg-[#111318]/50 border border-white/5 rounded-xl">
+                          <input
+                            type="text"
+                            value={ach.text}
+                            onChange={(e) => handleAchievementChange(index, "text", e.target.value)}
+                            placeholder="e.g. Represented India U19"
+                            className="flex-1 bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                            style={{ padding: '10px 14px' }}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveAchievementField(index)}
+                            className="p-2.5 rounded-lg text-red-400 hover:text-red-500 hover:bg-white/5 cursor-pointer transition-colors"
+                            title="Remove Achievement"
+                          >
+                            <span className="material-symbols-outlined text-[16px]">delete</span>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleAddAchievementField}
+                      className="w-full py-2.5 border border-dashed border-[#00f0ff]/30 hover:border-[#00f0ff] rounded-xl text-xs font-bold text-[#00f0ff] hover:bg-[#00f0ff]/5 transition-colors cursor-pointer flex items-center justify-center gap-1.5 !mt-4"
+                    >
+                      <span className="material-symbols-outlined text-sm">add</span>
+                      <span>Add New Achievement</span>
+                    </button>
+
+                    <div className="flex justify-end gap-3.5 !mt-5 pt-3.5 border-t border-white/5">
+                      <button onClick={() => setIsEditingAchievements(false)} className="bg-white/5 hover:bg-white/10 rounded-md text-[10px] font-bold cursor-pointer transition-colors" style={{ padding: '8px 16px' }}>Cancel</button>
+                      <button onClick={handleSaveAchievements} className="bg-[#00f0ff] hover:bg-[#00dbe9] text-black rounded-md text-[10px] font-bold cursor-pointer transition-colors shadow-[0_0_8px_rgba(0,240,255,0.2)]" style={{ padding: '8px 16px' }}>Save</button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    {/* List Items */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-sm font-extrabold uppercase tracking-wider text-white flex items-center gap-2">
+                          <span className="material-symbols-outlined text-[#00f0ff] text-lg">military_tech</span>
+                          <span>Career Achievements</span>
+                        </h3>
+                        {isOwner && (
+                          <button 
+                            onClick={handleStartEditingAchievements}
+                            className="p-1 rounded-md text-[#b9cacb] hover:text-white hover:bg-white/5 cursor-pointer"
+                          >
+                            <span className="material-symbols-outlined text-[16px]">edit</span>
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col gap-3.5">
+                        {athlete.highlights.length === 0 && (
+                          <p className="text-xs text-gray-500 italic py-2">No achievements added yet.</p>
+                        )}
+                        {athlete.highlights.map((h, i) => (
+                          <div key={i} className="flex items-center !py-2.5 !px-4 bg-[#111318]/40 border border-white/5 rounded-xl hover:border-[#00f0ff]/20 hover:bg-[#111318]/60 transition-all">
+                            <span className="text-xs sm:text-sm font-bold text-gray-200 leading-normal">{h.text}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Trophy Graphic */}
+                    <div className="w-36 h-36 border border-white/5 bg-[#111318]/50 rounded-xl p-2 flex items-center justify-center self-center shrink-0 shadow-inner relative overflow-hidden group-hover:border-[#00f0ff]/20 transition-all">
+                      <img 
+                        src="/trophy.png" 
+                        alt="Golden Trophy Award" 
+                        className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(0,240,255,0.25)] transition-transform duration-500 group-hover:scale-105" 
+                      />
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#00f0ff]/10 to-transparent h-1/3 pointer-events-none" />
+                    </div>
+                  </>
+                )}
 
               </div>
 
               {/* Experience Card */}
-              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all">
+              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all !mt-6">
                 <div className="flex justify-between items-center mb-5">
                   <h3 className="text-sm font-extrabold uppercase tracking-wider text-white flex items-center gap-2">
                     <span className="material-symbols-outlined text-[#00f0ff] text-lg">history</span>
@@ -986,7 +1276,7 @@ export default function AthleteProfileView() {
                   </h3>
                   {isOwner && (
                     <button 
-                      onClick={() => setIsExperienceModalOpen(true)}
+                      onClick={handleStartAddExperience}
                       className="flex items-center gap-1 px-3 py-1 border border-[#00f0ff]/30 hover:border-[#00f0ff] hover:bg-[#00f0ff]/5 rounded-full text-[10px] font-bold text-[#00f0ff] uppercase tracking-wider cursor-pointer transition-colors"
                     >
                       <Plus className="w-3 h-3" />
@@ -996,20 +1286,19 @@ export default function AthleteProfileView() {
                 </div>
 
                 {/* Experience Timeline */}
-                <div className="relative pl-6 border-l border-white/10 space-y-6">
+                <div className="flex flex-col !gap-y-4 !mt-5">
+                  {athlete.experience.length === 0 && (
+                    <p className="text-xs text-gray-500 italic py-2">No experience added yet.</p>
+                  )}
                   {athlete.experience.map((exp) => (
-                    <div key={exp.id} className="relative group/item">
-                      
-                      {/* Timeline Dot Indicator */}
-                      <div className="absolute -left-[30px] top-1.5 w-3.5 h-3.5 rounded-full bg-[#111318] border-2 border-[#00f0ff] shadow-[0_0_8px_#00f0ff] transition-all group-hover/item:scale-110" />
-
+                    <div key={exp.id} className="relative group/item p-4.5 bg-[#111318]/40 border border-white/5 rounded-xl hover:border-[#00f0ff]/20 hover:bg-[#111318]/60 transition-all !mb-4.5 last:!mb-0">
                       <div className="flex items-start gap-4">
                         {/* Mock Logo Box */}
                         <div className="w-10 h-10 rounded-lg bg-[#333539] border border-white/10 flex items-center justify-center text-lg shadow-md shrink-0 uppercase font-black text-gray-400">
                           {exp.team.charAt(0)}
                         </div>
 
-                        <div className="flex-1 min-w-0">
+                        <div className="flex-1 min-w-0 pr-10">
                           <div className="flex flex-col sm:flex-row justify-between items-start gap-1">
                             <h4 className="text-xs sm:text-sm font-extrabold text-white font-['Hanken_Grotesk'] leading-tight">
                               {exp.team}
@@ -1019,15 +1308,34 @@ export default function AthleteProfileView() {
                             </span>
                           </div>
 
-                          <p className="text-[11px] font-bold text-[#00f0ff] tracking-wide uppercase mt-0.5">
+                          <p className="text-[11px] font-bold text-[#00f0ff] tracking-wide uppercase mt-1">
                             {exp.role}
                           </p>
 
-                          <p className="text-xs text-gray-400 mt-2 leading-relaxed">
+                          <p className="text-xs text-gray-400 mt-2.5 leading-relaxed">
                             {exp.description}
                           </p>
                         </div>
                       </div>
+
+                      {isOwner && (
+                        <div className="absolute right-3.5 top-3.5 opacity-0 group-hover/item:opacity-100 flex items-center !gap-x-3.5 transition-all">
+                          <button 
+                            onClick={() => handleStartEditExperience(exp)}
+                            className="p-1.5 rounded text-[#b9cacb] hover:text-[#00f0ff] hover:bg-white/5 cursor-pointer"
+                            title="Edit Experience"
+                          >
+                            <span className="material-symbols-outlined text-[15px]">edit</span>
+                          </button>
+                          <button 
+                            onClick={() => handleDeleteExperience(exp.id)}
+                            className="p-1.5 rounded text-red-400 hover:text-red-500 hover:bg-white/5 cursor-pointer"
+                            title="Delete Experience"
+                          >
+                            <span className="material-symbols-outlined text-[15px]">delete</span>
+                          </button>
+                        </div>
+                      )}
 
                     </div>
                   ))}
@@ -1039,126 +1347,45 @@ export default function AthleteProfileView() {
             {/* RIGHT COLUMN: Stats, Endorsements, Media, Activity, Connections, Teams (3 Columns) */}
             <div className="lg:col-span-3 space-y-6">
               
-              {/* Profile Strength Card */}
-              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all">
-                <h3 className="text-sm font-extrabold uppercase tracking-wider text-white mb-4 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#00f0ff] text-lg">track_changes</span>
-                  <span>Profile Strength</span>
-                </h3>
-                <div className="flex items-center gap-5">
-                  {/* Radial Indicator */}
-                  <div className="relative shrink-0 flex items-center justify-center">
-                    <svg className="w-18 h-18 transform -rotate-90">
-                      <circle cx="36" cy="36" r="30" className="stroke-white/5 fill-transparent" strokeWidth="4" />
-                      <circle cx="36" cy="36" r="30" className="stroke-[#00f0ff] fill-transparent" strokeWidth="4" strokeDasharray="188.4" strokeDashoffset={188.4 - (188.4 * athlete.strength.percentage) / 100} strokeLinecap="round" />
-                    </svg>
-                    <div className="absolute text-center flex flex-col">
-                      <span className="text-sm font-extrabold text-white leading-none font-['JetBrains_Mono']">{athlete.strength.percentage}%</span>
-                      <span className="text-[8px] text-[#00ff41] font-bold uppercase tracking-wide mt-0.5 leading-none">{athlete.strength.level}</span>
-                    </div>
-                  </div>
 
-                  {/* Checklist */}
-                  <div className="flex-1 space-y-2">
-                    {athlete.strength.checklist.map((item) => (
-                      <div key={item.id} className="flex items-center gap-2 text-[11px]">
-                        <span className={`material-symbols-outlined text-xs shrink-0 ${item.completed ? "text-[#00ff41]" : "text-gray-600"}`}>
-                          {item.completed ? "check_circle" : "radio_button_unchecked"}
-                        </span>
-                        <span className={item.completed ? "text-gray-300 font-medium line-through" : "text-[#b9cacb]"}>
-                          {item.text}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
 
               {/* Endorsements Card */}
-              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all">
+              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all !mb-6">
                 <h3 className="text-sm font-extrabold uppercase tracking-wider text-white mb-4 flex items-center gap-2">
                   <span className="material-symbols-outlined text-[#00f0ff] text-lg">thumb_up</span>
                   <span>Top Endorsements</span>
                 </h3>
-                <div className="space-y-3.5">
-                  {athlete.endorsements.slice(0, 3).map((item) => (
-                    <div key={item.skill} className="flex items-center justify-between gap-2 border-b border-white/5 pb-2.5 last:border-0 last:pb-0">
+                <div className="flex flex-col !gap-y-3 mt-3.5">
+                  {getSkillEndorsementsList().slice(0, 3).map((item) => (
+                    <div key={item.skill} className="flex items-center justify-between gap-3 !py-2.5 !px-3.5 bg-[#111318]/40 border border-white/5 rounded-xl hover:border-[#00f0ff]/10 hover:bg-[#111318]/60 transition-all">
                       <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-bold text-white">{item.skill}</span>
-                          <span className="text-[10px] font-bold text-[#00f0ff] font-['JetBrains_Mono']">({item.count})</span>
-                        </div>
-                        {/* Mini Avatars */}
-                        <div className="flex -space-x-1.5 mt-1">
-                          {item.avatars.map((av, idx) => (
-                            <img key={idx} src={av} alt="Endorser Avatar" className="w-5 h-5 rounded-full object-cover border border-[#161B22]" />
-                          ))}
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-bold text-white leading-none">{item.skill}</span>
+                          <span className="text-[10px] font-bold text-[#00f0ff] font-['JetBrains_Mono'] leading-none">({item.count})</span>
                         </div>
                       </div>
 
                       <button 
                         onClick={() => handleEndorseSkill(item.skill)}
-                        className="px-3 py-1 bg-[#1e2024] hover:bg-[#333539] hover:text-[#00f0ff] border border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-wider cursor-pointer transition-colors"
+                        className="bg-[#1e2024] hover:bg-[#333539] hover:text-[#00f0ff] border border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-wider cursor-pointer transition-all"
+                        style={{ padding: '6px 12px' }}
                       >
                         Endorse
                       </button>
                     </div>
                   ))}
+                  {athlete.skills.length === 0 && (
+                    <p className="text-xs text-gray-500 italic py-2">Add skills to see endorsements.</p>
+                  )}
                 </div>
               </div>
 
-              {/* Media Card */}
-              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-sm font-extrabold uppercase tracking-wider text-white flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#00f0ff] text-lg">perm_media</span>
-                    <span>Media</span>
-                  </h3>
-                  <button onClick={() => setActiveTab("media")} className="text-[11px] text-[#00f0ff] hover:underline font-bold uppercase tracking-wider cursor-pointer">
-                    View all
-                  </button>
-                </div>
-                {/* 2x2 Grid */}
-                <div className="grid grid-cols-2 gap-2.5">
-                  {athlete.media.items.map((m) => (
-                    <div key={m.id} className="relative aspect-video rounded-lg overflow-hidden border border-white/10 bg-black group/img cursor-pointer">
-                      <img src={m.url} alt={m.caption} className="w-full h-full object-cover transition-transform duration-300 group-hover/img:scale-105" />
-                    </div>
-                  ))}
-                </div>
-                <div className="flex items-center justify-around text-center border-t border-white/5 mt-4 pt-3.5 text-xs text-[#b9cacb] font-medium">
-                  <div>{athlete.media.photos} Photos</div>
-                  <div className="h-4 w-px bg-white/10" />
-                  <div>{athlete.media.videos} Videos</div>
-                </div>
-              </div>
 
-              {/* Recent Activity */}
-              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all">
-                <h3 className="text-sm font-extrabold uppercase tracking-wider text-white mb-4 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#00f0ff] text-lg">rss_feed</span>
-                  <span>Recent Activity</span>
-                </h3>
-                <div className="space-y-3.5">
-                  {athlete.activity.map((act) => (
-                    <div key={act.id} className="flex items-start gap-3 border-b border-white/5 pb-3 last:border-0 last:pb-0">
-                      <div className="w-8 h-8 rounded-lg bg-[#333539] border border-white/10 flex items-center justify-center text-[#00f0ff] shrink-0 text-sm">
-                        {act.type === "achievement" ? "🏆" : act.type === "media" ? "📸" : "🥇"}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex justify-between items-start gap-1">
-                          <span className="text-[11px] font-bold text-white truncate leading-none">{act.title}</span>
-                          <span className="text-[9px] text-[#b9cacb]/80 shrink-0 font-medium">{act.time}</span>
-                        </div>
-                        <p className="text-[10px] text-gray-400 mt-1.5 truncate leading-relaxed">{act.subtitle}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+
+
 
               {/* Connections Card */}
-              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all">
+              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all !mt-6">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-sm font-extrabold uppercase tracking-wider text-white flex items-center gap-2">
                     <span className="material-symbols-outlined text-[#00f0ff] text-lg">group</span>
@@ -1168,7 +1395,7 @@ export default function AthleteProfileView() {
                     View all
                   </button>
                 </div>
-                <div className="flex items-center gap-3 flex-wrap">
+                <div className="flex items-center !gap-x-[18px] !gap-y-3 flex-wrap mt-5">
                   {athlete.connections.map((c) => (
                     <img key={c.name} src={c.avatar} alt={c.name} title={c.name} className="w-10 h-10 rounded-full object-cover border border-white/10 hover:scale-105 transition-transform cursor-pointer" />
                   ))}
@@ -1178,31 +1405,7 @@ export default function AthleteProfileView() {
                 </div>
               </div>
 
-              {/* Teams Card */}
-              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all">
-                <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-sm font-extrabold uppercase tracking-wider text-white flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[#00f0ff] text-lg">sports_cricket</span>
-                    <span>Teams</span>
-                  </h3>
-                  <button onClick={() => setActiveTab("experience")} className="text-[11px] text-[#00f0ff] hover:underline font-bold uppercase tracking-wider cursor-pointer">
-                    View all
-                  </button>
-                </div>
-                <div className="space-y-3.5">
-                  {athlete.teams.map((t) => (
-                    <div key={t.name} className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-[#333539] border border-white/10 flex items-center justify-center text-base shrink-0">
-                        {t.logo}
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-bold text-white font-['Hanken_Grotesk']">{t.name}</h4>
-                        <p className="text-[10px] text-gray-400 mt-0.5">{t.role} • {t.period}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+
 
             </div>
 
@@ -1212,23 +1415,120 @@ export default function AthleteProfileView() {
         {/* VIEW 2: ABOUT TAB */}
         {activeTab === "about" && (
           <div className="max-w-4xl mx-auto bg-[#161B22]/60 border border-white/10 rounded-2xl p-6 md:p-8 animate-fadeIn">
-            <h3 className="text-lg font-bold text-white mb-4 uppercase tracking-wider border-b border-white/5 pb-3">Biography</h3>
-            <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-line leading-relaxed">
-              {athlete.about}
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 border-t border-white/5 pt-6">
-              {athlete.bioDetails.map((detail) => (
-                <div key={detail.id} className="flex items-center gap-4 bg-[#111318]/50 border border-white/5 p-4 rounded-xl">
-                  <div className="w-10 h-10 rounded-lg bg-[#1e2024] border border-white/10 flex items-center justify-center text-[#00f0ff] shrink-0">
-                    <span className="material-symbols-outlined text-lg">{detail.icon}</span>
+            <div className="flex justify-between items-center border-b border-white/5 pb-3 mb-6">
+              <h3 className="text-lg font-bold text-white uppercase tracking-wider">Biography</h3>
+              {isOwner && !isEditingAbout && (
+                <button 
+                  onClick={handleStartEditingAbout}
+                  className="p-1.5 rounded-md text-[#b9cacb] hover:text-white hover:bg-white/5 cursor-pointer flex items-center gap-1 text-xs font-bold uppercase tracking-wider transition-colors"
+                >
+                  <span className="material-symbols-outlined text-[16px]">edit</span>
+                  <span>Edit</span>
+                </button>
+              )}
+            </div>
+
+            {isEditingAbout ? (
+              <div className="space-y-4">
+                <div>
+                  <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Bio / About Description</label>
+                  <textarea 
+                    value={editedAbout}
+                    onChange={(e) => setEditedAbout(e.target.value)}
+                    rows={4}
+                    className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff] leading-relaxed resize-none font-['Inter']"
+                    style={{ padding: '12px 14px' }}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 !gap-x-6 !gap-y-4 !mt-4.5">
+                  <div>
+                    <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Age</label>
+                    <input
+                      type="text"
+                      value={editAge}
+                      onChange={(e) => setEditAge(e.target.value)}
+                      className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                      style={{ padding: '10px 14px' }}
+                    />
                   </div>
                   <div>
-                    <span className="text-[10px] text-[#b9cacb] uppercase tracking-wider font-bold block">{detail.label}</span>
-                    <span className="text-sm text-white font-bold block mt-1">{detail.value}</span>
+                    <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Height</label>
+                    <input
+                      type="text"
+                      value={editHeight}
+                      onChange={(e) => setEditHeight(e.target.value)}
+                      className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                      style={{ padding: '10px 14px' }}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Weight</label>
+                    <input
+                      type="text"
+                      value={editWeight}
+                      onChange={(e) => setEditWeight(e.target.value)}
+                      className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                      style={{ padding: '10px 14px' }}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Playing Since</label>
+                    <input
+                      type="text"
+                      value={editPlayingSince}
+                      onChange={(e) => setEditPlayingSince(e.target.value)}
+                      className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                      style={{ padding: '10px 14px' }}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Languages</label>
+                    <input
+                      type="text"
+                      value={editLanguages}
+                      onChange={(e) => setEditLanguages(e.target.value)}
+                      className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                      style={{ padding: '10px 14px' }}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Education</label>
+                    <input
+                      type="text"
+                      value={editEducation}
+                      onChange={(e) => setEditEducation(e.target.value)}
+                      className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                      style={{ padding: '10px 14px' }}
+                    />
                   </div>
                 </div>
-              ))}
-            </div>
+
+                <div className="flex justify-end gap-3.5 !mt-6 pt-4 border-t border-white/5">
+                  <button onClick={() => setIsEditingAbout(false)} className="bg-white/5 hover:bg-white/10 rounded-md text-[10px] font-bold cursor-pointer transition-colors" style={{ padding: '8px 16px' }}>Cancel</button>
+                  <button onClick={handleSaveAbout} className="bg-[#00f0ff] hover:bg-[#00dbe9] text-black rounded-md text-[10px] font-bold cursor-pointer transition-colors shadow-[0_0_8px_rgba(0,240,255,0.2)]" style={{ padding: '8px 16px' }}>Save</button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-line">
+                  {athlete.about}
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 border-t border-white/5 pt-6">
+                  {athlete.bioDetails.map((detail) => (
+                    <div key={detail.id} className="flex items-center gap-4 bg-[#111318]/50 border border-white/5 p-4 rounded-xl">
+                      <div className="w-10 h-10 rounded-lg bg-[#1e2024] border border-white/10 flex items-center justify-center text-[#00f0ff] shrink-0">
+                        <span className="material-symbols-outlined text-lg">{detail.icon}</span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-[#b9cacb] uppercase tracking-wider font-bold block">{detail.label}</span>
+                        <span className="text-sm text-white font-bold block mt-1">{detail.value}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         )}
 
@@ -1338,7 +1638,7 @@ export default function AthleteProfileView() {
               <h3 className="text-lg font-bold text-white uppercase tracking-wider">Detailed Career Experience</h3>
               {isOwner && (
                 <button 
-                  onClick={() => setIsExperienceModalOpen(true)}
+                  onClick={handleStartAddExperience}
                   className="flex items-center gap-1.5 px-4 py-2 bg-[#00f0ff] hover:bg-[#00dbe9] text-[#002022] rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all shadow-[0_0_10px_rgba(0,240,255,0.25)]"
                 >
                   <Plus className="w-3.5 h-3.5" />
@@ -1347,15 +1647,17 @@ export default function AthleteProfileView() {
               )}
             </div>
 
-            <div className="relative pl-8 border-l-2 border-white/10 space-y-8 mt-6">
+            <div className="flex flex-col !gap-y-4 !mt-6">
+              {athlete.experience.length === 0 && (
+                <p className="text-xs text-gray-500 italic py-2 text-center">No experience added yet.</p>
+              )}
               {athlete.experience.map((exp) => (
-                <div key={exp.id} className="relative group/item2">
-                  <div className="absolute -left-[39px] top-1.5 w-4 h-4 rounded-full bg-[#090F1E] border-2 border-[#00f0ff] shadow-[0_0_10px_#00f0ff]" />
+                <div key={exp.id} className="relative group/item2 p-5 bg-[#111318]/40 border border-white/5 rounded-xl hover:border-[#00f0ff]/20 hover:bg-[#111318]/60 transition-all !mb-4.5 last:!mb-0">
                   <div className="flex items-start gap-5">
-                    <div className="w-12 h-12 rounded-xl bg-[#333539] border border-white/10 flex items-center justify-center text-xl shrink-0 shadow-md">
+                    <div className="w-12 h-12 rounded-xl bg-[#333539] border border-white/10 flex items-center justify-center text-xl shrink-0 shadow-md uppercase font-black text-gray-400">
                       {exp.team.charAt(0)}
                     </div>
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 pr-12">
                       <div className="flex flex-col sm:flex-row justify-between items-start gap-1">
                         <h4 className="text-sm sm:text-base font-extrabold text-white font-['Hanken_Grotesk'] leading-tight">
                           {exp.team}
@@ -1372,39 +1674,33 @@ export default function AthleteProfileView() {
                       </p>
                     </div>
                   </div>
+
+                  {isOwner && (
+                    <div className="absolute right-4 top-4 opacity-0 group-hover/item2:opacity-100 flex items-center !gap-x-3.5 transition-all">
+                      <button 
+                        onClick={() => handleStartEditExperience(exp)}
+                        className="p-1.5 rounded text-[#b9cacb] hover:text-[#00f0ff] hover:bg-white/5 cursor-pointer"
+                        title="Edit Experience"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">edit</span>
+                      </button>
+                      <button 
+                        onClick={() => handleDeleteExperience(exp.id)}
+                        className="p-1.5 rounded text-red-400 hover:text-red-500 hover:bg-white/5 cursor-pointer"
+                        title="Delete Experience"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">delete</span>
+                      </button>
+                    </div>
+                  )}
+
                 </div>
               ))}
             </div>
           </div>
         )}
 
-        {/* VIEW 5: MEDIA GALLERY TAB */}
-        {activeTab === "media" && (
-          <div className="max-w-5xl mx-auto space-y-6 animate-fadeIn">
-            <div className="flex justify-between items-center border-b border-white/5 pb-3">
-              <h3 className="text-lg font-bold text-white uppercase tracking-wider">Media Gallery ({athlete.media.photos + athlete.media.videos} assets)</h3>
-              <div className="flex gap-2">
-                <span className="px-3.5 py-1 bg-[#1e2024] rounded-lg border border-white/10 text-xs font-bold text-white">{athlete.media.photos} Photos</span>
-                <span className="px-3.5 py-1 bg-[#1e2024] rounded-lg border border-white/10 text-xs font-bold text-white">{athlete.media.videos} Videos</span>
-              </div>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {athlete.media.items.map((m) => (
-                <div key={m.id} className="relative rounded-2xl overflow-hidden border border-white/10 bg-black group/img2 aspect-square cursor-pointer shadow-lg">
-                  <img src={m.url} alt={m.caption} className="w-full h-full object-cover transition-transform duration-500 group-hover/img2:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover/img2:opacity-100 transition-opacity p-4 flex flex-col justify-end">
-                    <p className="text-xs font-bold text-white leading-tight font-['Outfit']">{m.caption}</p>
-                    <span className="text-[10px] text-[#00f0ff] uppercase font-bold tracking-wider mt-1.5 flex items-center gap-1">
-                      <Play className="w-3 h-3 fill-[#00f0ff]" />
-                      <span>View Playback</span>
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* VIEW 6: ACHIEVEMENTS TAB */}
         {activeTab === "achievements" && (
@@ -1434,23 +1730,18 @@ export default function AthleteProfileView() {
         {activeTab === "endorsements" && (
           <div className="max-w-4xl mx-auto bg-[#161B22]/60 border border-white/10 rounded-2xl p-6 md:p-8 animate-fadeIn">
             <h3 className="text-lg font-bold text-white mb-6 uppercase tracking-wider border-b border-white/5 pb-3">Skill Endorsements</h3>
-            <div className="space-y-5">
-              {athlete.endorsements.map((item) => (
+            <div className="flex flex-col !gap-y-4">
+              {athlete.skills.length === 0 && (
+                <p className="text-xs text-gray-500 italic py-4 text-center">No skills added yet. Add skills to enable endorsements.</p>
+              )}
+              {getSkillEndorsementsList().map((item) => (
                 <div key={item.skill} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 bg-[#111318]/50 border border-white/5 rounded-xl">
                   <div>
                     <div className="flex items-center gap-2">
                       <h4 className="text-sm sm:text-base font-bold text-white">{item.skill}</h4>
                       <span className="text-xs font-bold text-[#00f0ff] font-['JetBrains_Mono']">({item.count} endorsements)</span>
                     </div>
-                    {/* Avatars */}
-                    <div className="flex items-center gap-2 mt-2">
-                      <div className="flex -space-x-1.5">
-                        {item.avatars.map((av, idx) => (
-                          <img key={idx} src={av} alt="Endorser Avatar" className="w-6 h-6 rounded-full object-cover border border-[#161B22]" />
-                        ))}
-                      </div>
-                      <span className="text-[10px] text-gray-400 font-medium">Endorsed by state team scouts and teammates</span>
-                    </div>
+                    <span className="text-[10px] text-gray-400 font-medium block mt-1.5">Endorsed by state team scouts and teammates</span>
                   </div>
 
                   <button 
@@ -1517,10 +1808,10 @@ export default function AthleteProfileView() {
               className="bg-[#0A1224] border border-[#192540] rounded-2xl max-w-xl w-full p-8 shadow-2xl relative text-gray-100 font-['Inter']"
             >
               <h2 className="text-lg sm:text-xl font-black text-white font-['Hanken_Grotesk'] tracking-wider uppercase border-b border-white/10 pb-4 mb-6">
-                Add Career Experience
+                {editingExpId ? "Edit Career Experience" : "Add Career Experience"}
               </h2>
 
-              <form onSubmit={handleAddExperience} className="!space-y-5">
+              <form onSubmit={handleSaveExperienceForm} className="!space-y-5">
                 <div>
                   <label className="text-xs font-bold text-[#b9cacb] uppercase tracking-wider block mb-2 font-['Hanken_Grotesk']">Team / Club Name</label>
                   <input
@@ -1586,7 +1877,7 @@ export default function AthleteProfileView() {
                     className="bg-[#00f0ff] hover:bg-[#00dbe9] text-[#002022] rounded-lg text-xs font-bold uppercase tracking-wider cursor-pointer shadow-[0_0_10px_rgba(0,240,255,0.25)]"
                     style={{ paddingLeft: '24px', paddingRight: '24px', paddingTop: '10px', paddingBottom: '10px' }}
                   >
-                    Add Experience
+                    {editingExpId ? "Save Experience" : "Add Experience"}
                   </button>
                 </div>
               </form>
