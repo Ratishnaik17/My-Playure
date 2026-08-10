@@ -48,7 +48,7 @@ export default function FeedPostCard({ post }) {
     >
       
       {/* Post Header: Avatar, Name, Role, Club, Sport Badge, Location */}
-      <div className="flex items-start justify-between gap-3 mb-3.5">
+      <div className="flex items-start justify-between gap-3 !mb-5">
         <div className="flex items-center gap-3.5">
           <img
             src={post.authorAvatar}
@@ -56,7 +56,7 @@ export default function FeedPostCard({ post }) {
             className="w-11 h-11 rounded-full object-cover border border-[#00f0ff] shadow-md shrink-0"
           />
           <div>
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="flex items-center gap-3 flex-wrap">
               <h4 className="text-sm font-bold text-white hover:text-[#00f0ff] cursor-pointer font-['Hanken_Grotesk','Inter']">
                 {post.authorName}
               </h4>
@@ -68,7 +68,7 @@ export default function FeedPostCard({ post }) {
               </span>
             </div>
 
-            <div className="flex items-center gap-2 text-xs text-[#b9cacb] mt-0.5 flex-wrap">
+            <div className="flex items-center gap-2.5 text-xs text-[#b9cacb] !mt-2 flex-wrap">
               {post.playerRole && <span>{post.playerRole}</span>}
               {post.club && (
                 <>
@@ -142,7 +142,7 @@ export default function FeedPostCard({ post }) {
       )}
 
       {/* Post Text */}
-      <p className="text-sm text-[#e2e2e8] leading-relaxed mb-3.5 whitespace-pre-line font-['Inter']">
+      <p className="text-sm text-[#e2e2e8] leading-relaxed !mb-5 whitespace-pre-line font-['Inter']">
         {post.text}
       </p>
 
@@ -179,28 +179,28 @@ export default function FeedPostCard({ post }) {
       )}
 
       {/* Modern Engagement Bar */}
-      <div className="flex items-center justify-between border-t border-white/10 pt-3 text-xs text-[#b9cacb]">
+      <div className="flex items-center justify-between border-t border-white/10 !pt-4.5 !mt-1 text-xs text-[#b9cacb]">
         <div className="flex items-center gap-6">
           
           {/* Animated Like Button */}
           <motion.button
             whileTap={{ scale: 1.25 }}
             onClick={handleLike}
-            className={`flex items-center gap-1.5 font-semibold transition-all cursor-pointer ${
+            className={`flex items-center gap-2 font-semibold transition-all cursor-pointer !p-0 ${
               isLiked ? "text-[#00f0ff]" : "hover:text-[#00f0ff]"
             }`}
           >
-            <Heart className={`w-4.5 h-4.5 ${isLiked ? "fill-[#00f0ff] text-[#00f0ff]" : ""}`} />
-            <span className="font-['JetBrains_Mono',monospace]">{likes}</span>
+            <Heart className={`w-[18px] h-[18px] ${isLiked ? "fill-[#00f0ff] text-[#00f0ff]" : ""}`} />
+            <span className="font-['JetBrains_Mono',monospace] text-xs translate-y-[0.5px]">{likes}</span>
           </motion.button>
 
           {/* Comment Drawer Toggle */}
           <button
             onClick={() => setShowComments(!showComments)}
-            className="flex items-center gap-1.5 hover:text-[#00f0ff] font-semibold transition-colors cursor-pointer"
+            className="flex items-center gap-2 hover:text-[#00f0ff] font-semibold transition-colors cursor-pointer !p-0"
           >
-            <MessageSquare className="w-4.5 h-4.5" />
-            <span className="font-['JetBrains_Mono',monospace]">{comments.length}</span>
+            <MessageSquare className="w-[18px] h-[18px]" />
+            <span className="font-['JetBrains_Mono',monospace] text-xs translate-y-[0.5px]">{comments.length}</span>
           </button>
 
           {/* Share Button */}
@@ -212,10 +212,10 @@ export default function FeedPostCard({ post }) {
                 alert("Post link copied to clipboard!");
               }
             }}
-            className="flex items-center gap-1.5 hover:text-[#00f0ff] font-semibold transition-colors cursor-pointer"
+            className="flex items-center gap-2 hover:text-[#00f0ff] font-semibold transition-colors cursor-pointer !p-0"
           >
-            <Share2 className="w-4.5 h-4.5" />
-            <span className="hidden sm:inline">Share</span>
+            <Share2 className="w-[18px] h-[18px]" />
+            <span className="hidden sm:inline text-xs translate-y-[0.5px]">Share</span>
           </button>
 
         </div>
@@ -223,11 +223,11 @@ export default function FeedPostCard({ post }) {
         {/* Bookmark Button */}
         <button
           onClick={() => setIsBookmarked(!isBookmarked)}
-          className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+          className={`p-1.5 rounded-lg transition-colors cursor-pointer !p-1 ${
             isBookmarked ? "text-[#00f0ff] bg-[#00f0ff]/10" : "hover:text-[#00f0ff]"
           }`}
         >
-          <Bookmark className={`w-4.5 h-4.5 ${isBookmarked ? "fill-[#00f0ff] text-[#00f0ff]" : ""}`} />
+          <Bookmark className={`w-[18px] h-[18px] ${isBookmarked ? "fill-[#00f0ff] text-[#00f0ff]" : ""}`} />
         </button>
       </div>
 

@@ -155,6 +155,19 @@ export default function SignInModal({ isOpen, onClose, onSuccess, onSwitchToSign
                 <span>{loading ? "Signing In..." : "Sign In To Playure"}</span>
                 <ArrowRight className="w-4 h-4 text-[#00363a]" />
               </button>
+
+              {/* Quick Demo Bypass Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  if (onSuccess) onSuccess();
+                  onClose();
+                }}
+                className="w-full bg-[#1F2937] hover:bg-slate-800 text-[#00f0ff] font-['JetBrains_Mono'] text-xs font-bold uppercase tracking-wider py-2.5 rounded-lg border border-[#00f0ff]/20 transition-all cursor-pointer flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(0,240,255,0.1)] hover:border-[#00f0ff]/40"
+              >
+                <Zap className="w-4 h-4 text-[#00f0ff]" />
+                <span>Quick Demo Access (Bypass Auth)</span>
+              </button>
             </form>
 
             {/* Sign Up Link */}

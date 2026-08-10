@@ -374,25 +374,25 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
           <div className="w-full sm:w-[320px] md:w-[380px] bg-[#111318] border-r border-white/10 flex flex-col shrink-0">
             
             {/* Search & Filter Chips */}
-            <div className="p-4 border-b border-white/10 shrink-0">
-              <div className="relative mb-3">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#849495] text-lg">search</span>
+            <div className="!p-4 border-b border-white/10 shrink-0 space-y-3">
+              <div className="relative">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#849495] text-lg pointer-events-none">search</span>
                 <input 
                   type="text" 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search conversations..." 
-                  className="w-full bg-[#282a2e] border border-white/5 rounded-xl pl-10 pr-4 py-2.5 text-xs text-[#e2e2e8] placeholder-[#849495] focus:outline-none focus:ring-1 focus:ring-[#00f0ff] transition-all"
+                  className="w-full bg-[#282a2e] border border-white/5 rounded-xl !pl-10 !pr-4 !py-3 text-xs text-[#e2e2e8] placeholder-[#849495] focus:outline-none focus:ring-1 focus:ring-[#00f0ff] transition-all"
                 />
               </div>
 
               {/* Filter Chips */}
-              <div className="flex gap-2 overflow-x-auto no-scrollbar">
+              <div className="flex gap-2 overflow-x-auto no-scrollbar pt-1 !mt-4">
                 {["All", "Unread", "Coaches"].map(chip => (
                   <button
                     key={chip}
                     onClick={() => setActiveFilter(chip)}
-                    className={`px-3 py-1 rounded-full font-['JetBrains_Mono'] text-xs whitespace-nowrap transition-all cursor-pointer ${
+                    className={`!px-3.5 !py-1.5 rounded-full font-['JetBrains_Mono'] text-xs whitespace-nowrap transition-all cursor-pointer ${
                       activeFilter === chip 
                         ? "bg-[#1e2024] text-[#7df4ff] border border-[#7df4ff]/40 font-bold" 
                         : "bg-[#1e2024] text-[#b9cacb] border border-white/5 hover:border-white/20"
@@ -405,7 +405,7 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
             </div>
 
             {/* Contact List Scroll Area */}
-            <div className="flex-1 overflow-y-auto chat-scroll p-2 space-y-1">
+            <div className="flex-1 overflow-y-auto chat-scroll !p-3 !space-y-2">
               {filteredConversations.length === 0 ? (
                 <div className="text-center py-12 px-4 text-[#b9cacb]">
                   <p className="text-xs">No conversations found.</p>
@@ -419,7 +419,7 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
                     <div 
                       key={conv.id}
                       onClick={() => setActiveConversationId(conv.id)}
-                      className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-150 relative group ${
+                      className={`flex items-center gap-3.5 !p-3.5 rounded-xl cursor-pointer transition-all duration-150 relative group ${
                         isActive 
                           ? "bg-[#161B22]/90 border border-white/10 shadow-md" 
                           : "hover:bg-[#1a1c20] border border-transparent"
@@ -444,16 +444,16 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
 
                       {/* Info & Last Message Snippet */}
                       <div className="flex-1 min-w-0">
-                        <div className="flex justify-between items-baseline mb-1">
+                        <div className="flex justify-between items-center mb-1">
                           <h3 className={`font-['Hanken_Grotesk'] text-sm font-bold truncate ${isActive ? "text-white" : "text-[#e2e2e8]"}`}>
                             {conv.recipient.name}
                           </h3>
-                          <span className={`text-xs font-['JetBrains_Mono'] shrink-0 ${isActive ? "text-[#7df4ff]" : "text-[#b9cacb]"}`}>
+                          <span className={`text-[11px] font-['JetBrains_Mono'] shrink-0 ml-2 ${isActive ? "text-[#7df4ff]" : "text-[#b9cacb]"}`}>
                             {conv.timestamp}
                           </span>
                         </div>
 
-                        <p className="text-xs text-[#b9cacb] truncate font-['Inter']">
+                        <p className="text-xs text-[#b9cacb] truncate font-['Inter'] leading-normal">
                           {conv.is_typing ? (
                             <span className="text-[#7df4ff] font-semibold italic animate-pulse">Typing...</span>
                           ) : (
@@ -493,7 +493,7 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
             {activeConversation ? (
               <>
                 {/* Chat Header */}
-                <div className="flex justify-between items-center w-full px-6 h-20 bg-[#0D1117]/90 backdrop-blur-lg border-b border-white/10 z-10 shrink-0">
+                <div className="flex justify-between items-center w-full !px-6 !py-4 h-auto min-h-[72px] bg-[#0D1117]/90 backdrop-blur-lg border-b border-white/10 z-10 shrink-0">
                   <div className="flex items-center gap-4">
                     <div className="relative">
                       <img 
@@ -509,7 +509,7 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
                       <h2 className="font-['Hanken_Grotesk'] text-lg font-bold text-[#7df4ff]">
                         {activeConversation.recipient.name}
                       </h2>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 mt-0.5">
                         <span className={`w-2 h-2 rounded-full ${activeConversation.recipient.online ? "bg-[#00FF41]" : "bg-gray-500"}`} />
                         <span className="text-xs text-[#b9cacb] font-['Inter']">
                           {activeConversation.recipient.role} • {activeConversation.recipient.online ? "Online" : activeConversation.recipient.last_seen}
@@ -520,25 +520,25 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
 
                   {/* Header Call / Video / Info Actions */}
                   <div className="flex items-center gap-3 text-[#b9cacb]">
-                    <button className="w-10 h-10 rounded-full bg-[#282a2e] flex items-center justify-center hover:text-[#7df4ff] hover:bg-[#37393e] transition-colors cursor-pointer group">
+                    <button className="w-10 h-10 !p-0 rounded-full bg-[#282a2e] flex items-center justify-center hover:text-[#7df4ff] hover:bg-[#37393e] transition-colors cursor-pointer group">
                       <span className="material-symbols-outlined text-xl group-active:opacity-70">call</span>
                     </button>
-                    <button className="w-10 h-10 rounded-full bg-[#282a2e] flex items-center justify-center hover:text-[#7df4ff] hover:bg-[#37393e] transition-colors cursor-pointer group">
+                    <button className="w-10 h-10 !p-0 rounded-full bg-[#282a2e] flex items-center justify-center hover:text-[#7df4ff] hover:bg-[#37393e] transition-colors cursor-pointer group">
                       <span className="material-symbols-outlined text-xl group-active:opacity-70">videocam</span>
                     </button>
                     <div className="w-px h-6 bg-white/10 mx-1" />
-                    <button className="w-10 h-10 rounded-full bg-[#282a2e] flex items-center justify-center hover:text-[#7df4ff] hover:bg-[#37393e] transition-colors cursor-pointer group">
+                    <button className="w-10 h-10 !p-0 rounded-full bg-[#282a2e] flex items-center justify-center hover:text-[#7df4ff] hover:bg-[#37393e] transition-colors cursor-pointer group">
                       <span className="material-symbols-outlined text-xl group-active:opacity-70">info</span>
                     </button>
                   </div>
                 </div>
 
                 {/* Message Feed Area */}
-                <div className="flex-1 overflow-y-auto chat-scroll p-6 space-y-6 z-10">
+                <div className="flex-1 overflow-y-auto chat-scroll !p-6 !space-y-6 z-10">
                   
                   {/* Timestamp separator */}
-                  <div className="flex justify-center">
-                    <span className="px-3 py-1 bg-[#1a1c20] rounded-full text-xs text-[#b9cacb] font-['JetBrains_Mono'] border border-white/5">
+                  <div className="flex justify-center my-2">
+                    <span className="!px-4 !py-1.5 bg-[#1a1c20] rounded-full text-xs text-[#b9cacb] font-['JetBrains_Mono'] border border-white/5">
                       Today, 09:15 AM
                     </span>
                   </div>
@@ -563,7 +563,7 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
 
                         <div className={isMe ? "text-right" : ""}>
                           <div 
-                            className={`p-4 rounded-2xl shadow-sm relative overflow-hidden backdrop-blur-sm ${
+                            className={`!px-4.5 !py-3.5 rounded-2xl shadow-sm relative overflow-hidden backdrop-blur-sm ${
                               isMe 
                                 ? "bg-[#7df4ff] text-[#002022] rounded-br-sm shadow-[0_4px_20px_rgba(0,240,255,0.15)] font-medium" 
                                 : "bg-[#282a2e] text-[#e2e2e8] rounded-bl-sm border border-white/5"
@@ -597,7 +597,7 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
                                     href={msg.attachment.url} 
                                     target="_blank" 
                                     rel="noreferrer"
-                                    className="flex items-center gap-2.5 p-2.5 bg-black/20 border border-white/10 rounded-xl hover:bg-black/30 transition-colors text-xs text-current"
+                                    className="flex items-center gap-2.5 !p-3 bg-black/20 border border-white/10 rounded-xl hover:bg-black/30 transition-colors text-xs text-current"
                                   >
                                     <FileText className="w-5 h-5 shrink-0" />
                                     <div className="flex-1 min-w-0">
@@ -612,10 +612,10 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
                           </div>
 
                           {/* Timestamp & Done All Status Checkmarks */}
-                          <div className={`flex items-center gap-1.5 mt-1 text-[10px] font-['JetBrains_Mono'] ${isMe ? "justify-end mr-1 text-[#b9cacb]" : "ml-1 text-[#b9cacb]"}`}>
+                          <div className={`flex items-center gap-1.5 mt-2 text-[11px] font-['JetBrains_Mono'] ${isMe ? "justify-end mr-1 text-[#849495]" : "ml-1 text-[#849495]"}`}>
                             <span>{msg.timestamp}</span>
                             {isMe && (
-                              <span className="material-symbols-outlined text-[14px] text-[#00f0ff]">
+                              <span className="material-symbols-outlined text-[15px] text-[#00f0ff] font-bold">
                                 done_all
                               </span>
                             )}
@@ -638,7 +638,7 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
 
                 {/* Attachment Preview Bar before sending */}
                 {attachment && (
-                  <div className="px-6 py-3 bg-[#0D1117] border-t border-white/10 flex items-center justify-between shrink-0 z-10">
+                  <div className="!px-6 !py-3 bg-[#0D1117] border-t border-white/10 flex items-center justify-between shrink-0 z-10">
                     <div className="flex items-center gap-3 min-w-0">
                       {attachment.type === "image" ? (
                         <img src={attachment.previewUrl} alt="Preview" className="w-10 h-10 rounded-lg object-cover border border-[#00f0ff]/50" />
@@ -655,7 +655,7 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
 
                     <button 
                       onClick={() => setAttachment(null)}
-                      className="p-1.5 text-gray-400 hover:text-red-400 hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
+                      className="!p-1.5 text-gray-400 hover:text-red-400 hover:bg-white/5 rounded-lg transition-colors cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -664,7 +664,7 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
 
                 {/* Emoji Picker Popover */}
                 {showEmojiPicker && (
-                  <div className="absolute bottom-20 left-6 z-30 w-72 bg-[#1a1c20] border border-white/10 rounded-2xl p-3 shadow-2xl backdrop-blur-xl animate-fadeIn">
+                  <div className="absolute bottom-20 left-6 z-30 w-72 bg-[#1a1c20] border border-white/10 rounded-2xl !p-3 shadow-2xl backdrop-blur-xl animate-fadeIn">
                     <div className="flex justify-between items-center pb-2 mb-2 border-b border-white/10">
                       <span className="text-xs font-bold text-white font-['Hanken_Grotesk']">Select Emoji</span>
                       <button onClick={() => setShowEmojiPicker(false)} className="text-gray-400 hover:text-white">
@@ -683,7 +683,7 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
                               <button 
                                 key={eIdx}
                                 onClick={() => setInputText(prev => prev + e)}
-                                className="text-lg p-1.5 hover:bg-white/10 rounded-lg transition-transform hover:scale-125 cursor-pointer text-center"
+                                className="text-lg !p-1.5 hover:bg-white/10 rounded-lg transition-transform hover:scale-125 cursor-pointer text-center"
                               >
                                 {e}
                               </button>
@@ -696,13 +696,13 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
                 )}
 
                 {/* Message Input Area */}
-                <div className="p-4 bg-[#0D1117]/90 backdrop-blur-xl border-t border-white/10 z-10 shrink-0">
-                  <div className="max-w-4xl mx-auto flex items-end gap-3 bg-[#0c0e12] border border-white/10 rounded-2xl p-2 shadow-inner focus-within:border-[#7df4ff]/50 transition-colors">
+                <div className="!p-4 bg-[#0D1117]/90 backdrop-blur-xl border-t border-white/10 z-10 shrink-0">
+                  <div className="max-w-4xl mx-auto flex items-center gap-3 bg-[#0c0e12] border border-white/10 rounded-2xl !p-3 shadow-inner focus-within:border-[#7df4ff]/50 transition-colors">
                     
                     {/* Attachment trigger */}
                     <button 
                       onClick={() => fileInputRef.current?.click()}
-                      className="p-2 text-[#b9cacb] hover:text-[#7df4ff] transition-colors shrink-0 mb-1 cursor-pointer"
+                      className="!p-2 text-[#b9cacb] hover:text-[#7df4ff] transition-colors shrink-0 cursor-pointer flex items-center justify-center"
                       title="Attach file (Images, PDF, Video, Word up to 20MB)"
                     >
                       <span className="material-symbols-outlined text-xl">attach_file</span>
@@ -717,7 +717,7 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
                     />
 
                     {/* Textarea Input */}
-                    <div className="flex-1 min-h-[44px] flex items-center mb-1">
+                    <div className="flex-1 min-h-[44px] flex items-center">
                       <textarea 
                         value={inputText}
                         onChange={handleInputChange}
@@ -729,14 +729,14 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
                         }}
                         placeholder="Type a message..." 
                         rows={1}
-                        className="w-full bg-transparent border-none focus:ring-0 text-[#e2e2e8] font-['Inter'] text-sm resize-none placeholder:text-[#849495] max-h-32 overflow-y-auto chat-scroll py-2 focus:outline-none"
+                        className="w-full bg-transparent border-none focus:ring-0 text-[#e2e2e8] font-['Inter'] text-sm resize-none placeholder:text-[#849495] max-h-32 overflow-y-auto chat-scroll !py-2.5 focus:outline-none leading-relaxed"
                       />
                     </div>
 
                     {/* Emoji trigger */}
                     <button 
                       onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-                      className="p-2 text-[#b9cacb] hover:text-[#7df4ff] transition-colors shrink-0 mb-1 cursor-pointer"
+                      className="!p-2 text-[#b9cacb] hover:text-[#7df4ff] transition-colors shrink-0 cursor-pointer flex items-center justify-center"
                       title="Add Emoji"
                     >
                       <span className="material-symbols-outlined text-xl">sentiment_satisfied</span>
@@ -746,7 +746,7 @@ export default function MessagingModal({ isOpen, onClose, onUnreadCountChange })
                     <button 
                       onClick={handleSendMessage}
                       disabled={isUploading}
-                      className="w-12 h-12 bg-[#00f0ff] hover:bg-[#7df4ff] text-[#00363a] rounded-xl flex items-center justify-center shrink-0 transition-colors shadow-[0_0_10px_rgba(0,240,255,0.2)] cursor-pointer active:scale-95 disabled:opacity-50"
+                      className="w-11 h-11 !p-0 bg-[#00f0ff] hover:bg-[#7df4ff] text-[#00363a] rounded-xl flex items-center justify-center shrink-0 transition-colors shadow-[0_0_10px_rgba(0,240,255,0.2)] cursor-pointer active:scale-95 disabled:opacity-50"
                     >
                       <span className="material-symbols-outlined text-xl font-bold">send</span>
                     </button>

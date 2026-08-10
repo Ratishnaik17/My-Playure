@@ -5,7 +5,9 @@ import CreatePostCard from "../components/CreatePostCard";
 import FeedPostCard from "../components/FeedPostCard";
 import CompetitionsView from "../components/CompetitionsView";
 import CollaborationView from "../components/CollaborationView";
+import RePlayView from "../components/RePlayView";
 import RightSidebar from "../components/RightSidebar";
+import AthleteProfileView from "../components/AthleteProfileView";
 import AIChatbotModal from "../components/AIChatbotModal";
 import MessagingModal from "../components/MessagingModal";
 import NotificationSettingsModal from "../components/NotificationSettingsModal";
@@ -57,7 +59,7 @@ export default function Dashboard({ onSignOut }) {
             const mappedBackendPosts = data.items.map((p) => ({
               id: p.id,
               authorName: p.user?.full_name || "Ratish Naik",
-              authorAvatar: p.user?.profile_image || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+              authorAvatar: p.user?.profile_image || "/default_avatar.jpg",
               playerRole: p.user?.role || "Athlete / Player",
               sport: p.sport || "Cricket",
               sportIcon: "🏆",
@@ -132,27 +134,35 @@ export default function Dashboard({ onSignOut }) {
       <div className="w-full flex justify-center py-6 px-3 sm:px-5">
         <div className="w-full max-w-[1400px] flex justify-center items-start gap-6">
           {/* Column 1: Left Profile Sidebar (320px) */}
-          <div className="w-[300px] xl:w-[320px] shrink-0 hidden lg:block sticky top-[80px]">
-            <LeftProfileSidebar 
-              activeTab={activeTab}
-              onNavigateTab={(tab) => {
-                if (tab === "ai_assistant") {
-                  setIsChatbotOpen(true);
-                } else if (tab === "messages") {
-                  setIsMessagingOpen(true);
-                } else {
-                  setActiveTab(tab);
-                }
-              }}
-              onNavigateCompetitions={() => setActiveTab("competitions")} 
-              onSignOut={onSignOut}
-            />
-          </div>
+          {activeTab !== "replay" && activeTab !== "settings" && (
+            <div className="w-[300px] xl:w-[320px] shrink-0 hidden lg:block sticky top-[80px]">
+              <LeftProfileSidebar 
+                activeTab={activeTab}
+                onNavigateTab={(tab) => {
+                  if (tab === "ai_assistant") {
+                    setIsChatbotOpen(true);
+                  } else if (tab === "messages") {
+                    setIsMessagingOpen(true);
+                  } else {
+                    setActiveTab(tab);
+                  }
+                }}
+                onNavigateCompetitions={() => setActiveTab("competitions")} 
+                onSignOut={onSignOut}
+              />
+            </div>
+          )}
 
           {/* Column 2: Center Main Feed */}
           <main className="flex-1 min-w-0 space-y-6">
             
-            {activeTab === "competitions" ? (
+            {activeTab === "replay" ? (
+              /* DEDICATED REPLAY MARKETPLACE VIEW */
+              <RePlayView />
+            ) : activeTab === "settings" ? (
+              /* DEDICATED ATHLETE PROFILE PAGE VIEW */
+              <AthleteProfileView />
+            ) : activeTab === "competitions" ? (
               /* DEDICATED COMPETITIONS PAGE VIEW */
               <CompetitionsView />
             ) : activeTab === "collaboration" ? (
@@ -220,13 +230,15 @@ export default function Dashboard({ onSignOut }) {
           </main>
 
           {/* Column 3: Right Sidebar (320px) */}
-          <div className="w-[300px] xl:w-[320px] shrink-0 hidden lg:block sticky top-[80px]">
-            <RightSidebar 
-              activeTab={activeTab}
-              onOpenChatbot={() => setIsChatbotOpen(true)} 
-              onNavigateCompetitions={() => setActiveTab("competitions")}
-            />
-          </div>
+          {activeTab !== "replay" && activeTab !== "settings" && (
+            <div className="w-[300px] xl:w-[320px] shrink-0 hidden lg:block sticky top-[80px]">
+              <RightSidebar 
+                activeTab={activeTab}
+                onOpenChatbot={() => setIsChatbotOpen(true)} 
+                onNavigateCompetitions={() => setActiveTab("competitions")}
+              />
+            </div>
+          )}
 
         </div>
       </div>

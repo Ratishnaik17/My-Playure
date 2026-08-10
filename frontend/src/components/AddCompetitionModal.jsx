@@ -213,7 +213,7 @@ export default function AddCompetitionModal({ isOpen, onClose, onAddCompetition 
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="!space-y-6">
             
             {/* Row 1: Competition Name, Sports Name, Level of Competition (3 Columns) */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
@@ -228,7 +228,8 @@ export default function AddCompetitionModal({ isOpen, onClose, onAddCompetition 
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. All-India Inter-State Badminton Masters 2026"
-                  className="w-full px-4 py-3 bg-[#333539] border border-white/10 rounded-lg text-sm text-white placeholder-[#b9cacb]/60 font-medium focus:outline-none focus:border-[#00f0ff] transition-colors"
+                  className="w-full bg-[#333539] border border-white/10 rounded-lg text-sm text-white placeholder-[#b9cacb]/60 font-medium focus:outline-none focus:border-[#00f0ff] transition-colors"
+                  style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '12px', paddingBottom: '12px' }}
                 />
               </div>
 
@@ -240,7 +241,8 @@ export default function AddCompetitionModal({ isOpen, onClose, onAddCompetition 
                 <select
                   value={sport}
                   onChange={(e) => setSport(e.target.value)}
-                  className="w-full px-4 py-3 bg-[#333539] border border-white/10 rounded-lg text-sm font-semibold text-white focus:outline-none focus:border-[#00f0ff] cursor-pointer"
+                  className="w-full bg-[#333539] border border-white/10 rounded-lg text-sm font-semibold text-white focus:outline-none focus:border-[#00f0ff] cursor-pointer"
+                  style={{ paddingLeft: '16px', paddingRight: '24px', paddingTop: '12px', paddingBottom: '12px' }}
                 >
                   {SPORTS_CATEGORIES.filter(s => s.name !== "All Sports").map(s => (
                     <option key={s.name} value={s.name} className="bg-[#111318] text-white">
@@ -258,7 +260,8 @@ export default function AddCompetitionModal({ isOpen, onClose, onAddCompetition 
                 <select
                   value={level}
                   onChange={(e) => setLevel(e.target.value)}
-                  className="w-full px-4 py-3 bg-[#333539] border border-white/10 rounded-lg text-sm font-semibold text-white focus:outline-none focus:border-[#00f0ff] cursor-pointer"
+                  className="w-full bg-[#333539] border border-white/10 rounded-lg text-sm font-semibold text-white focus:outline-none focus:border-[#00f0ff] cursor-pointer"
+                  style={{ paddingLeft: '16px', paddingRight: '24px', paddingTop: '12px', paddingBottom: '12px' }}
                 >
                   {COMPETITION_LEVELS.map(lvl => (
                     <option key={lvl} value={lvl} className="bg-[#111318] text-white">
@@ -281,7 +284,8 @@ export default function AddCompetitionModal({ isOpen, onClose, onAddCompetition 
                   required
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="w-full px-4 py-3 bg-[#333539] border border-white/10 rounded-lg text-sm font-medium text-white focus:outline-none focus:border-[#00f0ff]"
+                  className="w-full bg-[#333539] border border-white/10 rounded-lg text-sm font-medium text-white focus:outline-none focus:border-[#00f0ff]"
+                  style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '12px', paddingBottom: '12px' }}
                 />
               </div>
 
@@ -294,7 +298,8 @@ export default function AddCompetitionModal({ isOpen, onClose, onAddCompetition 
                   type="date"
                   value={registrationDeadline}
                   onChange={(e) => setRegistrationDeadline(e.target.value)}
-                  className="w-full px-4 py-3 bg-[#333539] border border-white/10 rounded-lg text-sm font-medium text-white focus:outline-none focus:border-[#00f0ff]"
+                  className="w-full bg-[#333539] border border-white/10 rounded-lg text-sm font-medium text-white focus:outline-none focus:border-[#00f0ff]"
+                  style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '12px', paddingBottom: '12px' }}
                 />
               </div>
 
@@ -308,7 +313,8 @@ export default function AddCompetitionModal({ isOpen, onClose, onAddCompetition 
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   placeholder="e.g. Kanteerava Indoor Stadium, Bengaluru"
-                  className="w-full px-4 py-3 bg-[#333539] border border-white/10 rounded-lg text-sm text-white placeholder-[#b9cacb]/60 font-medium focus:outline-none focus:border-[#00f0ff]"
+                  className="w-full bg-[#333539] border border-white/10 rounded-lg text-sm text-white placeholder-[#b9cacb]/60 font-medium focus:outline-none focus:border-[#00f0ff]"
+                  style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '12px', paddingBottom: '12px' }}
                 />
               </div>
             </div>
@@ -323,7 +329,8 @@ export default function AddCompetitionModal({ isOpen, onClose, onAddCompetition 
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Describe match format, age criteria, rules, schedule, equipment guidelines..."
-                className="w-full p-4 bg-[#333539] border border-white/10 rounded-lg text-sm text-white placeholder-[#b9cacb]/60 font-medium focus:outline-none focus:border-[#00f0ff] resize-none leading-relaxed"
+                className="w-full bg-[#333539] border border-white/10 rounded-lg text-sm text-white placeholder-[#b9cacb]/60 font-medium focus:outline-none focus:border-[#00f0ff] resize-none leading-relaxed"
+                style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '14px', paddingBottom: '14px' }}
               />
             </div>
 
@@ -339,7 +346,8 @@ export default function AddCompetitionModal({ isOpen, onClose, onAddCompetition 
                   value={prizePool}
                   onChange={(e) => setPrizePool(e.target.value)}
                   placeholder="e.g. ₹1,50,000 + Trophies"
-                  className="w-full px-4 py-3 bg-[#333539] border border-white/10 rounded-lg text-sm font-medium text-white placeholder-[#b9cacb]/60 focus:outline-none focus:border-[#00f0ff]"
+                  className="w-full bg-[#333539] border border-white/10 rounded-lg text-sm font-medium text-white placeholder-[#b9cacb]/60 focus:outline-none focus:border-[#00f0ff]"
+                  style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '12px', paddingBottom: '12px' }}
                 />
               </div>
 
@@ -353,7 +361,8 @@ export default function AddCompetitionModal({ isOpen, onClose, onAddCompetition 
                   value={registrationFee}
                   onChange={(e) => setRegistrationFee(e.target.value)}
                   placeholder="Free Entry"
-                  className="w-full px-4 py-3 bg-[#333539] border border-white/10 rounded-lg text-sm font-medium text-white placeholder-[#b9cacb]/60 focus:outline-none focus:border-[#00f0ff]"
+                  className="w-full bg-[#333539] border border-white/10 rounded-lg text-sm font-medium text-white placeholder-[#b9cacb]/60 focus:outline-none focus:border-[#00f0ff]"
+                  style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '12px', paddingBottom: '12px' }}
                 />
               </div>
 
@@ -367,7 +376,8 @@ export default function AddCompetitionModal({ isOpen, onClose, onAddCompetition 
                   value={maxParticipants}
                   onChange={(e) => setMaxParticipants(e.target.value)}
                   placeholder="Open Entry"
-                  className="w-full px-4 py-3 bg-[#333539] border border-white/10 rounded-lg text-sm font-medium text-white placeholder-[#b9cacb]/60 focus:outline-none focus:border-[#00f0ff]"
+                  className="w-full bg-[#333539] border border-white/10 rounded-lg text-sm font-medium text-white placeholder-[#b9cacb]/60 focus:outline-none focus:border-[#00f0ff]"
+                  style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '12px', paddingBottom: '12px' }}
                 />
               </div>
             </div>
@@ -383,7 +393,8 @@ export default function AddCompetitionModal({ isOpen, onClose, onAddCompetition 
                   value={organizer}
                   onChange={(e) => setOrganizer(e.target.value)}
                   placeholder="e.g. Karnataka Sports Association"
-                  className="w-full px-4 py-3 bg-[#333539] border border-white/10 rounded-lg text-sm text-white placeholder-[#b9cacb]/60 font-medium focus:outline-none focus:border-[#00f0ff]"
+                  className="w-full bg-[#333539] border border-white/10 rounded-lg text-sm text-white placeholder-[#b9cacb]/60 font-medium focus:outline-none focus:border-[#00f0ff]"
+                  style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '12px', paddingBottom: '12px' }}
                 />
               </div>
 
@@ -396,7 +407,8 @@ export default function AddCompetitionModal({ isOpen, onClose, onAddCompetition 
                   value={contactInfo}
                   onChange={(e) => setContactInfo(e.target.value)}
                   placeholder="e.g. +91 9876543210 or info@karnataka.org"
-                  className="w-full px-4 py-3 bg-[#333539] border border-white/10 rounded-lg text-sm text-white placeholder-[#b9cacb]/60 font-medium focus:outline-none focus:border-[#00f0ff]"
+                  className="w-full bg-[#333539] border border-[#192540] rounded-lg text-sm text-white placeholder-[#b9cacb]/60 font-medium focus:outline-none focus:border-[#00f0ff]"
+                  style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '12px', paddingBottom: '12px' }}
                 />
               </div>
             </div>
@@ -411,7 +423,8 @@ export default function AddCompetitionModal({ isOpen, onClose, onAddCompetition 
                 value={bannerImage}
                 onChange={(e) => setBannerImage(e.target.value)}
                 placeholder="Paste tournament poster image URL (e.g. Unsplash link)..."
-                className="w-full px-4 py-3 bg-[#333539] border border-white/10 rounded-lg text-sm text-white placeholder-[#b9cacb]/60 font-medium focus:outline-none focus:border-[#00f0ff]"
+                className="w-full bg-[#333539] border border-white/10 rounded-lg text-sm text-white placeholder-[#b9cacb]/60 font-medium focus:outline-none focus:border-[#00f0ff]"
+                style={{ paddingLeft: '16px', paddingRight: '16px', paddingTop: '12px', paddingBottom: '12px' }}
               />
             </div>
 
@@ -420,14 +433,16 @@ export default function AddCompetitionModal({ isOpen, onClose, onAddCompetition 
               <button
                 type="button"
                 onClick={onClose}
-                className="px-6 py-3 bg-[#333539] hover:bg-gray-700 text-[#e2e2e8] rounded-lg text-xs sm:text-sm font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                className="bg-[#333539] hover:bg-gray-700 text-[#e2e2e8] rounded-lg text-xs sm:text-sm font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                style={{ paddingLeft: '24px', paddingRight: '24px', paddingTop: '12px', paddingBottom: '12px' }}
               >
                 CANCEL
               </button>
 
               <button
                 type="submit"
-                className="px-7 py-3 bg-[#00f0ff] hover:bg-[#00dbe9] text-[#002022] rounded-lg text-xs sm:text-sm font-bold uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(0,240,255,0.3)] flex items-center gap-2.5 cursor-pointer font-['Hanken_Grotesk']"
+                className="bg-[#00f0ff] hover:bg-[#00dbe9] text-[#002022] rounded-lg text-xs sm:text-sm font-bold uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(0,240,255,0.3)] flex items-center gap-2.5 cursor-pointer font-['Hanken_Grotesk']"
+                style={{ paddingLeft: '28px', paddingRight: '28px', paddingTop: '12px', paddingBottom: '12px' }}
               >
                 <Trophy className="w-5 h-5" />
                 <span>PUBLISH COMPETITION</span>

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Search, Home, Trophy, Users, Bot, Mail, Bell, ChevronDown, LogOut, User } from "lucide-react";
+import { useUser } from "@clerk/clerk-react";
+import { Search, Home, Trophy, Users, Bot, Mail, Bell, ChevronDown, LogOut, User, ShoppingBag } from "lucide-react";
 import NotificationDropdown from "./NotificationDropdown";
 
 export default function Navbar({ 
@@ -16,6 +17,9 @@ export default function Navbar({
   onOpenNotificationSettings,
   onNotificationUnreadCountChange
 }) {
+  const { user } = useUser();
+  const userName = user?.fullName || "Ratish Naik";
+  const userEmail = user?.primaryEmailAddress?.emailAddress || "ratish@playure.com";
   const [searchQuery, setSearchQuery] = useState("");
   const [showUserDropdown, setShowUserDropdown] = useState(false);
 
@@ -23,6 +27,7 @@ export default function Navbar({
     { id: "home", label: "Home", icon: Home },
     { id: "competitions", label: "Competitions", icon: Trophy },
     { id: "collaboration", label: "Collaboration", icon: Users },
+    { id: "replay", label: "RePlay", icon: ShoppingBag },
     { id: "chatbot", label: "AI Coach", icon: Bot, isChatbot: true },
   ];
 
@@ -144,7 +149,7 @@ export default function Navbar({
                 className="flex items-center gap-1 cursor-pointer hover:opacity-90 transition-opacity"
               >
                 <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80"
+                  src="/default_avatar.jpg"
                   alt="Ratish Naik"
                   className="w-8 h-8 rounded-full object-cover border border-[#00f0ff] shadow-sm"
                 />
@@ -155,8 +160,8 @@ export default function Navbar({
               {showUserDropdown && (
                 <div className="absolute right-0 top-11 z-50 w-52 bg-[#161B22] border border-white/10 rounded-xl shadow-2xl p-2 text-xs font-['Inter'] backdrop-blur-2xl">
                   <div className="px-3 py-2 border-b border-white/10 mb-1">
-                    <p className="font-bold text-white text-sm font-['Hanken_Grotesk']">Ratish Naik</p>
-                    <p className="text-[11px] text-[#00f0ff]">State-level Athlete</p>
+                    <p className="font-bold text-white text-sm font-['Hanken_Grotesk']">{userName}</p>
+                    <p className="text-[11px] text-[#00f0ff] truncate">{userEmail}</p>
                   </div>
 
                   <button

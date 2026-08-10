@@ -15,7 +15,10 @@ import {
 } from "lucide-react";
 import { SPORTS_CATEGORIES } from "./SportsCategoriesBar";
 
+import { useUser } from "@clerk/clerk-react";
+
 export default function CreatePostCard({ onAddPost }) {
+  const { user } = useUser();
   const [postText, setPostText] = useState("");
   const [selectedSport, setSelectedSport] = useState("Cricket");
   const [postType, setPostType] = useState("General");
@@ -25,8 +28,8 @@ export default function CreatePostCard({ onAddPost }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const fileInputRef = useRef(null);
 
-  const userAvatar = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80";
-  const userName = "Ratish Naik";
+  const userAvatar = "/default_avatar.jpg";
+  const userName = user?.fullName || "Ratish Naik";
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];

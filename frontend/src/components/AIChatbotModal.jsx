@@ -226,17 +226,17 @@ export default function AIChatbotModal({ isOpen, onClose }) {
               <div className="p-4 flex-1 overflow-y-auto space-y-5">
                 
                 {/* Agent Categories Radio List */}
-                <div className="space-y-1.5">
+                <div className="!space-y-3">
                   {categories.map((cat) => {
                     const isActive = activeCategory === cat.id;
                     return (
                       <label
                         key={cat.id}
                         onClick={() => setActiveCategory(cat.id)}
-                        className={`flex items-center gap-3 p-2.5 sm:p-3 rounded-lg cursor-pointer transition-all ${
+                        className={`flex items-center gap-3.5 !p-3.5 rounded-xl cursor-pointer transition-all border ${
                           isActive
-                            ? "bg-[#1e2024] border border-[#00f0ff]/40 glow-active"
-                            : "hover:bg-[#1e2024]/60 border border-transparent"
+                            ? "bg-[#1e2024] border-[#00f0ff]/40 glow-active"
+                            : "hover:bg-[#1e2024]/60 bg-transparent border-transparent"
                         }`}
                       >
                         <div className="relative flex items-center justify-center w-4 h-4 shrink-0">
@@ -274,7 +274,7 @@ export default function AIChatbotModal({ isOpen, onClose }) {
                 {/* Integrated Guidance & Resume Builder Content Section */}
                 <div className="pt-3 border-t border-white/10 space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-['Hanken_Grotesk'] text-base font-bold text-white flex items-center gap-2">
+                    <h3 className="font-['Hanken_Grotesk'] text-base font-extrabold text-white flex items-center gap-2">
                       <span>{activeGuidance.title}</span>
                     </h3>
                     <span className="material-symbols-outlined text-[#00f0ff] text-base">
@@ -282,11 +282,11 @@ export default function AIChatbotModal({ isOpen, onClose }) {
                     </span>
                   </div>
 
-                  <div className="bg-[#1e2024]/70 rounded-xl p-3.5 border border-white/10">
+                  <div className="bg-[#1e2024]/70 rounded-xl !p-4.5 border border-white/10">
                     <h4 className="font-['JetBrains_Mono'] text-xs font-bold text-[#00f0ff] mb-2.5 uppercase tracking-wider">
                       {activeCategory === "Resume" ? "FILL THESE FIELDS:" : "KEY INDICATORS:"}
                     </h4>
-                    <ul className="space-y-1.5 font-['JetBrains_Mono'] text-xs text-[#b9cacb]">
+                    <ul className="!space-y-2.5 font-['JetBrains_Mono'] text-xs text-[#b9cacb]">
                       {activeGuidance.fields.map((field, idx) => (
                         <li key={idx} className="flex items-center gap-2">
                           <span className="w-1.5 h-1.5 rounded-full bg-[#00f0ff] shrink-0" />
@@ -297,7 +297,7 @@ export default function AIChatbotModal({ isOpen, onClose }) {
                   </div>
 
                   {/* Suggested Prompts List */}
-                  <div className="space-y-2 pt-1">
+                  <div className="!space-y-2.5 pt-1.5">
                     <span className="font-['JetBrains_Mono'] text-[11px] font-bold text-gray-400 uppercase tracking-wider block">
                       SUGGESTED PROMPTS:
                     </span>
@@ -305,7 +305,7 @@ export default function AIChatbotModal({ isOpen, onClose }) {
                       <button
                         key={idx}
                         onClick={() => handleSend(p)}
-                        className="w-full text-left text-xs bg-[#161B22] hover:bg-[#1e2024] text-gray-300 hover:text-[#00f0ff] p-2.5 rounded-lg border border-white/10 hover:border-[#00f0ff]/40 transition-all font-['Inter'] leading-snug cursor-pointer"
+                        className="w-full text-left text-xs bg-[#161B22] hover:bg-[#1e2024] text-gray-300 hover:text-[#00f0ff] !px-4.5 !py-3.5 rounded-xl border border-white/10 hover:border-[#00f0ff]/40 transition-all font-['Inter'] leading-normal cursor-pointer shadow-sm"
                       >
                         "{p}"
                       </button>
@@ -321,10 +321,10 @@ export default function AIChatbotModal({ isOpen, onClose }) {
             <div className="flex-1 glass-panel rounded-xl flex flex-col relative overflow-hidden min-w-0 border border-white/10">
               
               {/* Workspace Header Box */}
-              <div className="py-5 px-6 border-b border-white/10 bg-[#161B22]/80 backdrop-blur-sm flex justify-between items-center shrink-0 min-h-[96px] z-20">
+              <div className="!py-6 !px-7 border-b border-white/10 bg-[#161B22]/80 backdrop-blur-sm flex justify-between items-center shrink-0 min-h-[96px] z-20">
                 {/* Left: Active Agent Badge */}
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className="px-3 py-1.5 rounded-md bg-[#00f0ff]/10 border border-[#00f0ff]/30 text-[#00f0ff] font-['JetBrains_Mono'] text-xs font-bold uppercase tracking-wider shadow-[0_0_10px_rgba(0,240,255,0.15)]">
+                  <span className="inline-block !px-3.5 !py-2 rounded-md bg-[#00f0ff]/10 border border-[#00f0ff]/30 text-[#00f0ff] font-['JetBrains_Mono'] text-[11px] font-bold uppercase tracking-wider shadow-[0_0_10px_rgba(0,240,255,0.15)]">
                     {activeCategory} AGENT ACTIVE
                   </span>
                 </div>
@@ -354,7 +354,7 @@ export default function AIChatbotModal({ isOpen, onClose }) {
                         },
                       ])
                     }
-                    className="font-['JetBrains_Mono'] text-xs text-[#b9cacb] hover:text-[#00f0ff] transition-colors border border-white/10 hover:border-[#00f0ff]/50 px-3.5 py-2 rounded-md flex items-center gap-1.5 cursor-pointer bg-white/5 hover:bg-white/10"
+                    className="font-['JetBrains_Mono'] text-xs text-[#b9cacb] hover:text-[#00f0ff] transition-colors border border-white/10 hover:border-[#00f0ff]/50 !px-4 !py-2.5 rounded-lg flex items-center gap-1.5 cursor-pointer bg-white/5 hover:bg-white/10 shadow-sm"
                   >
                     <span>Clear Chat</span>
                     <span className="material-symbols-outlined text-sm">refresh</span>
@@ -363,7 +363,7 @@ export default function AIChatbotModal({ isOpen, onClose }) {
               </div>
 
               {/* Chat Canvas */}
-              <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 relative flex flex-col">
+              <div className="flex-1 overflow-y-auto !p-6 !space-y-5.5 relative flex flex-col">
                 {/* Decorative background watermark with text */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center opacity-[0.12] pointer-events-none select-none px-4 text-center">
                   <span className="material-symbols-outlined text-[200px] text-[#00f0ff] mb-2">
@@ -389,7 +389,7 @@ export default function AIChatbotModal({ isOpen, onClose }) {
                     )}
 
                     <div
-                      className={`max-w-[85%] sm:max-w-[78%] p-4 rounded-2xl text-xs sm:text-sm leading-relaxed ${
+                      className={`max-w-[85%] sm:max-w-[78%] !p-4.5 sm:!p-5 rounded-2xl text-xs sm:text-sm leading-relaxed ${
                         msg.sender === "user"
                           ? "bg-gradient-to-r from-[#006970] to-[#004f54] text-white rounded-br-none border border-[#00f0ff]/30 shadow-md font-['Inter']"
                           : "bg-[#161B22] text-[#e2e2e8] border border-white/10 rounded-bl-none shadow-sm font-['Inter']"
@@ -432,12 +432,12 @@ export default function AIChatbotModal({ isOpen, onClose }) {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder={`Ask ${activeCategory} AI Agent...`}
-                    className="w-full bg-[#1e2024] rounded-xl py-3.5 pl-5 pr-12 border border-white/15 focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff] font-['Inter'] text-sm text-white placeholder:text-gray-400 shadow-inner transition-all group-hover:border-white/30 outline-none"
+                    className="w-full bg-[#1e2024] rounded-xl !py-4 !pl-5 !pr-16 border border-white/15 focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff] font-['Inter'] text-sm text-white placeholder:text-gray-400 shadow-inner transition-all group-hover:border-white/30 outline-none"
                   />
                   <button
                     type="submit"
                     disabled={!input.trim()}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center bg-[#00f0ff] hover:bg-[#7df4ff] text-[#00363a] rounded-lg transition-all border border-transparent disabled:opacity-40 cursor-pointer btn-primary-glow font-bold"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 w-10 h-10 !p-0 flex items-center justify-center bg-[#00f0ff] hover:bg-[#7df4ff] text-[#00363a] rounded-lg transition-all border border-transparent disabled:opacity-40 cursor-pointer btn-primary-glow font-bold"
                   >
                     <span className="material-symbols-outlined text-xl">arrow_upward</span>
                   </button>

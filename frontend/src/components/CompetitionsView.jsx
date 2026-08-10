@@ -276,25 +276,24 @@ export default function CompetitionsView() {
       <div className="bg-[#161B22]/60 backdrop-blur-xl border border-white/10 p-4 rounded-xl space-y-5">
         {/* Search Bar */}
         <div className="relative w-full">
-          <Search className="w-4 h-4 text-[#b9cacb] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-4 h-4 text-[#b9cacb] absolute left-4.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search tournaments, players, clubs..."
-            className="w-full pl-11 pr-4 py-2.5 bg-[#333539] border border-white/10 rounded-full text-xs text-white placeholder-[#b9cacb] focus:outline-none focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff] transition-all font-['Inter']"
-            style={{ paddingLeft: "2.75rem" }}
+            className="w-full !pl-12 !pr-4 !py-3.5 bg-[#333539] border border-white/10 rounded-full text-xs text-white placeholder-[#b9cacb] focus:outline-none focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff] transition-all font-['Inter']"
           />
         </div>
 
         {/* Filter Dropdowns Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-2">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-2 !mt-5">
           {/* Sport Filter */}
-          <div className="flex items-center bg-[#1e2024] border border-white/10 rounded-lg px-3 py-2 hover:border-[#00f0ff]/50 transition-colors">
+          <div className="relative w-full">
             <select
               value={selectedSport}
               onChange={(e) => setSelectedSport(e.target.value)}
-              className="w-full bg-transparent border-none text-xs sm:text-sm text-[#e2e2e8] focus:ring-0 p-0 cursor-pointer font-['Inter']"
+              className="w-full bg-[#1e2024] border border-white/10 rounded-xl !pl-3 !pr-7 !py-3.5 text-xs text-[#e2e2e8] hover:border-[#00f0ff]/50 transition-colors focus:outline-none focus:ring-1 focus:ring-[#00f0ff] appearance-none cursor-pointer font-['Inter'] font-bold"
             >
               <option value="All Sports" className="bg-[#1e2024]">All Sports</option>
               <option value="Badminton" className="bg-[#1e2024]">Badminton</option>
@@ -302,46 +301,61 @@ export default function CompetitionsView() {
               <option value="Football" className="bg-[#1e2024]">Football</option>
               <option value="Kabaddi" className="bg-[#1e2024]">Kabaddi</option>
             </select>
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none flex items-center">
+              <span className="material-symbols-outlined text-[16px] text-gray-400">expand_more</span>
+            </div>
           </div>
 
           {/* Location Filter */}
-          <div className="flex items-center bg-[#1e2024] border border-white/10 rounded-lg px-3 py-2 hover:border-[#00f0ff]/50 transition-colors">
-            <select className="w-full bg-transparent border-none text-xs sm:text-sm text-[#e2e2e8] focus:ring-0 p-0 cursor-pointer font-['Inter']">
+          <div className="relative w-full">
+            <select className="w-full bg-[#1e2024] border border-white/10 rounded-xl !pl-3 !pr-7 !py-3.5 text-xs text-[#e2e2e8] hover:border-[#00f0ff]/50 transition-colors focus:outline-none focus:ring-1 focus:ring-[#00f0ff] appearance-none cursor-pointer font-['Inter'] font-bold">
               <option className="bg-[#1e2024]">All States</option>
               <option className="bg-[#1e2024]">Karnataka</option>
               <option className="bg-[#1e2024]">Maharashtra</option>
               <option className="bg-[#1e2024]">Delhi</option>
             </select>
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none flex items-center">
+              <span className="material-symbols-outlined text-[16px] text-gray-400">expand_more</span>
+            </div>
           </div>
 
           {/* Level Filter */}
-          <div className="flex items-center bg-[#1e2024] border border-white/10 rounded-lg px-3 py-2 hover:border-[#00f0ff]/50 transition-colors">
+          <div className="relative w-full">
             <select
               value={selectedLevel}
               onChange={(e) => setSelectedLevel(e.target.value)}
-              className="w-full bg-transparent border-none text-xs sm:text-sm text-[#e2e2e8] focus:ring-0 p-0 cursor-pointer font-['Inter']"
+              className="w-full bg-[#1e2024] border border-white/10 rounded-xl !pl-3 !pr-7 !py-3.5 text-xs text-[#e2e2e8] hover:border-[#00f0ff]/50 transition-colors focus:outline-none focus:ring-1 focus:ring-[#00f0ff] appearance-none cursor-pointer font-['Inter'] font-bold"
             >
               {LOCAL_COMPETITION_LEVELS.map(lvl => (
                 <option key={lvl} value={lvl} className="bg-[#1e2024]">{lvl}</option>
               ))}
             </select>
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none flex items-center">
+              <span className="material-symbols-outlined text-[16px] text-gray-400">expand_more</span>
+            </div>
           </div>
 
           {/* Date Filter */}
-          <div className="flex items-center bg-[#1e2024] border border-white/10 rounded-lg px-3 py-2 hover:border-[#00f0ff]/50 transition-colors">
-            <select className="w-full bg-transparent border-none text-xs sm:text-sm text-[#e2e2e8] focus:ring-0 p-0 cursor-pointer font-['Inter']">
+          <div className="relative w-full">
+            <select className="w-full bg-[#1e2024] border border-white/10 rounded-xl !pl-3 !pr-7 !py-3.5 text-xs text-[#e2e2e8] hover:border-[#00f0ff]/50 transition-colors focus:outline-none focus:ring-1 focus:ring-[#00f0ff] appearance-none cursor-pointer font-['Inter'] font-bold">
               <option className="bg-[#1e2024]">All Dates</option>
               <option className="bg-[#1e2024]">This Weekend</option>
               <option className="bg-[#1e2024]">Next Month</option>
             </select>
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none flex items-center">
+              <span className="material-symbols-outlined text-[16px] text-gray-400">expand_more</span>
+            </div>
           </div>
 
           {/* Prize Money Filter */}
-          <div className="flex items-center bg-[#1e2024] border border-white/10 rounded-lg px-3 py-2 hover:border-[#00f0ff]/50 transition-colors">
-            <select className="w-full bg-transparent border-none text-xs sm:text-sm text-[#e2e2e8] focus:ring-0 p-0 cursor-pointer font-['Inter']">
+          <div className="relative w-full">
+            <select className="w-full bg-[#1e2024] border border-white/10 rounded-xl !pl-3 !pr-7 !py-3.5 text-xs text-[#e2e2e8] hover:border-[#00f0ff]/50 transition-colors focus:outline-none focus:ring-1 focus:ring-[#00f0ff] appearance-none cursor-pointer font-['Inter'] font-bold">
               <option className="bg-[#1e2024]">Prize Money</option>
               <option className="bg-[#1e2024]">High to Low</option>
             </select>
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none flex items-center">
+              <span className="material-symbols-outlined text-[16px] text-gray-400">expand_more</span>
+            </div>
           </div>
         </div>
 

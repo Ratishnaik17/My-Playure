@@ -183,14 +183,14 @@ export default function NotificationDropdown({
 
       {/* Search & Category Filter Chips */}
       <div className="p-4 border-b border-white/10 bg-[#111318]/40">
-        <div className="relative mb-3">
+        <div className="relative !mb-4">
           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#b9cacb] text-lg">search</span>
           <input 
             type="text" 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search alerts by keyword..." 
-            className="w-full bg-[#1e2024]/50 border border-white/10 rounded-lg py-2 pl-9 pr-3 text-xs text-[#e2e2e8] placeholder-[#b9cacb]/50 focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff]/50 transition-all font-['Inter']"
+            className="w-full bg-[#1e2024]/50 border border-white/10 rounded-lg !py-3 !pl-10 !pr-4 text-xs text-[#e2e2e8] placeholder-[#b9cacb]/50 focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff]/50 transition-all font-['Inter']"
           />
         </div>
 
@@ -200,7 +200,7 @@ export default function NotificationDropdown({
             <button
               key={chip}
               onClick={() => setActiveFilter(chip)}
-              className={`px-3.5 py-1.5 rounded-full font-['JetBrains_Mono'] text-xs whitespace-nowrap transition-all cursor-pointer ${
+              className={`!px-3.5 !py-1.5 rounded-full font-['JetBrains_Mono'] text-xs whitespace-nowrap transition-all cursor-pointer ${
                 activeFilter === chip 
                   ? "border border-[#00f0ff] text-[#00f0ff] bg-[#00f0ff]/10 font-bold" 
                   : "border border-white/10 text-[#b9cacb] hover:border-white/30 hover:text-white"
@@ -213,7 +213,7 @@ export default function NotificationDropdown({
       </div>
 
       {/* Notification Stream Feed Area */}
-      <div className="max-h-[400px] overflow-y-auto chat-scroll p-3 space-y-2">
+      <div className="max-h-[400px] overflow-y-auto chat-scroll !p-4 !space-y-3.5">
         {filteredNotifications.length === 0 ? (
           <div className="text-center py-12 text-[#b9cacb]">
             <span className="material-symbols-outlined text-4xl text-gray-500 mb-2 block">notifications_off</span>
@@ -225,15 +225,15 @@ export default function NotificationDropdown({
             <div 
               key={n.id}
               onClick={() => handleMarkAsRead(n.id, n.action_url)}
-              className={`p-3.5 rounded-lg cursor-pointer transition-all duration-150 flex gap-3.5 relative group ${
+              className={`!p-4 rounded-xl cursor-pointer transition-all duration-150 flex gap-3.5 relative group border ${
                 !n.is_read 
-                  ? "bg-[#282a2e]/50 border border-[#00f0ff]/20 hover:bg-[#282a2e]/70" 
-                  : "bg-transparent border border-transparent hover:bg-white/5 opacity-85"
+                  ? "bg-[#282a2e]/50 border-[#00f0ff]/20 hover:bg-[#282a2e]/70" 
+                  : "bg-transparent border-white/5 hover:bg-white/5 opacity-85"
               }`}
             >
               {/* Left Indicator Bar for Unread */}
               {!n.is_read && (
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#00f0ff] rounded-l-lg" />
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#00f0ff] rounded-l-xl" />
               )}
 
               {/* Category Avatar / Icon Box */}

@@ -13,9 +13,12 @@ import {
   Mail
 } from "lucide-react";
 
+import { useUser } from "@clerk/clerk-react";
+
 export default function LeftProfileSidebar({ activeTab, onNavigateTab, onNavigateCompetitions, onSignOut }) {
-  const userAvatar = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80";
-  const userName = "Ratish Naik";
+  const { user } = useUser();
+  const userAvatar = "/default_avatar.jpg";
+  const userName = user?.fullName || "Ratish Naik";
 
   const menuItems = [
     { id: "ai_assistant", label: "AI Coach & Resume", icon: Bot, isHighlight: true },

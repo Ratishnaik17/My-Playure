@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useUser, useClerk } from "@clerk/clerk-react";
 import Dashboard from "./pages/Dashboard";
-import Home from "./pages/Home";
+import Home from "./pages/home";
 
 function App() {
   const { isSignedIn, isLoaded, user } = useUser();

@@ -15,7 +15,11 @@ import {
   BarChart2,
   LogIn,
   Globe,
-  Zap
+  Zap,
+  Activity,
+  Heart,
+  Dumbbell,
+  ClipboardCheck
 } from "lucide-react";
 
 export default function Home({ onSignInSuccess }) {
@@ -579,56 +583,55 @@ export default function Home({ onSignInSuccess }) {
                 </div>
               </div>
 
-              {/* Right Side (Visual Mockup with Overlay Stats) */}
-              <div className="lg:col-span-5 relative w-full h-[320px] sm:h-[380px] rounded-2xl overflow-hidden border border-white/10 shadow-2xl flex items-center justify-center bg-black/40">
-                <img 
-                  src="https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800&auto=format&fit=crop&q=80" 
-                  alt="Athlete running on stadium track" 
-                  className="w-full h-full object-cover opacity-60"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0D1117]/80 via-transparent to-transparent z-10" />
+              {/* Right Side (Visual Mockup - Dynamic Agent Circular Orbs) */}
+              <div className="lg:col-span-5 relative w-full h-[320px] sm:h-[400px] flex items-center justify-center select-none">
+                {/* Background decorative wave grids */}
+                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#00f0ff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
+                
+                {/* Cosmic Orbits and Connection SVG */}
+                <svg className="absolute w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] text-[#00f0ff]/20 animate-[spin_60s_linear_infinite]" viewBox="0 0 200 200">
+                  <circle cx="100" cy="100" r="75" stroke="currentColor" strokeWidth="0.75" strokeDasharray="3 4" fill="none" />
+                  <circle cx="100" cy="100" r="50" stroke="currentColor" strokeWidth="0.5" strokeDasharray="1.5 2" fill="none" />
+                  <circle cx="100" cy="100" r="75" stroke="rgba(0, 240, 255, 0.4)" strokeWidth="1" strokeDasharray="10 180" fill="none" />
+                </svg>
 
-                {/* Overlay 1: Performance 92% (Top Left) */}
-                <div className="absolute top-4 left-4 bg-[#161B22]/90 border border-white/15 backdrop-blur-md rounded-xl p-3 shadow-2xl z-20 flex flex-col gap-1 w-32">
-                  <span className="text-[9px] font-['JetBrains_Mono',monospace] text-[#b9cacb] uppercase tracking-wider">Performance</span>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xl font-bold text-white leading-none">92%</span>
-                    <span className="text-[10px] text-[#00FF41] font-bold">▲ 4%</span>
-                  </div>
-                  <svg className="w-full h-6 mt-1 text-[#00f0ff]" viewBox="0 0 100 30" fill="none">
-                    <path d="M0,25 Q15,10 30,20 T60,5 T90,15 T100,10" stroke="currentColor" strokeWidth="2" fill="none" />
-                  </svg>
+                {/* Additional slow reverse rotation ring for high-fidelity look */}
+                <div className="absolute w-[240px] h-[240px] sm:w-[280px] sm:h-[280px] border border-dashed border-[#00f0ff]/10 rounded-full animate-[spin_40s_linear_infinite_reverse] pointer-events-none" />
+
+                {/* Center Core: Glowing Playure P Logo */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 sm:w-28 sm:h-28 bg-[#0b0e14]/95 border-2 border-[#00f0ff]/40 rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(0,240,255,0.25)] z-20 group">
+                  {/* Subtle inner pulse ring */}
+                  <div className="absolute inset-1 border border-[#00f0ff]/20 rounded-full animate-pulse" />
+                  <img
+                    src="/playure-logo.png"
+                    alt="Playure Logo Core"
+                    className="w-12 h-12 sm:w-14 sm:h-14 object-contain filter drop-shadow-[0_0_8px_rgba(0,240,255,0.65)]"
+                  />
                 </div>
 
-                {/* Overlay 2: Top Speed (Top Right) */}
-                <div className="absolute top-4 right-4 bg-[#161B22]/90 border border-white/15 backdrop-blur-md rounded-xl p-3 shadow-2xl z-20 flex flex-col gap-1 w-32">
-                  <span className="text-[9px] font-['JetBrains_Mono',monospace] text-[#b9cacb] uppercase tracking-wider">Top Speed</span>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xl font-bold text-white leading-none">32.4</span>
-                    <span className="text-[10px] text-[#b9cacb] font-medium">KM/H</span>
-                  </div>
-                  <div className="flex items-end gap-1 h-6 mt-1 pt-1">
-                    <div className="bg-[#b9cacb]/20 w-2 h-3 rounded-sm" />
-                    <div className="bg-[#b9cacb]/20 w-2 h-4 rounded-sm" />
-                    <div className="bg-[#00f0ff] w-2 h-5 rounded-sm shadow-[0_0_8px_#00f0ff]" />
-                    <div className="bg-[#b9cacb]/20 w-2 h-4 rounded-sm" />
-                    <div className="bg-[#b9cacb]/20 w-2 h-3 rounded-sm" />
-                  </div>
+                {/* Satellite 1: Top (Training / Activity) */}
+                <div className="absolute top-[14%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-11 h-11 bg-[#0c1220]/95 border border-[#00f0ff]/40 hover:border-[#00f0ff] rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(0,240,255,0.2)] hover:shadow-[0_0_22px_rgba(0,240,255,0.55)] transition-all duration-300 z-20 group cursor-pointer">
+                  <Activity className="w-5 h-5 text-[#00f0ff] group-hover:scale-110 transition-transform" />
                 </div>
 
-                {/* Overlay 3: Recovery 87% (Bottom Right) */}
-                <div className="absolute bottom-4 right-4 bg-[#161B22]/90 border border-white/15 backdrop-blur-md rounded-xl p-3 shadow-2xl z-20 flex items-center gap-2 w-36">
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-[9px] font-['JetBrains_Mono',monospace] text-[#b9cacb] uppercase tracking-wider">Recovery</span>
-                    <span className="text-lg font-bold text-white leading-none">87%</span>
-                  </div>
-                  <div className="relative w-8 h-8 flex items-center justify-center ml-auto">
-                    <svg className="w-full h-full transform -rotate-90">
-                      <circle cx="16" cy="16" r="13" stroke="rgba(255,255,255,0.05)" strokeWidth="3" fill="none" />
-                      <circle cx="16" cy="16" r="13" stroke="#00FF41" strokeWidth="3" strokeDasharray="81" strokeDashoffset="11" strokeLinecap="round" fill="none" />
-                    </svg>
-                    <span className="absolute text-[8px] font-bold text-[#00FF41] font-['JetBrains_Mono',monospace]">87%</span>
-                  </div>
+                {/* Satellite 2: Top-Right (Pulse / Health) */}
+                <div className="absolute top-[32%] left-[84%] -translate-x-1/2 -translate-y-1/2 w-11 h-11 bg-[#0c1220]/95 border border-[#00f0ff]/40 hover:border-[#00f0ff] rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(0,240,255,0.2)] hover:shadow-[0_0_22px_rgba(0,240,255,0.55)] transition-all duration-300 z-20 group cursor-pointer">
+                  <Heart className="w-5 h-5 text-[#00f0ff] group-hover:scale-110 transition-transform" />
+                </div>
+
+                {/* Satellite 3: Bottom-Right (Dumbbell / Strength) */}
+                <div className="absolute top-[75%] left-[71%] -translate-x-1/2 -translate-y-1/2 w-11 h-11 bg-[#0c1220]/95 border border-[#00f0ff]/40 hover:border-[#00f0ff] rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(0,240,255,0.2)] hover:shadow-[0_0_22px_rgba(0,240,255,0.55)] transition-all duration-300 z-20 group cursor-pointer">
+                  <Dumbbell className="w-5 h-5 text-[#00f0ff] group-hover:scale-110 transition-transform" />
+                </div>
+
+                {/* Satellite 4: Bottom-Left (Clipboard Checklist / Scouting) */}
+                <div className="absolute top-[75%] left-[29%] -translate-x-1/2 -translate-y-1/2 w-11 h-11 bg-[#0c1220]/95 border border-[#00f0ff]/40 hover:border-[#00f0ff] rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(0,240,255,0.2)] hover:shadow-[0_0_22px_rgba(0,240,255,0.55)] transition-all duration-300 z-20 group cursor-pointer">
+                  <ClipboardCheck className="w-5 h-5 text-[#00f0ff] group-hover:scale-110 transition-transform" />
+                </div>
+
+                {/* Satellite 5: Top-Left (Chart / Analytics) */}
+                <div className="absolute top-[32%] left-[16%] -translate-x-1/2 -translate-y-1/2 w-11 h-11 bg-[#0c1220]/95 border border-[#00f0ff]/40 hover:border-[#00f0ff] rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(0,240,255,0.2)] hover:shadow-[0_0_22px_rgba(0,240,255,0.55)] transition-all duration-300 z-20 group cursor-pointer">
+                  <BarChart2 className="w-5 h-5 text-[#00f0ff] group-hover:scale-110 transition-transform" />
                 </div>
               </div>
             </div>
