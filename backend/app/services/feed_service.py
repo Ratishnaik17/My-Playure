@@ -15,6 +15,7 @@ class FeedService:
 
     async def get_feed(
         self,
+        author_id: Optional[uuid.UUID] = None,
         sport: Optional[str] = None,
         achievement_type: Optional[str] = None,
         post_type: Optional[str] = None,
@@ -32,6 +33,7 @@ class FeedService:
             skip=skip,
             limit=limit,
             user_id=current_user_id,
+            author_id=author_id,
         )
 
         item_responses: List[PostResponse] = []

@@ -269,6 +269,7 @@ export default function AthleteProfileView() {
       }
     }
     loadProfile();
+    fetchProfilePosts();
   }, [user]);
 
   const handleSaveAbout = async () => {
@@ -462,80 +463,82 @@ export default function AthleteProfileView() {
     await syncSkillsToDB(updatedSkills);
   };
 
-  const syncPostsToDB = async (postsList) => {
-    let city = "Bengaluru";
-    let state = "India";
-    const locParts = athlete.location.split(",");
-    if (locParts.length > 0) city = locParts[0].trim();
-    if (locParts.length > 1) state = locParts.slice(1).join(",").trim();
-
-    const ageVal = athlete.bioDetails.find(d => d.label === "Age")?.value || "24";
-    const heightVal = athlete.bioDetails.find(d => d.label === "Height")?.value || "5'10\"";
-    const weightVal = athlete.bioDetails.find(d => d.label === "Weight")?.value || "72 kg";
-    const sinceVal = athlete.bioDetails.find(d => d.label === "Playing Since")?.value || "2012";
-    const langVal = athlete.bioDetails.find(d => d.label === "Languages")?.value || "English, Hindi, Gujarati";
-    const eduVal = athlete.bioDetails.find(d => d.label === "Education")?.value || "BBA, Mumbai University";
-
-    const bioObj = {
-      about: athlete.about,
-      website: athlete.profileUrl,
-      attributes: athlete.attributes,
-      bioDetails: {
-        age: ageVal,
-        height: heightVal,
-        weight: weightVal,
-        playingSince: sinceVal,
-        languages: langVal,
-        education: eduVal
-      },
-      skills: athlete.skills,
-      highlights: athlete.highlights,
-      experience: athlete.experience,
-      posts: postsList
-    };
-
-    const updatePayload = {
-      role: athlete.role,
-      city: city,
-      state: state,
-      bio: JSON.stringify(bioObj)
-    };
-    const activeUserId = user?.id || localStorage.getItem("playure_demo_user_id") || "00000000-0000-0000-0000-000000000001";
-    await updateUserProfile(updatePayload, activeUserId);
+  const fetchProfilePosts = async () => {
+    try {
+      const activeUserId = user?.id || localStorage.getItem("playure_demo_user_id") || "00000000-0000-0000-0000-000000000001";
+      const headers = {};
+      headers["X-User-Id"] = activeUserId;
+      const res = await fetch(`http://localhost:8000/api/v1/feed?author_id=${activeUserId}`, { headers });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.items) {
+          const mappedPosts = data.items.map(p => ({
+            id: p.id,
+            title: p.sport || "Update",
+            content: p.content,
+            date: new Date(p.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+          }));
+          setAthlete(prev => ({
+            ...prev,
+            posts: mappedPosts
+          }));
+        }
+      }
+    } catch (err) {
+      console.warn("Failed to fetch profile posts:", err);
+    }
   };
 
   const handleSaveNewPost = async (e) => {
     e.preventDefault();
     if (!newPostTitle.trim() || !newPostContent.trim()) return;
 
-    const newPost = {
-      id: Date.now(),
-      title: newPostTitle.trim(),
-      content: newPostContent.trim(),
-      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-    };
+    try {
+      const activeUserId = user?.id || localStorage.getItem("playure_demo_user_id") || "00000000-0000-0000-0000-000000000001";
+      const res = await fetch("http://localhost:8000/api/v1/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-User-Id": activeUserId
+        },
+        body: JSON.stringify({
+          content: newPostContent.trim(),
+          post_type: "normal",
+          sport: newPostTitle.trim(),
+          visibility: "public"
+        })
+      });
 
-    const updatedPosts = [newPost, ...(athlete.posts || [])];
-    setAthlete(prev => ({
-      ...prev,
-      posts: updatedPosts
-    }));
-
-    setNewPostTitle("");
-    setNewPostContent("");
-    setIsAddingPost(false);
-
-    await syncPostsToDB(updatedPosts);
+      if (res.ok) {
+        setNewPostTitle("");
+        setNewPostContent("");
+        setIsAddingPost(false);
+        await fetchProfilePosts();
+      } else {
+        alert("Failed to save post to backend DB");
+      }
+    } catch (err) {
+      console.error("Error creating post:", err);
+    }
   };
 
   const handleDeletePost = async (postId) => {
-    const updatedPosts = (athlete.posts || []).filter(p => p.id !== postId);
-    setAthlete(prev => ({
-      ...prev,
-      posts: updatedPosts
-    }));
-
-    await syncPostsToDB(updatedPosts);
+    try {
+      const activeUserId = user?.id || localStorage.getItem("playure_demo_user_id") || "00000000-0000-0000-0000-000000000001";
+      const res = await fetch(`http://localhost:8000/api/v1/posts/${postId}`, {
+        method: "DELETE",
+        headers: {
+          "X-User-Id": activeUserId
+        }
+      });
+      if (res.ok) {
+        await fetchProfilePosts();
+      } else {
+        alert("Failed to delete post");
+      }
+    } catch (err) {
+      console.error("Error deleting post:", err);
+    }
   };
 
   const handleStartEditingAchievements = () => {

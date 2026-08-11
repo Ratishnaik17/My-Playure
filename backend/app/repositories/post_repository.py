@@ -38,6 +38,7 @@ class PostRepository(BaseRepository[Post]):
         limit: int = 20,
         include_drafts: bool = False,
         user_id: Optional[uuid.UUID] = None,
+        author_id: Optional[uuid.UUID] = None,
     ) -> Tuple[List[Post], int]:
         """
         Fetch feed posts with optional filters, eagerly loading user, media & hashtags.
@@ -53,6 +54,9 @@ class PostRepository(BaseRepository[Post]):
             query = query.where(Post.is_draft == False)
         elif user_id:
             query = query.where(or_(Post.is_draft == False, Post.user_id == user_id))
+
+        if author_id:
+            query = query.where(Post.user_id == author_id)
 
         if sport:
             query = query.where(Post.sport == sport)

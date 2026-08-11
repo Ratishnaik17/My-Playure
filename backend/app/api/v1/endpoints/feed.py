@@ -13,6 +13,7 @@ router = APIRouter()
 
 @router.get("/feed", response_model=PaginatedResponse[PostResponse], summary="Fetch homepage feed posts")
 async def get_feed(
+    author_id: Optional[uuid.UUID] = Query(None, description="Filter posts by author user ID"),
     sport: Optional[str] = Query(None, description="Filter posts by sport"),
     achievement_type: Optional[str] = Query(None, description="Filter posts by achievement type"),
     post_type: Optional[str] = Query(None, description="Filter by post type (normal, achievement, tournament, check_in)"),
@@ -24,6 +25,7 @@ async def get_feed(
 ):
     service = FeedService(db)
     return await service.get_feed(
+        author_id=author_id,
         sport=sport,
         achievement_type=achievement_type,
         post_type=post_type,
