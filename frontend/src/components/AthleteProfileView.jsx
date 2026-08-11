@@ -114,8 +114,9 @@ const INITIAL_ATHLETE_DATA = {
   ],
   reviews: [
     { id: 1, author: "Rahul Dravid", role: "National Scout / Coach", text: "Arjun shows outstanding work ethic and tactical clarity on the field. His batting acceleration in middle overs and accurate off-breaks make him an invaluable all-rounder asset.", rating: 5, date: "May 2026" },
-    { id: 2, select: "Mahela Jayawardene", author: "Club Head Coach", text: "Excellent physical conditioning. Highly cooperative in team setups. Led the field placements during U19 very well.", rating: 4.8, date: "Nov 2025" }
-  ]
+    { id: 2, author: "Mahela Jayawardene", role: "Club Head Coach", text: "Excellent physical conditioning. Highly cooperative in team setups. Led the field placements during U19 very well.", rating: 4.8, date: "Nov 2025" }
+  ],
+  posts: []
 };
 
 export default function AthleteProfileView() {
@@ -126,6 +127,11 @@ export default function AthleteProfileView() {
   const [isConnected, setIsConnected] = useState(false);
   const [isSupporting, setIsSupporting] = useState(false);
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  
+  // Posts states
+  const [isAddingPost, setIsAddingPost] = useState(false);
+  const [newPostTitle, setNewPostTitle] = useState("");
+  const [newPostContent, setNewPostContent] = useState("");
   
   // Ref for Avatar Upload
   const avatarInputRef = useRef(null);
@@ -256,7 +262,8 @@ export default function AthleteProfileView() {
           bioDetails: loadedBioDetails,
           skills: parsedBio.skills || [],
           highlights: parsedBio.highlights || prev.highlights,
-          experience: parsedBio.experience || prev.experience
+          experience: parsedBio.experience || prev.experience,
+          posts: parsedBio.posts || []
         }));
         setEditedAbout(parsedBio.about);
       }
@@ -301,7 +308,8 @@ export default function AthleteProfileView() {
       },
       skills: athlete.skills,
       highlights: athlete.highlights,
-      experience: athlete.experience
+      experience: athlete.experience,
+      posts: athlete.posts || []
     };
 
     const updatePayload = {
@@ -349,7 +357,8 @@ export default function AthleteProfileView() {
       },
       skills: athlete.skills,
       highlights: athlete.highlights,
-      experience: athlete.experience
+      experience: athlete.experience,
+      posts: athlete.posts || []
     };
 
     const updatePayload = {
@@ -406,7 +415,7 @@ export default function AthleteProfileView() {
       },
       skills: skillsList,
       highlights: athlete.highlights,
-      experience: athlete.experience
+      posts: athlete.posts || []
     };
 
     const updatePayload = {
@@ -451,6 +460,82 @@ export default function AthleteProfileView() {
       skills: updatedSkills
     }));
     await syncSkillsToDB(updatedSkills);
+  };
+
+  const syncPostsToDB = async (postsList) => {
+    let city = "Bengaluru";
+    let state = "India";
+    const locParts = athlete.location.split(",");
+    if (locParts.length > 0) city = locParts[0].trim();
+    if (locParts.length > 1) state = locParts.slice(1).join(",").trim();
+
+    const ageVal = athlete.bioDetails.find(d => d.label === "Age")?.value || "24";
+    const heightVal = athlete.bioDetails.find(d => d.label === "Height")?.value || "5'10\"";
+    const weightVal = athlete.bioDetails.find(d => d.label === "Weight")?.value || "72 kg";
+    const sinceVal = athlete.bioDetails.find(d => d.label === "Playing Since")?.value || "2012";
+    const langVal = athlete.bioDetails.find(d => d.label === "Languages")?.value || "English, Hindi, Gujarati";
+    const eduVal = athlete.bioDetails.find(d => d.label === "Education")?.value || "BBA, Mumbai University";
+
+    const bioObj = {
+      about: athlete.about,
+      website: athlete.profileUrl,
+      attributes: athlete.attributes,
+      bioDetails: {
+        age: ageVal,
+        height: heightVal,
+        weight: weightVal,
+        playingSince: sinceVal,
+        languages: langVal,
+        education: eduVal
+      },
+      skills: athlete.skills,
+      highlights: athlete.highlights,
+      experience: athlete.experience,
+      posts: postsList
+    };
+
+    const updatePayload = {
+      role: athlete.role,
+      city: city,
+      state: state,
+      bio: JSON.stringify(bioObj)
+    };
+    const activeUserId = user?.id || localStorage.getItem("playure_demo_user_id") || "00000000-0000-0000-0000-000000000001";
+    await updateUserProfile(updatePayload, activeUserId);
+  };
+
+  const handleSaveNewPost = async (e) => {
+    e.preventDefault();
+    if (!newPostTitle.trim() || !newPostContent.trim()) return;
+
+    const newPost = {
+      id: Date.now(),
+      title: newPostTitle.trim(),
+      content: newPostContent.trim(),
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    };
+
+    const updatedPosts = [newPost, ...(athlete.posts || [])];
+    setAthlete(prev => ({
+      ...prev,
+      posts: updatedPosts
+    }));
+
+    setNewPostTitle("");
+    setNewPostContent("");
+    setIsAddingPost(false);
+
+    await syncPostsToDB(updatedPosts);
+  };
+
+  const handleDeletePost = async (postId) => {
+    const updatedPosts = (athlete.posts || []).filter(p => p.id !== postId);
+    setAthlete(prev => ({
+      ...prev,
+      posts: updatedPosts
+    }));
+
+    await syncPostsToDB(updatedPosts);
   };
 
   const handleStartEditingAchievements = () => {
@@ -509,7 +594,7 @@ export default function AthleteProfileView() {
       },
       skills: athlete.skills,
       highlights: validAchievements,
-      experience: athlete.experience
+      posts: athlete.posts || []
     };
 
     const updatePayload = {
@@ -595,7 +680,8 @@ export default function AthleteProfileView() {
       },
       skills: athlete.skills,
       highlights: athlete.highlights,
-      experience: expList
+      experience: expList,
+      posts: athlete.posts || []
     };
 
     const updatePayload = {
@@ -1342,6 +1428,97 @@ export default function AthleteProfileView() {
                 </div>
               </div>
 
+              {/* Posts Card */}
+              <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all !mt-6 animate-fadeIn">
+                <div className="flex justify-between items-center mb-5">
+                  <h3 className="text-sm font-extrabold uppercase tracking-wider text-white flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[#00f0ff] text-lg">feed</span>
+                    <span>Posts</span>
+                  </h3>
+                  {isOwner && !isAddingPost && (
+                    <button 
+                      onClick={() => setIsAddingPost(true)}
+                      className="flex items-center gap-1 px-3 py-1 border border-[#00f0ff]/30 hover:border-[#00f0ff] hover:bg-[#00f0ff]/5 rounded-full text-[10px] font-bold text-[#00f0ff] uppercase tracking-wider cursor-pointer transition-colors"
+                    >
+                      <Plus className="w-3 h-3" />
+                      <span>Add Post</span>
+                    </button>
+                  )}
+                </div>
+
+                {isAddingPost && (
+                  <form onSubmit={handleSaveNewPost} className="space-y-4 bg-[#111318]/30 border border-white/5 p-4 rounded-xl mb-4">
+                    <div>
+                      <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Post Title</label>
+                      <input 
+                        type="text" 
+                        value={newPostTitle}
+                        onChange={(e) => setNewPostTitle(e.target.value)}
+                        placeholder="e.g. Match Highlights, Training Session"
+                        className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                        style={{ padding: '10px 14px' }}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Post Content</label>
+                      <textarea 
+                        value={newPostContent}
+                        onChange={(e) => setNewPostContent(e.target.value)}
+                        placeholder="What's on your mind? Share updates, matches, achievements..."
+                        rows={3}
+                        className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff] resize-none font-['Inter'] leading-relaxed"
+                        style={{ padding: '12px 14px' }}
+                        required
+                      />
+                    </div>
+                    <div className="flex justify-end gap-3 pt-2">
+                      <button type="button" onClick={() => setIsAddingPost(false)} className="bg-white/5 hover:bg-white/10 rounded-md text-[10px] font-bold px-4 py-2 cursor-pointer transition-colors text-white">Cancel</button>
+                      <button type="submit" className="bg-[#00f0ff] hover:bg-[#00dbe9] text-black rounded-md text-[10px] font-bold px-4 py-2 cursor-pointer transition-colors shadow-[0_0_8px_rgba(0,240,255,0.2)]">Publish</button>
+                    </div>
+                  </form>
+                )}
+
+                {/* Posts List */}
+                <div className="flex flex-col !gap-y-4 !mt-5">
+                  {(!athlete.posts || athlete.posts.length === 0) ? (
+                    <p className="text-xs text-gray-500 italic py-2 text-center">no post</p>
+                  ) : (
+                    athlete.posts.map((post) => (
+                      <div key={post.id} className="relative group/post p-4.5 bg-[#111318]/40 border border-white/5 rounded-xl hover:border-[#00f0ff]/20 hover:bg-[#111318]/60 transition-all">
+                        <div className="flex items-start gap-4">
+                          {/* User Avatar */}
+                          <img 
+                            src={athlete.avatarUrl || "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80"} 
+                            alt={athlete.name} 
+                            className="w-10 h-10 rounded-full object-cover border border-white/10 shrink-0" 
+                          />
+                          <div className="flex-1 min-w-0 animate-fadeIn">
+                            <div className="flex justify-between items-start gap-2">
+                              <div>
+                                <h4 className="text-xs sm:text-sm font-extrabold text-white font-['Hanken_Grotesk'] leading-tight">{athlete.name}</h4>
+                                <span className="text-[10px] font-medium text-[#b9cacb]/60 block mt-0.5">{post.date}</span>
+                              </div>
+                              {isOwner && (
+                                <button 
+                                  onClick={() => handleDeletePost(post.id)}
+                                  className="p-1 rounded text-red-400 hover:text-red-500 hover:bg-white/5 cursor-pointer opacity-0 group-hover/post:opacity-100 transition-opacity"
+                                  title="Delete Post"
+                                >
+                                  <span className="material-symbols-outlined text-[15px]">delete</span>
+                                </button>
+                              )}
+                            </div>
+                            <h5 className="text-xs sm:text-sm font-bold text-[#00f0ff] mt-3">{post.title}</h5>
+                            <p className="text-xs text-gray-300 mt-1.5 leading-relaxed whitespace-pre-line font-['Inter']">{post.content}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
             </div>
 
             {/* RIGHT COLUMN: Stats, Endorsements, Media, Activity, Connections, Teams (3 Columns) */}
@@ -1633,69 +1810,162 @@ export default function AthleteProfileView() {
 
         {/* VIEW 4: EXPERIENCE TIMELINE TAB */}
         {activeTab === "experience" && (
-          <div className="max-w-4xl mx-auto bg-[#161B22]/60 border border-white/10 rounded-2xl p-6 md:p-8 animate-fadeIn">
-            <div className="flex justify-between items-center mb-6 border-b border-white/5 pb-3">
-              <h3 className="text-lg font-bold text-white uppercase tracking-wider">Detailed Career Experience</h3>
-              {isOwner && (
-                <button 
-                  onClick={handleStartAddExperience}
-                  className="flex items-center gap-1.5 px-4 py-2 bg-[#00f0ff] hover:bg-[#00dbe9] text-[#002022] rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all shadow-[0_0_10px_rgba(0,240,255,0.25)]"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Add Experience</span>
-                </button>
-              )}
+          <div className="space-y-6 max-w-4xl mx-auto animate-fadeIn">
+            <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-6 md:p-8">
+              <div className="flex justify-between items-center mb-6 border-b border-white/5 pb-3">
+                <h3 className="text-lg font-bold text-white uppercase tracking-wider">Detailed Career Experience</h3>
+                {isOwner && (
+                  <button 
+                    onClick={handleStartAddExperience}
+                    className="flex items-center gap-1.5 px-4 py-2 bg-[#00f0ff] hover:bg-[#00dbe9] text-[#002022] rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all shadow-[0_0_10px_rgba(0,240,255,0.25)]"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add Experience</span>
+                  </button>
+                )}
+              </div>
+
+              <div className="flex flex-col !gap-y-4 !mt-6">
+                {athlete.experience.length === 0 && (
+                  <p className="text-xs text-gray-500 italic py-2 text-center">No experience added yet.</p>
+                )}
+                {athlete.experience.map((exp) => (
+                  <div key={exp.id} className="relative group/item2 p-5 bg-[#111318]/40 border border-white/5 rounded-xl hover:border-[#00f0ff]/20 hover:bg-[#111318]/60 transition-all !mb-4.5 last:!mb-0">
+                    <div className="flex items-start gap-5">
+                      <div className="w-12 h-12 rounded-xl bg-[#333539] border border-white/10 flex items-center justify-center text-xl shrink-0 shadow-md uppercase font-black text-gray-400">
+                        {exp.team.charAt(0)}
+                      </div>
+                      <div className="flex-1 min-w-0 pr-12">
+                        <div className="flex flex-col sm:flex-row justify-between items-start gap-1">
+                          <h4 className="text-sm sm:text-base font-extrabold text-white font-['Hanken_Grotesk'] leading-tight">
+                            {exp.team}
+                          </h4>
+                          <span className="text-xs font-semibold text-[#b9cacb]">
+                            {exp.period}
+                          </span>
+                        </div>
+                        <p className="text-xs font-bold text-[#00f0ff] tracking-wide uppercase mt-1">
+                          {exp.role}
+                        </p>
+                        <p className="text-xs sm:text-sm text-gray-300 mt-3 leading-relaxed">
+                          {exp.description}
+                        </p>
+                      </div>
+                    </div>
+
+                    {isOwner && (
+                      <div className="absolute right-4 top-4 opacity-0 group-hover/item2:opacity-100 flex items-center !gap-x-3.5 transition-all">
+                        <button 
+                          onClick={() => handleStartEditExperience(exp)}
+                          className="p-1.5 rounded text-[#b9cacb] hover:text-[#00f0ff] hover:bg-white/5 cursor-pointer"
+                          title="Edit Experience"
+                        >
+                          <span className="material-symbols-outlined text-[16px]">edit</span>
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteExperience(exp.id)}
+                          className="p-1.5 rounded text-red-400 hover:text-red-500 hover:bg-white/5 cursor-pointer"
+                          title="Delete Experience"
+                        >
+                          <span className="material-symbols-outlined text-[16px]">delete</span>
+                        </button>
+                      </div>
+                    )}
+
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className="flex flex-col !gap-y-4 !mt-6">
-              {athlete.experience.length === 0 && (
-                <p className="text-xs text-gray-500 italic py-2 text-center">No experience added yet.</p>
-              )}
-              {athlete.experience.map((exp) => (
-                <div key={exp.id} className="relative group/item2 p-5 bg-[#111318]/40 border border-white/5 rounded-xl hover:border-[#00f0ff]/20 hover:bg-[#111318]/60 transition-all !mb-4.5 last:!mb-0">
-                  <div className="flex items-start gap-5">
-                    <div className="w-12 h-12 rounded-xl bg-[#333539] border border-white/10 flex items-center justify-center text-xl shrink-0 shadow-md uppercase font-black text-gray-400">
-                      {exp.team.charAt(0)}
-                    </div>
-                    <div className="flex-1 min-w-0 pr-12">
-                      <div className="flex flex-col sm:flex-row justify-between items-start gap-1">
-                        <h4 className="text-sm sm:text-base font-extrabold text-white font-['Hanken_Grotesk'] leading-tight">
-                          {exp.team}
-                        </h4>
-                        <span className="text-xs font-semibold text-[#b9cacb]">
-                          {exp.period}
-                        </span>
-                      </div>
-                      <p className="text-xs font-bold text-[#00f0ff] tracking-wide uppercase mt-1">
-                        {exp.role}
-                      </p>
-                      <p className="text-xs sm:text-sm text-gray-300 mt-3 leading-relaxed">
-                        {exp.description}
-                      </p>
-                    </div>
+            {/* Posts Card (Detailed tab version) */}
+            <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-6 md:p-8">
+              <div className="flex justify-between items-center mb-5 border-b border-white/5 pb-3">
+                <h3 className="text-lg font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[#00f0ff] text-xl">feed</span>
+                  <span>Posts</span>
+                </h3>
+                {isOwner && !isAddingPost && (
+                  <button 
+                    onClick={() => setIsAddingPost(true)}
+                    className="flex items-center gap-1.5 px-4 py-2 bg-[#00f0ff] hover:bg-[#00dbe9] text-[#002022] rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all shadow-[0_0_10px_rgba(0,240,255,0.25)]"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add Post</span>
+                  </button>
+                )}
+              </div>
+
+              {isAddingPost && (
+                <form onSubmit={handleSaveNewPost} className="space-y-4 bg-[#111318]/30 border border-white/5 p-5 rounded-xl mb-6">
+                  <div>
+                    <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Post Title</label>
+                    <input 
+                      type="text" 
+                      value={newPostTitle}
+                      onChange={(e) => setNewPostTitle(e.target.value)}
+                      placeholder="e.g. Match Highlights, Training Session"
+                      className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
+                      style={{ padding: '10px 14px' }}
+                      required
+                    />
                   </div>
+                  <div>
+                    <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Post Content</label>
+                    <textarea 
+                      value={newPostContent}
+                      onChange={(e) => setNewPostContent(e.target.value)}
+                      placeholder="What's on your mind? Share updates, matches, achievements..."
+                      rows={3}
+                      className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff] resize-none font-['Inter'] leading-relaxed"
+                      style={{ padding: '12px 14px' }}
+                      required
+                    />
+                  </div>
+                  <div className="flex justify-end gap-3 pt-2">
+                    <button type="button" onClick={() => setIsAddingPost(false)} className="bg-white/5 hover:bg-white/10 rounded-md text-[10px] font-bold px-4 py-2 cursor-pointer transition-colors text-white">Cancel</button>
+                    <button type="submit" className="bg-[#00f0ff] hover:bg-[#00dbe9] text-black rounded-md text-[10px] font-bold px-4 py-2 cursor-pointer transition-colors shadow-[0_0_8px_rgba(0,240,255,0.2)]">Publish</button>
+                  </div>
+                </form>
+              )}
 
-                  {isOwner && (
-                    <div className="absolute right-4 top-4 opacity-0 group-hover/item2:opacity-100 flex items-center !gap-x-3.5 transition-all">
-                      <button 
-                        onClick={() => handleStartEditExperience(exp)}
-                        className="p-1.5 rounded text-[#b9cacb] hover:text-[#00f0ff] hover:bg-white/5 cursor-pointer"
-                        title="Edit Experience"
-                      >
-                        <span className="material-symbols-outlined text-[16px]">edit</span>
-                      </button>
-                      <button 
-                        onClick={() => handleDeleteExperience(exp.id)}
-                        className="p-1.5 rounded text-red-400 hover:text-red-500 hover:bg-white/5 cursor-pointer"
-                        title="Delete Experience"
-                      >
-                        <span className="material-symbols-outlined text-[16px]">delete</span>
-                      </button>
+              {/* Posts List */}
+              <div className="flex flex-col !gap-y-4 !mt-5">
+                {(!athlete.posts || athlete.posts.length === 0) ? (
+                  <p className="text-xs text-gray-500 italic py-4 text-center">no post</p>
+                ) : (
+                  athlete.posts.map((post) => (
+                    <div key={post.id} className="relative group/post p-5 bg-[#111318]/40 border border-white/5 rounded-xl hover:border-[#00f0ff]/20 hover:bg-[#111318]/60 transition-all">
+                      <div className="flex items-start gap-4">
+                        {/* User Avatar */}
+                        <img 
+                          src={athlete.avatarUrl || "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80"} 
+                          alt={athlete.name} 
+                          className="w-12 h-12 rounded-full object-cover border border-white/10 shrink-0" 
+                        />
+                        <div className="flex-1 min-w-0 animate-fadeIn">
+                          <div className="flex justify-between items-start gap-2">
+                            <div>
+                              <h4 className="text-sm font-extrabold text-white font-['Hanken_Grotesk'] leading-tight">{athlete.name}</h4>
+                              <span className="text-[10px] font-medium text-[#b9cacb]/60 block mt-0.5">{post.date}</span>
+                            </div>
+                            {isOwner && (
+                              <button 
+                                onClick={() => handleDeletePost(post.id)}
+                                className="p-1.5 rounded text-red-400 hover:text-red-500 hover:bg-white/5 cursor-pointer opacity-0 group-hover/post:opacity-100 transition-opacity"
+                                title="Delete Post"
+                              >
+                                <span className="material-symbols-outlined text-[16px]">delete</span>
+                              </button>
+                            )}
+                          </div>
+                          <h5 className="text-sm font-bold text-[#00f0ff] mt-4">{post.title}</h5>
+                          <p className="text-xs sm:text-sm text-gray-300 mt-2 leading-relaxed whitespace-pre-line font-['Inter']">{post.content}</p>
+                        </div>
+                      </div>
                     </div>
-                  )}
-
-                </div>
-              ))}
+                  ))
+                )}
+              </div>
             </div>
           </div>
         )}
