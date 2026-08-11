@@ -8,6 +8,7 @@ import {
   Target, Zap, Dumbbell, Play, Award as MedalIcon
 } from "lucide-react";
 import { fetchUserProfile, updateUserProfile } from "../api/client";
+import CreatePostCard from "./CreatePostCard";
 
 // Mock data model
 const INITIAL_ATHLETE_DATA = {
@@ -489,36 +490,20 @@ export default function AthleteProfileView() {
     }
   };
 
-  const handleSaveNewPost = async (e) => {
-    e.preventDefault();
-    if (!newPostTitle.trim() || !newPostContent.trim()) return;
-
-    try {
-      const activeUserId = user?.id || localStorage.getItem("playure_demo_user_id") || "00000000-0000-0000-0000-000000000001";
-      const res = await fetch("http://localhost:8000/api/v1/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-User-Id": activeUserId
-        },
-        body: JSON.stringify({
-          content: newPostContent.trim(),
-          post_type: "normal",
-          sport: newPostTitle.trim(),
-          visibility: "public"
-        })
-      });
-
-      if (res.ok) {
-        setNewPostTitle("");
-        setNewPostContent("");
-        setIsAddingPost(false);
-        await fetchProfilePosts();
-      } else {
-        alert("Failed to save post to backend DB");
-      }
-    } catch (err) {
-      console.error("Error creating post:", err);
+  const handleAddPostFromCard = async (newPost) => {
+    if (newPost && newPost.id && typeof newPost.id !== 'number') {
+      await fetchProfilePosts();
+    } else if (newPost) {
+      const mappedFallback = {
+        id: newPost.id,
+        title: newPost.sport || "Update",
+        content: newPost.text,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      };
+      setAthlete(prev => ({
+        ...prev,
+        posts: [mappedFallback, ...(prev.posts || [])]
+      }));
     }
   };
 
@@ -1438,48 +1423,12 @@ export default function AthleteProfileView() {
                     <span className="material-symbols-outlined text-[#00f0ff] text-lg">feed</span>
                     <span>Posts</span>
                   </h3>
-                  {isOwner && !isAddingPost && (
-                    <button 
-                      onClick={() => setIsAddingPost(true)}
-                      className="flex items-center gap-1 px-3 py-1 border border-[#00f0ff]/30 hover:border-[#00f0ff] hover:bg-[#00f0ff]/5 rounded-full text-[10px] font-bold text-[#00f0ff] uppercase tracking-wider cursor-pointer transition-colors"
-                    >
-                      <Plus className="w-3 h-3" />
-                      <span>Add Post</span>
-                    </button>
-                  )}
                 </div>
 
-                {isAddingPost && (
-                  <form onSubmit={handleSaveNewPost} className="space-y-4 bg-[#111318]/30 border border-white/5 p-4 rounded-xl mb-4">
-                    <div>
-                      <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Post Title</label>
-                      <input 
-                        type="text" 
-                        value={newPostTitle}
-                        onChange={(e) => setNewPostTitle(e.target.value)}
-                        placeholder="e.g. Match Highlights, Training Session"
-                        className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
-                        style={{ padding: '10px 14px' }}
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Post Content</label>
-                      <textarea 
-                        value={newPostContent}
-                        onChange={(e) => setNewPostContent(e.target.value)}
-                        placeholder="What's on your mind? Share updates, matches, achievements..."
-                        rows={3}
-                        className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff] resize-none font-['Inter'] leading-relaxed"
-                        style={{ padding: '12px 14px' }}
-                        required
-                      />
-                    </div>
-                    <div className="flex justify-end gap-3 pt-2">
-                      <button type="button" onClick={() => setIsAddingPost(false)} className="bg-white/5 hover:bg-white/10 rounded-md text-[10px] font-bold px-4 py-2 cursor-pointer transition-colors text-white">Cancel</button>
-                      <button type="submit" className="bg-[#00f0ff] hover:bg-[#00dbe9] text-black rounded-md text-[10px] font-bold px-4 py-2 cursor-pointer transition-colors shadow-[0_0_8px_rgba(0,240,255,0.2)]">Publish</button>
-                    </div>
-                  </form>
+                {isOwner && (
+                  <div className="mb-6">
+                    <CreatePostCard onAddPost={handleAddPostFromCard} />
+                  </div>
                 )}
 
                 {/* Posts List */}
@@ -1887,48 +1836,12 @@ export default function AthleteProfileView() {
                   <span className="material-symbols-outlined text-[#00f0ff] text-xl">feed</span>
                   <span>Posts</span>
                 </h3>
-                {isOwner && !isAddingPost && (
-                  <button 
-                    onClick={() => setIsAddingPost(true)}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-[#00f0ff] hover:bg-[#00dbe9] text-[#002022] rounded-full text-xs font-bold uppercase tracking-wider cursor-pointer transition-all shadow-[0_0_10px_rgba(0,240,255,0.25)]"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>Add Post</span>
-                  </button>
-                )}
               </div>
 
-              {isAddingPost && (
-                <form onSubmit={handleSaveNewPost} className="space-y-4 bg-[#111318]/30 border border-white/5 p-5 rounded-xl mb-6">
-                  <div>
-                    <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Post Title</label>
-                    <input 
-                      type="text" 
-                      value={newPostTitle}
-                      onChange={(e) => setNewPostTitle(e.target.value)}
-                      placeholder="e.g. Match Highlights, Training Session"
-                      className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff]"
-                      style={{ padding: '10px 14px' }}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] font-bold text-[#b9cacb] uppercase tracking-wider block mb-1.5 font-['Hanken_Grotesk']">Post Content</label>
-                    <textarea 
-                      value={newPostContent}
-                      onChange={(e) => setNewPostContent(e.target.value)}
-                      placeholder="What's on your mind? Share updates, matches, achievements..."
-                      rows={3}
-                      className="w-full bg-[#1e2024] border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#00f0ff] resize-none font-['Inter'] leading-relaxed"
-                      style={{ padding: '12px 14px' }}
-                      required
-                    />
-                  </div>
-                  <div className="flex justify-end gap-3 pt-2">
-                    <button type="button" onClick={() => setIsAddingPost(false)} className="bg-white/5 hover:bg-white/10 rounded-md text-[10px] font-bold px-4 py-2 cursor-pointer transition-colors text-white">Cancel</button>
-                    <button type="submit" className="bg-[#00f0ff] hover:bg-[#00dbe9] text-black rounded-md text-[10px] font-bold px-4 py-2 cursor-pointer transition-colors shadow-[0_0_8px_rgba(0,240,255,0.2)]">Publish</button>
-                  </div>
-                </form>
+              {isOwner && (
+                <div className="mb-6">
+                  <CreatePostCard onAddPost={handleAddPostFromCard} />
+                </div>
               )}
 
               {/* Posts List */}
