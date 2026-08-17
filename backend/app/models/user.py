@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime, timezone
-from typing import List, TYPE_CHECKING
+from typing import List, Optional, TYPE_CHECKING
 from sqlalchemy import String, Text, Boolean, Integer, DateTime, Index, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database.base import Base
@@ -32,8 +32,19 @@ class User(Base):
     followers_count: Mapped[int] = mapped_column(Integer, default=0)
     following_count: Mapped[int] = mapped_column(Integer, default=0)
     profile_views: Mapped[int] = mapped_column(Integer, default=0)
+    password: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    date_of_birth: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    gender: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    phone: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    location: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    is_verified: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
     )
 
     # Relationships

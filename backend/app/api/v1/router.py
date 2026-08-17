@@ -14,6 +14,7 @@ from app.api.v1.endpoints import (
     ai_coach,
     messaging,
     notifications,
+    replay,
 )
 
 api_router = APIRouter()
@@ -32,3 +33,4 @@ api_router.include_router(home.router, tags=["Home Dashboard"])
 api_router.include_router(ai_coach.router, tags=["AI Coach"])
 api_router.include_router(messaging.router, tags=["Real-Time Messaging"])
 api_router.include_router(notifications.router, tags=["Real-Time Notifications"])
+api_router.include_router(replay.router, tags=["RePlay Marketplace"])

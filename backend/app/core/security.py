@@ -19,7 +19,8 @@ async def get_current_user_id(
         try:
             return uuid.UUID(x_user_id)
         except ValueError:
-            pass
+            # Deterministic UUID generation from Clerk ID or other custom string
+            return uuid.uuid5(uuid.NAMESPACE_DNS, x_user_id)
 
     if authorization and authorization.startswith("Bearer "):
         token = authorization.split(" ")[1]
@@ -42,7 +43,8 @@ async def get_optional_user_id(
         try:
             return uuid.UUID(x_user_id)
         except ValueError:
-            pass
+            # Deterministic UUID generation from Clerk ID or other custom string
+            return uuid.uuid5(uuid.NAMESPACE_DNS, x_user_id)
 
     if authorization and authorization.startswith("Bearer "):
         token = authorization.split(" ")[1]
@@ -52,3 +54,4 @@ async def get_optional_user_id(
             pass
 
     return DEFAULT_TEST_USER_ID
+

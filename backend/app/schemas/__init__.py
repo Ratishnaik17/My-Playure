@@ -9,6 +9,7 @@ from app.schemas.trending import TrendingResponse, TrendingHashtagItem, Trending
 from app.schemas.sidebar import SidebarUserSummary
 from app.schemas.ai_assistant import AIAssistantCardResponse
 from app.schemas.home import HomeResponse, HomeFeedSection
+from app.schemas.replay import RePlayListingCreate, RePlayListingResponse
 
 __all__ = [
     "PaginationMeta",
@@ -37,4 +38,6 @@ __all__ = [
     "AIAssistantCardResponse",
     "HomeResponse",
     "HomeFeedSection",
+    "RePlayListingCreate",
+    "RePlayListingResponse",
 ]

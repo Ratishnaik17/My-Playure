@@ -184,7 +184,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
 
       {/* Main Form Card */}
       <main 
-        className="relative z-10 w-full max-w-2xl my-auto py-6"
+        className="relative z-10 w-full max-w-xl my-auto py-4 px-2"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="glass-panel rounded-3xl overflow-hidden shadow-[0_25px_70px_rgba(0,0,0,0.85),0_0_40px_rgba(0,240,255,0.18)] flex flex-col relative border border-white/10">
@@ -192,14 +192,15 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-5 right-5 sm:top-6 sm:right-6 text-gray-400 hover:text-white bg-black/40 hover:bg-black/70 p-2 rounded-full transition-all cursor-pointer z-20 border border-white/10"
+            className="absolute text-gray-400 hover:text-white bg-black/40 hover:bg-black/70 p-2 rounded-full transition-all cursor-pointer z-20 border border-white/10"
+            style={{ top: "1.5rem", right: "1.5rem" }}
             aria-label="Close modal"
           >
             <X className="w-4 h-4" />
           </button>
 
           {/* Header Area */}
-          <div className="px-8 sm:px-12 pt-10 pb-6 text-center border-b border-white/10 relative">
+          <div className="text-center border-b border-white/10 relative" style={{ padding: "1.75rem 2rem 1.25rem" }}>
             <div className="inline-flex items-center gap-2 bg-[#0b0e14] px-2.5 py-1 rounded-xl border border-[#00f0ff]/30 shadow-[0_0_12px_rgba(0,240,255,0.2)] mb-3">
               <img src="/playure-logo.png" alt="Playure Logo" className="h-5 w-5 object-cover rounded-md" />
               <span className="font-hanken text-xs font-black text-white tracking-widest uppercase">
@@ -207,16 +208,16 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
               </span>
             </div>
 
-            <h1 className="font-hanken text-2xl sm:text-3xl font-black text-white tracking-tight">
+            <h1 className="font-hanken text-xl sm:text-2xl font-black text-white tracking-tight">
               Create Your Account
             </h1>
-            <p className="font-inter text-xs sm:text-sm text-[#b9cacb] mt-1">
+            <p className="font-inter text-[11px] sm:text-xs text-[#b9cacb] mt-1">
               Join the elite network of sports professionals across India.
             </p>
           </div>
 
           {/* Form Body */}
-          <div className="p-8 sm:p-10 flex flex-col gap-6">
+          <div className="flex flex-col gap-6" style={{ padding: "1.75rem 2rem" }}>
             
             {error && (
               <div className="bg-[#93000a]/50 border border-[#ffb4ab]/40 text-[#ffdad6] text-xs px-4 py-2.5 rounded-xl text-center font-inter">
@@ -225,15 +226,15 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
             )}
 
             {!pendingVerification ? (
-              <form onSubmit={handleSignUp} className="flex flex-col gap-6">
+              <form onSubmit={handleSignUp} className="flex flex-col gap-5">
                 
                 {/* Account Type Toggle (Segmented Pill) */}
-                <div className="flex justify-center mb-2">
+                <div className="flex justify-center mb-1">
                   <div className="bg-[#282a2e]/90 rounded-full p-1 inline-flex w-full max-w-xs border border-[#3b494b]">
                     <button
                       type="button"
                       onClick={() => setRole("player")}
-                      className={`flex-1 py-2 px-4 rounded-full font-mono-data text-xs font-bold transition-all cursor-pointer ${
+                      className={`flex-1 py-1.5 px-3 rounded-full font-mono-data text-[10px] font-bold transition-all cursor-pointer ${
                         role === "player"
                           ? "bg-[#434957] text-white shadow-md"
                           : "text-[#b9cacb] hover:text-white"
@@ -244,7 +245,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
                     <button
                       type="button"
                       onClick={() => setRole("organization")}
-                      className={`flex-1 py-2 px-4 rounded-full font-mono-data text-xs font-bold transition-all cursor-pointer ${
+                      className={`flex-1 py-1.5 px-3 rounded-full font-mono-data text-[10px] font-bold transition-all cursor-pointer ${
                         role === "organization"
                           ? "bg-[#434957] text-white shadow-md"
                           : "text-[#b9cacb] hover:text-white"
@@ -256,10 +257,10 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
                 </div>
 
                 {/* Personal Info Grid (2 Columns) */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {/* Name */}
                   <div className="flex flex-col gap-1.5 relative">
-                    <label className="font-mono-data text-[11px] font-semibold text-[#b9cacb] uppercase tracking-wider" htmlFor="name">
+                    <label className="font-mono-data text-[10px] font-semibold text-[#b9cacb] uppercase tracking-wider" htmlFor="name">
                       Name
                     </label>
                     <div className="relative flex items-center">
@@ -271,14 +272,14 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Full Name"
-                        className="input-ghost w-full py-2.5 text-sm text-white font-inter focus:outline-none transition-colors placeholder:text-[#b9cacb]/40"
+                        className="input-ghost w-full py-2 text-xs text-white font-inter focus:outline-none transition-colors placeholder:text-[#b9cacb]/40"
                       />
                     </div>
                   </div>
 
                   {/* Username */}
                   <div className="flex flex-col gap-1.5 relative">
-                    <label className="font-mono-data text-[11px] font-semibold text-[#b9cacb] uppercase tracking-wider" htmlFor="username">
+                    <label className="font-mono-data text-[10px] font-semibold text-[#b9cacb] uppercase tracking-wider" htmlFor="username">
                       Create Username
                     </label>
                     <div className="relative flex items-center">
@@ -290,7 +291,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         placeholder="e.g., pro_athlete99"
-                        className="input-ghost w-full py-2.5 text-sm text-white font-inter focus:outline-none transition-colors placeholder:text-[#b9cacb]/40"
+                        className="input-ghost w-full py-2 text-xs text-white font-inter focus:outline-none transition-colors placeholder:text-[#b9cacb]/40"
                       />
                     </div>
                   </div>
@@ -298,7 +299,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
 
                 {/* Email */}
                 <div className="flex flex-col gap-1.5 relative">
-                  <label className="font-mono-data text-[11px] font-semibold text-[#b9cacb] uppercase tracking-wider" htmlFor="email">
+                  <label className="font-mono-data text-[10px] font-semibold text-[#b9cacb] uppercase tracking-wider" htmlFor="email">
                     Email
                   </label>
                   <div className="relative flex items-center">
@@ -310,16 +311,16 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="your@email.com"
-                      className="input-ghost w-full py-2.5 text-sm text-white font-inter focus:outline-none transition-colors placeholder:text-[#b9cacb]/40"
+                      className="input-ghost w-full py-2 text-xs text-white font-inter focus:outline-none transition-colors placeholder:text-[#b9cacb]/40"
                     />
                   </div>
                 </div>
 
                 {/* Password Grid (2 Columns: Password & Age) */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {/* Password */}
                   <div className="flex flex-col gap-1.5 relative">
-                    <label className="font-mono-data text-[11px] font-semibold text-[#b9cacb] uppercase tracking-wider" htmlFor="password">
+                    <label className="font-mono-data text-[10px] font-semibold text-[#b9cacb] uppercase tracking-wider" htmlFor="password">
                       Password
                     </label>
                     <div className="relative flex items-center">
@@ -331,7 +332,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="input-ghost w-full py-2.5 pr-8 text-sm text-white font-inter focus:outline-none transition-colors placeholder:text-[#b9cacb]/40"
+                        className="input-ghost w-full py-2 pr-8 text-xs text-white font-inter focus:outline-none transition-colors placeholder:text-[#b9cacb]/40"
                       />
                       <button
                         type="button"
@@ -345,7 +346,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
 
                   {/* Age */}
                   <div className="flex flex-col gap-1.5 relative">
-                    <label className="font-mono-data text-[11px] font-semibold text-[#b9cacb] uppercase tracking-wider" htmlFor="age">
+                    <label className="font-mono-data text-[10px] font-semibold text-[#b9cacb] uppercase tracking-wider" htmlFor="age">
                       Age
                     </label>
                     <div className="relative flex items-center">
@@ -359,19 +360,19 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
                         value={age}
                         onChange={(e) => setAge(e.target.value)}
                         placeholder="Years"
-                        className="input-ghost w-full py-2.5 text-sm text-white font-inter focus:outline-none transition-colors placeholder:text-[#b9cacb]/40"
+                        className="input-ghost w-full py-2 text-xs text-white font-inter focus:outline-none transition-colors placeholder:text-[#b9cacb]/40"
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* Sports Selection */}
-                <div className="flex flex-col gap-2 pt-1">
-                  <label className="font-mono-data text-[11px] font-semibold text-[#00f0ff] uppercase tracking-wider">
+                <div className="flex flex-col gap-2.5 pt-1">
+                  <label className="font-mono-data text-[10px] font-semibold text-[#00f0ff] uppercase tracking-wider">
                     Which sports do you play?
                   </label>
 
-                  <div className="flex flex-wrap gap-2 max-h-44 overflow-y-auto p-2.5 bg-[#111318]/70 rounded-xl border border-white/5 custom-scrollbar">
+                  <div className="flex flex-wrap gap-2 max-h-36 overflow-y-auto rounded-xl border border-white/5 custom-scrollbar" style={{ padding: "0.85rem", backgroundColor: "rgba(17, 19, 24, 0.7)" }}>
                     {indianSportsList.map((sport) => {
                       const isSelected = selectedSports.includes(sport.name);
                       return (
@@ -379,7 +380,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
                           key={sport.name}
                           type="button"
                           onClick={() => toggleSport(sport.name)}
-                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-inter font-medium transition-all cursor-pointer ${
+                          className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-inter font-medium transition-all cursor-pointer ${
                             isSelected
                               ? "bg-[#00f0ff]/20 text-[#00f0ff] border border-[#00f0ff] shadow-[0_0_10px_rgba(0,240,255,0.3)] font-bold"
                               : "bg-[#161B22] text-[#b9cacb] border border-white/10 hover:border-white/30 hover:text-white"
@@ -387,7 +388,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
                         >
                           <span>{sport.icon}</span>
                           <span>{sport.name}</span>
-                          {isSelected && <Check className="w-3.5 h-3.5 text-[#00f0ff]" />}
+                          {isSelected && <Check className="w-3 h-3 text-[#00f0ff]" />}
                         </button>
                       );
                     })}
@@ -399,7 +400,7 @@ export default function SignUpModal({ isOpen, onClose, onSuccess, onSwitchToSign
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-[#00f0ff] hover:bg-[#7df4ff] text-[#00363a] font-hanken text-sm font-black uppercase tracking-wider py-3.5 rounded-lg flex items-center justify-center gap-2 transition-all shadow-[0_0_22px_rgba(0,240,255,0.45)] btn-glow cursor-pointer active:scale-98"
+                    className="w-full bg-[#00f0ff] hover:bg-[#7df4ff] text-[#00363a] font-hanken text-xs font-black uppercase tracking-wider py-3 rounded-lg flex items-center justify-center gap-2 transition-all shadow-[0_0_22px_rgba(0,240,255,0.45)] btn-glow cursor-pointer active:scale-98"
                   >
                     <span>{loading ? "Creating Account..." : "Create Account"}</span>
                     <ArrowRight className="w-4 h-4 text-[#00363a]" />

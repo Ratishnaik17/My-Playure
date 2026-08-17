@@ -199,7 +199,7 @@ export default function RePlayView() {
     setIsSubmitting(true);
     
     // Choose default gear placeholder illustration if no custom image was provided
-    const finalImage = newListingForm.imagePreviewUrl || defaultGearImage;
+    const finalImage = newListingForm.imagePreviewUrl || null;
 
     const payload = {
       name: newListingForm.name.trim(),

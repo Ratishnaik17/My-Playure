@@ -188,24 +188,76 @@ let mockRePlayListings = [
 ];
 
 export async function fetchRePlayListings() {
-  // Simulate network latency
-  await new Promise((resolve) => setTimeout(resolve, 800));
-  return [...mockRePlayListings];
+  try {
+    const res = await fetch(`${API_BASE_URL}/v1/replay/listings`);
+    if (!res.ok) throw new Error("Failed to fetch RePlay listings");
+    const data = await res.json();
+    return data.map((item) => ({
+      id: item.id,
+      name: item.name,
+      sport: item.sport,
+      category: item.category,
+      condition: item.condition,
+      price: item.price,
+      isFree: item.is_free,
+      location: item.location,
+      description: item.description,
+      imageUrl: item.image_url || defaultGearImage,
+      sellerName: item.user.full_name,
+      sellerAvatar: item.user.profile_image || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
+      sellerRole: item.user.role || "Athlete",
+      postedDate: new Date(item.created_at).toLocaleDateString()
+    }));
+  } catch (err) {
+    console.error("API Error fetching replay listings:", err);
+    return [];
+  }
 }
 
 export async function createRePlayListing(listingData) {
-  // Simulate network latency
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  const newListing = {
-    id: Date.now(),
-    postedDate: "Just now",
-    sellerName: "Ratish Naik",
-    sellerAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
-    sellerRole: "State-level Athlete",
-    ...listingData,
-  };
-  mockRePlayListings = [newListing, ...mockRePlayListings];
-  return newListing;
+  try {
+    const userId = localStorage.getItem("playure_demo_user_id") || "00000000-0000-0000-0000-000000000001";
+    const payload = {
+      name: listingData.name,
+      sport: listingData.sport,
+      category: listingData.category,
+      condition: listingData.condition,
+      price: listingData.price,
+      is_free: listingData.isFree,
+      location: listingData.location,
+      description: listingData.description,
+      image_url: listingData.imageUrl,
+    };
+    const res = await fetch(`${API_BASE_URL}/v1/replay/listings`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-User-Id": userId,
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error("Failed to create RePlay listing");
+    const item = await res.json();
+    return {
+      id: item.id,
+      name: item.name,
+      sport: item.sport,
+      category: item.category,
+      condition: item.condition,
+      price: item.price,
+      isFree: item.is_free,
+      location: item.location,
+      description: item.description,
+      imageUrl: item.image_url || defaultGearImage,
+      sellerName: item.user.full_name,
+      sellerAvatar: item.user.profile_image || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
+      sellerRole: item.user.role || "Athlete",
+      postedDate: "Just now"
+    };
+  } catch (err) {
+    console.error("API Error creating replay listing:", err);
+    throw err;
+  }
 }
 
 export async function fetchUserProfile(userId, fullName) {

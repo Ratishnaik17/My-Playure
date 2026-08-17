@@ -68,14 +68,15 @@ export default function SignInModal({ isOpen, onClose, onSuccess, onSwitchToSign
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-5 right-5 sm:top-6 sm:right-6 text-gray-400 hover:text-white bg-black/40 hover:bg-black/70 p-2 rounded-full transition-all cursor-pointer z-20 border border-white/10"
+            className="absolute text-gray-400 hover:text-white bg-black/40 hover:bg-black/70 p-2 rounded-full transition-all cursor-pointer z-20 border border-white/10"
+            style={{ top: "1.5rem", right: "1.5rem" }}
             aria-label="Close modal"
           >
             <X className="w-4 h-4" />
           </button>
 
           {/* Header Area */}
-          <div className="p-8 pb-6 text-center border-b border-white/10 relative">
+          <div className="text-center border-b border-white/10 relative" style={{ padding: "2.5rem 3rem 1.5rem" }}>
             {/* Logo Badge */}
             <div className="flex justify-center items-center gap-3 mb-3">
               <div className="bg-[#0b0e14] p-1 rounded-xl border border-[#00f0ff]/30 shadow-[0_0_15px_rgba(0,240,255,0.25)] flex items-center justify-center overflow-hidden">
@@ -95,16 +96,16 @@ export default function SignInModal({ isOpen, onClose, onSuccess, onSwitchToSign
           </div>
 
           {/* Form Area */}
-          <div className="p-8 pt-6 flex flex-col gap-6">
+          <div className="flex flex-col gap-6" style={{ padding: "2.5rem 3rem" }}>
             {error && (
               <div className="bg-[#93000a]/50 border border-[#ffb4ab]/40 text-[#ffdad6] text-xs px-4 py-2.5 rounded-xl text-center font-inter">
                 {error}
               </div>
             )}
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-8">
               
               {/* Email / Username Input */}
-              <div className="flex flex-col gap-1.5 relative">
+              <div className="flex flex-col gap-2 relative">
                 <label className="font-mono-data text-[11px] font-semibold text-[#b9cacb] uppercase tracking-wider" htmlFor="username">
                   Email or Username
                 </label>
@@ -123,7 +124,7 @@ export default function SignInModal({ isOpen, onClose, onSuccess, onSwitchToSign
               </div>
 
               {/* Password Input */}
-              <div className="flex flex-col gap-1.5 relative">
+              <div className="flex flex-col gap-2 relative">
                 <div className="flex justify-between items-baseline">
                   <label className="font-mono-data text-[11px] font-semibold text-[#b9cacb] uppercase tracking-wider" htmlFor="password">
                     Password

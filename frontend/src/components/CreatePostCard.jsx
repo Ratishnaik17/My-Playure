@@ -162,7 +162,7 @@ export default function CreatePostCard({ onAddPost }) {
           <button
             type="button"
             onClick={() => setIsExpanded(true)}
-            className="flex-1 bg-[#1a212d] hover:bg-[#222c3c] border border-[#00f0ff]/40 hover:border-[#00f0ff] rounded-full px-6 sm:px-7 py-3.5 sm:py-4 text-left text-sm sm:text-base font-semibold text-white font-['Inter'] cursor-pointer transition-all duration-200 flex items-center justify-between group shadow-[0_0_20px_rgba(0,240,255,0.15)] hover:shadow-[0_0_28px_rgba(0,240,255,0.35)]"
+            className="flex-1 min-w-0 bg-[#1a212d] hover:bg-[#222c3c] border border-[#00f0ff]/40 hover:border-[#00f0ff] rounded-full px-6 sm:px-7 py-3.5 sm:py-4 text-left text-sm sm:text-base font-semibold text-white font-['Inter'] cursor-pointer transition-all duration-200 flex items-center justify-between group shadow-[0_0_20px_rgba(0,240,255,0.15)] hover:shadow-[0_0_28px_rgba(0,240,255,0.35)]"
           >
             <span className="truncate pr-2 tracking-wide text-gray-100 font-medium">
               Share your training, achievement, competition, or inspire fellow athletes...

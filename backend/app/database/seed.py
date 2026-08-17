@@ -13,6 +13,7 @@ from app.models.saved_post import SavedPost
 from app.models.follower import Follower
 from app.models.hashtag import Hashtag, PostHashtag
 from app.models.competition import Competition
+from app.models.replay import RePlayListing
 from app.core.security import DEFAULT_TEST_USER_ID
 
 
@@ -51,6 +52,24 @@ async def seed_database():
         # 1. Users
         user_main = User(
             id=DEFAULT_TEST_USER_ID,
+            full_name="Ratish Naik",
+            username="ratish_naik",
+            email="ratish@playure.com",
+            profile_image="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80",
+            cover_image="https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=1200&auto=format&fit=crop&q=80",
+            bio='{"about": "International Athlete & Cricket Captain. Passionate about fitness, mental toughness, and youth mentoring.", "website": "playure.com/ratishnaik", "attributes": ["Right Hand Batsman", "Right Arm Off Break", "All Rounder"], "bioDetails": {"age": "24", "height": "5\'10\\"", "weight": "72 kg", "playingSince": "2012", "languages": "English, Hindi, Gujarati", "education": "UVCE"}, "skills": [{"name": "Batting", "percentage": 88}, {"name": "Balling", "percentage": 88}, {"name": "fielding", "percentage": 88}, {"name": "hockey", "percentage": 85}], "highlights": [{"icon": "🏆", "text": "RCB cup winner"}, {"icon": "🏆", "text": "RCB cup winner 2"}], "experience": [{"id": 1, "team": "Rcb", "role": "ALL ROUNDER", "period": "Jan 2023 - presentt", "description": "Good"}], "posts": []}',
+            role="athlete",
+            sport="Cricket",
+            state="India",
+            city="Bengaluru",
+            verified=True,
+            followers_count=1205,
+            following_count=325,
+            profile_views=8930,
+        )
+
+        user_virat = User(
+            id=uuid.uuid4(),
             full_name="Virat Kohli",
             username="virat_kohli",
             email="virat@playure.com",
@@ -139,7 +158,109 @@ async def seed_database():
             profile_views=12300,
         )
 
-        session.add_all([user_main, user_2, user_3, user_coach, user_academy])
+        # RePlay Marketplace Sellers
+        user_naresh = User(
+            id=uuid.uuid4(),
+            full_name="Naresh Kumar",
+            username="naresh_k",
+            email="naresh@playure.com",
+            profile_image="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop&q=80",
+            role="athlete",
+            sport="Cricket",
+            state="Telangana",
+            city="Hyderabad",
+            verified=True,
+        )
+        user_divya = User(
+            id=uuid.uuid4(),
+            full_name="Divya Nair",
+            username="divya_n",
+            email="divya@playure.com",
+            profile_image="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&auto=format&fit=crop&q=80",
+            role="athlete",
+            sport="Volleyball",
+            state="Tamil Nadu",
+            city="Chennai",
+            verified=True,
+        )
+        user_rohan = User(
+            id=uuid.uuid4(),
+            full_name="Rohan Joshi",
+            username="rohan_j",
+            email="rohan@playure.com",
+            profile_image="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80",
+            role="coach",
+            sport="Football",
+            state="Maharashtra",
+            city="Pune",
+            verified=True,
+        )
+        user_vikrant = User(
+            id=uuid.uuid4(),
+            full_name="Vikrant Mehta",
+            username="vikrant_m",
+            email="vikrant@playure.com",
+            profile_image="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=100&auto=format&fit=crop&q=80",
+            role="athlete",
+            sport="Running",
+            state="Telangana",
+            city="Hyderabad",
+            verified=True,
+        )
+        user_kabir = User(
+            id=uuid.uuid4(),
+            full_name="Kabir Singh",
+            username="kabir_s",
+            email="kabir@playure.com",
+            profile_image="https://images.unsplash.com/photo-1500048993953-d23a436266cf?w=100&auto=format&fit=crop&q=80",
+            role="athlete",
+            sport="Basketball",
+            state="Delhi",
+            city="New Delhi",
+            verified=True,
+        )
+        user_subhash = User(
+            id=uuid.uuid4(),
+            full_name="Subhash Bose",
+            username="subhash_b",
+            email="subhash@playure.com",
+            profile_image="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
+            role="athlete",
+            sport="Football",
+            state="West Bengal",
+            city="Kolkata",
+            verified=True,
+        )
+        user_priya = User(
+            id=uuid.uuid4(),
+            full_name="Priya Patel",
+            username="priya_p",
+            email="priya@playure.com",
+            profile_image="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80",
+            role="athlete",
+            sport="Badminton",
+            state="Maharashtra",
+            city="Mumbai",
+            verified=True,
+        )
+        user_arjun_s = User(
+            id=uuid.uuid4(),
+            full_name="Arjun Sharma",
+            username="arjun_s",
+            email="arjuns@playure.com",
+            profile_image="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80",
+            role="athlete",
+            sport="Cricket",
+            state="Karnataka",
+            city="Bangalore",
+            verified=True,
+        )
+
+        session.add_all([
+            user_main, user_virat, user_2, user_3, user_coach, user_academy,
+            user_naresh, user_divya, user_rohan, user_vikrant,
+            user_kabir, user_subhash, user_priya, user_arjun_s
+        ])
         await session.flush()
 
         # 2. Followers
@@ -160,7 +281,7 @@ async def seed_database():
         # 4. Posts
         post1 = Post(
             id=uuid.uuid4(),
-            user_id=user_main.id,
+            user_id=user_virat.id,
             content="Heavy net session today at Chinnaswamy! Focused on front-foot defense against high pace. Work hard in silence, let your results speak. #cricket #fitnessjourney #playurechampions",
             post_type="achievement",
             sport="Cricket",
@@ -255,7 +376,7 @@ async def seed_database():
         c1_reply = Comment(
             id=uuid.uuid4(),
             post_id=post1.id,
-            user_id=user_main.id,
+            user_id=user_virat.id,
             parent_comment_id=c1.id,
             comment="Thanks Coach! Working closely on foot movement speed.",
             created_at=datetime.now(timezone.utc) - timedelta(hours=1),
@@ -309,6 +430,114 @@ async def seed_database():
         )
 
         session.add_all([comp1, comp2, comp3])
+
+        # 9. RePlay Listings
+        l1 = RePlayListing(
+            id=uuid.uuid4(),
+            user_id=user_naresh.id,
+            name="Nivia Cricket Leather Balls (Pack of 6)",
+            sport="Cricket",
+            category="Cricket Balls",
+            condition="Good",
+            price=0.0,
+            is_free=True,
+            location="Hyderabad, TS",
+            description="Box of 6 four-piece leather cricket balls. Slightly used for nets practice (about 5-10 overs each). Great for academy practice sessions.",
+            image_url=None,
+        )
+        l2 = RePlayListing(
+            id=uuid.uuid4(),
+            user_id=user_divya.id,
+            name="Cosco Super Volleyball",
+            sport="Volleyball",
+            category="Volleyballs",
+            condition="Like New",
+            price=0.0,
+            is_free=True,
+            location="Chennai, TN",
+            description="Premium quality outdoor volleyball. Used only twice, holding air perfectly. Selling as I have upgraded.",
+            image_url=None,
+        )
+        l3 = RePlayListing(
+            id=uuid.uuid4(),
+            user_id=user_rohan.id,
+            name="Kipsta Football Size 5",
+            sport="Football",
+            category="Footballs",
+            condition="Excellent",
+            price=0.0,
+            is_free=True,
+            location="Pune, MH",
+            description="Official size 5 Kipsta football. Very durable, suitable for both grass and artificial turf. Normal signs of use.",
+            image_url=None,
+        )
+        l4 = RePlayListing(
+            id=uuid.uuid4(),
+            user_id=user_vikrant.id,
+            name="Adidas Ultraboost Running Shoes",
+            sport="Running",
+            category="Footwear",
+            condition="Excellent",
+            price=5500.0,
+            is_free=False,
+            location="Hyderabad, TS",
+            description="Adidas Ultraboost running shoes (Size UK 9). Exceptionally comfortable boost cushioning. Used for under 50km on track.",
+            image_url=None,
+        )
+        l5 = RePlayListing(
+            id=uuid.uuid4(),
+            user_id=user_kabir.id,
+            name="Decathlon Kipsta Basketball",
+            sport="Basketball",
+            category="Basketballs",
+            condition="Good",
+            price=800.0,
+            is_free=False,
+            location="Delhi, NCR",
+            description="Size 7 basketball from Decathlon. Excellent grip and bounce, ideal for outdoor asphalt courts.",
+            image_url=None,
+        )
+        l6 = RePlayListing(
+            id=uuid.uuid4(),
+            user_id=user_subhash.id,
+            name="Nike Mercurial Football Boots",
+            sport="Football",
+            category="Footwear",
+            condition="Good",
+            price=3000.0,
+            is_free=False,
+            location="Kolkata, WB",
+            description="Nike Mercurial multi-ground football studs (Size UK 8). Lightweight speed-focused design. Studs are in great shape.",
+            image_url=None,
+        )
+        l7 = RePlayListing(
+            id=uuid.uuid4(),
+            user_id=user_priya.id,
+            name="Yonex Nanoray Badminton Racket",
+            sport="Badminton",
+            category="Rackets",
+            condition="Like New",
+            price=2200.0,
+            is_free=False,
+            location="Mumbai, MH",
+            description="Lightweight head-light badminton racket. Strung with BG65 titanium strings at 24 lbs. No scratches or paint chips.",
+            image_url=None,
+        )
+        l8 = RePlayListing(
+            id=uuid.uuid4(),
+            user_id=user_arjun_s.id,
+            name="SS English Willow Cricket Bat",
+            sport="Cricket",
+            category="Bats",
+            condition="Excellent",
+            price=4500.0,
+            is_free=False,
+            location="Bangalore, KA",
+            description="Professional grade SS English Willow cricket bat. Standard short handle size. Balanced sweet spot, fully knocked and oiled.",
+            image_url=None,
+        )
+
+        session.add_all([l1, l2, l3, l4, l5, l6, l7, l8])
 
         await session.commit()
         print("Database seed completed successfully!")

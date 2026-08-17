@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, timezone
 from typing import Optional
-from sqlalchemy import String, DateTime, Index, Uuid, Text
+from sqlalchemy import String, DateTime, Index, Uuid, Text, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database.base import Base
 
@@ -14,7 +14,9 @@ class Competition(Base):
     )
     title: Mapped[str] = mapped_column(String(150), nullable=False, index=True)
     sport: Mapped[str] = mapped_column(String(80), nullable=False, index=True)
+    sport_id: Mapped[Optional[uuid.UUID]] = mapped_column(Uuid(as_uuid=True), ForeignKey("sports.id", ondelete="SET NULL"), nullable=True, index=True)
     organizer: Mapped[str] = mapped_column(String(150), nullable=False)
+    organizer_id: Mapped[Optional[uuid.UUID]] = mapped_column(Uuid(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
     location: Mapped[str] = mapped_column(String(150), nullable=False)
     level: Mapped[Optional[str]] = mapped_column(String(50), nullable=True, default="Open")  # State, National, District, College, etc.
     description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
@@ -30,6 +32,14 @@ class Competition(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
     )
+
+    @property
+    def name(self) -> str:
+        return self.title
+
+    @name.setter
+    def name(self, value: str) -> None:
+        self.title = value
 
     __table_args__ = (
         Index("idx_competitions_status_sport", "status", "sport"),

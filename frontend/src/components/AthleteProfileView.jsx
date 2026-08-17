@@ -417,6 +417,7 @@ export default function AthleteProfileView() {
       },
       skills: skillsList,
       highlights: athlete.highlights,
+      experience: athlete.experience,
       posts: athlete.posts || []
     };
 
@@ -582,6 +583,7 @@ export default function AthleteProfileView() {
       },
       skills: athlete.skills,
       highlights: validAchievements,
+      experience: athlete.experience,
       posts: athlete.posts || []
     };
 
@@ -968,7 +970,11 @@ export default function AthleteProfileView() {
               {/* Metrics Row */}
               <div className="flex flex-row items-center gap-8 md:gap-12 text-center sm:text-left">
                 <div>
-                  <span className="text-[11px] text-[#b9cacb] uppercase tracking-wider block font-bold">Athlete Network</span>
+                  <span className="text-[11px] uppercase tracking-wider block font-bold">
+                    <span className="text-white">Play</span>
+                    <span className="text-[#00f0ff]">ure</span>
+                    <span className="text-[#b9cacb]">&nbsp;Network</span>
+                  </span>
                   <span className="text-xl font-extrabold text-[#00f0ff] font-['JetBrains_Mono'] block mt-0.5">{athlete.stats.connections} athletes</span>
                 </div>
                 <div className="h-8 w-px bg-white/10 hidden sm:block" />
@@ -1416,6 +1422,13 @@ export default function AthleteProfileView() {
                 </div>
               </div>
 
+              {/* Create Post Card (if owner) */}
+              {isOwner && (
+                <div className="!mt-6">
+                  <CreatePostCard onAddPost={handleAddPostFromCard} />
+                </div>
+              )}
+
               {/* Posts Card */}
               <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-5 relative overflow-hidden group hover:border-[#00f0ff]/30 transition-all !mt-6 animate-fadeIn">
                 <div className="flex justify-between items-center mb-5">
@@ -1424,12 +1437,6 @@ export default function AthleteProfileView() {
                     <span>Posts</span>
                   </h3>
                 </div>
-
-                {isOwner && (
-                  <div className="mb-6">
-                    <CreatePostCard onAddPost={handleAddPostFromCard} />
-                  </div>
-                )}
 
                 {/* Posts List */}
                 <div className="flex flex-col !gap-y-4 !mt-5">
@@ -1485,7 +1492,7 @@ export default function AthleteProfileView() {
                   <span>Top Endorsements</span>
                 </h3>
                 <div className="flex flex-col !gap-y-3 mt-3.5">
-                  {getSkillEndorsementsList().slice(0, 3).map((item) => (
+                  {getSkillEndorsementsList().map((item) => (
                     <div key={item.skill} className="flex items-center justify-between gap-3 !py-2.5 !px-3.5 bg-[#111318]/40 border border-white/5 rounded-xl hover:border-[#00f0ff]/10 hover:bg-[#111318]/60 transition-all">
                       <div>
                         <div className="flex items-center gap-2">
@@ -1829,6 +1836,13 @@ export default function AthleteProfileView() {
               </div>
             </div>
 
+            {/* Create Post Card (Detailed tab version) */}
+            {isOwner && (
+              <div className="!mt-6">
+                <CreatePostCard onAddPost={handleAddPostFromCard} />
+              </div>
+            )}
+
             {/* Posts Card (Detailed tab version) */}
             <div className="bg-[#161B22]/60 border border-white/10 rounded-2xl p-6 md:p-8">
               <div className="flex justify-between items-center mb-5 border-b border-white/5 pb-3">
@@ -1837,12 +1851,6 @@ export default function AthleteProfileView() {
                   <span>Posts</span>
                 </h3>
               </div>
-
-              {isOwner && (
-                <div className="mb-6">
-                  <CreatePostCard onAddPost={handleAddPostFromCard} />
-                </div>
-              )}
 
               {/* Posts List */}
               <div className="flex flex-col !gap-y-4 !mt-5">
